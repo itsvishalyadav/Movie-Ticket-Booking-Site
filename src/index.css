@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  font-family: "Source Sans 3", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+
+  color-scheme: light dark;
+  color: white;
+  background-color: #1a191f;
+  min-height: 100vh;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0) 5%, #1a191f 70%),
+    url(./assets/blackPanther.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  /* background-attachment: fixed; */
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  
+}
+a:hover{
+  text-decoration: underline;
+}
+
+
+h1 {
+  line-height: 1;
+}

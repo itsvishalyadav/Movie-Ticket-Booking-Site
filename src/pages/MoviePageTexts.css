@@ -1,0 +1,15 @@
+#MoviePageTexts {
+  padding: 50px 20px 30px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 45vw;
+  height: 100vh;
+  gap: 20px;
+}
+
+button:hover{
+  box-shadow: 0 0 15px #F9AB00;
+  border-color: #F9AB00;
+}
