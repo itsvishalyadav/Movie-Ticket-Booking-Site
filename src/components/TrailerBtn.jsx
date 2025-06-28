@@ -7,7 +7,7 @@ export default function TrailerBtn({customStyles}) {
   const styles = {
     borderRadius: "10px",
     height: "56px",
-    padding: "20px 20px",
+    padding: "20px 25px",
     backgroundColor: "#f9ab00",
     fontSize: "20px",
     fontWeight: "700",
