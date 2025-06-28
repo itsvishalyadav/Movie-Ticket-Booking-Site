@@ -27,13 +27,7 @@ body {
   color-scheme: light dark;
   color: white;
   background-color: #1a191f;
-  min-height: 100vh;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0) 5%, #1a191f 70%),
-    url(./assets/blackPanther.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  /* background-attachment: fixed; */
+  
 }
 
 a {

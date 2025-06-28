@@ -7,10 +7,9 @@ let Styles = {
   height: "30px",
   padding: "5px 15px",
   cursor: "pointer",
-
 };
 
-export default function SmallBTN({ TextForButton, otherStyles = {} }) {
+export default function SmallBTN({ TextForButton, otherStyles = {},onClick }) {
   let mergedStyles = { ...Styles, ...otherStyles };
-  return <button /*onClick={fn}*/ style={mergedStyles}>{TextForButton}</button>;
+  return <button onClick={onClick} style={mergedStyles}>{TextForButton}</button>;
 }
