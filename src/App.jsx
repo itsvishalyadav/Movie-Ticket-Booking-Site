@@ -1,6 +1,5 @@
 import "./App.css";
 import BookingPage from "./pages/BookingPage";
-import MoviePage from "./pages/MoviePage";
 import MoviePageTexts from "./pages/MoviePageTexts";
 import tileImage from "./assets/movieTile.jpeg";
 function App() {
@@ -13,11 +12,8 @@ function App() {
     ratings: { imdbRating: 8, rtRating: 84, googleLikes: 81 },
   };
   return (
-    // <MoviePageTexts info={movieInfo} />
-    <BookingPage
-      info={movieInfo}
-
-    />
+    <MoviePageTexts info={movieInfo} />
+    // <BookingPage info={movieInfo} />
   );
 }
 
