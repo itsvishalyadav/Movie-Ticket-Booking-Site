@@ -1,12 +1,51 @@
-# React + Vite
+# 🎬 Movie Ticket Booking Site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sleek, responsive web application for browsing movies and booking tickets in real-time. Built with **React.js**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+✅ Browse movie details (title, genre, runtime, language)  
+✅ Interactive buttons for watching trailers and booking tickets  
+✅ Smooth background gradients and responsive design  
+✅ Dynamic styling and component-based architecture  
+✅ Modern UI with glowing buttons and animations  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React.js, CSS (custom styles, gradients, responsive units)
+- **Version Control:** Git & GitHub
+
+---
+
+## 📸 Screenshots
+
+*(Add screenshots here once deployed)*
+
+---
+
+
+## 🚀 Getting Started
+
+### 📦 Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/Movie-Ticket-Booking-Site.git
+   cd Movie-Ticket-Booking-Site
+   ```
+
+2. **Install dependencies**
+
+    ```bash
+    npm install
+    ```
+3. **Start the development server**
+
+    ```bash
+    npm run dev
+    ```
