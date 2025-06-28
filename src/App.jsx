@@ -13,13 +13,10 @@ function App() {
     ratings: { imdbRating: 8, rtRating: 84, googleLikes: 81 },
   };
   return (
-    // <MoviePageTexts
-    //   info={movieInfo}
-    // />
+    // <MoviePageTexts info={movieInfo} />
     <BookingPage
-      movieTile={movieInfo.movieTile}
-      imdbRating={movieInfo.ratings.imdbRating}
-      movieLength={movieInfo.length}
+      info={movieInfo}
+
     />
   );
 }

@@ -1,6 +1,7 @@
 let Styles = {
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   backgroundColor: "#1A191F",
   border: "2px solid #f9ab00",
   borderRadius: "5px",

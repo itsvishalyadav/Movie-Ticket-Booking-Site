@@ -2,10 +2,10 @@ import MovieInfo from "../components/MovieInfoBookingPage";
 ;
 
 
-export default function BookingPage({movieTile,imdbRating,movieLength}) {
+export default function BookingPage({info}) {
   return (
     <div id="BookingPage">
-      <MovieInfo movieTile={movieTile} imdbRating={imdbRating} movieLength={movieLength}/>
+      <MovieInfo info={info}/>
     </div>
   );
 }
