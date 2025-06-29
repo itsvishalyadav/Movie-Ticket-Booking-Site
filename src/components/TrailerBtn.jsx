@@ -1,28 +1,18 @@
 import { useState } from "react";
-import SmallBTN from "./SmallBTN";
 import "./TrailerBtn.css";
+import BigBTN from "./BigBTN";
 
-export default function TrailerBtn({ customStyles }) {
+export default function TrailerBtn() {
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const styles = {
-    borderRadius: "10px",
-    height: "56px",
-    padding: "20px 25px",
-    backgroundColor: "#f9ab00",
-    fontSize: "20px",
-    fontWeight: "700",
-    cursor: "pointer",
-  };
   return (
     <>
-      <SmallBTN
+      <BigBTN
         onClick={() => setShowOverlay(true)}
-        otherStyles={{ ...styles, ...customStyles }}
         TextForButton="▶ Watch Trailer"
       />
       {showOverlay && (
-        <div className="overlay  ">
+        <div className="overlay">
           <iframe
             width="80%"
             height="80%"

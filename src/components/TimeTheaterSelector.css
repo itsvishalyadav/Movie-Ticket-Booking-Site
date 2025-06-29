@@ -12,3 +12,10 @@
   outline: none;
   border-color: #5441FA;
 }
+.time-theater-selector {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #1a191f;
+  border-radius: 10px;
+}

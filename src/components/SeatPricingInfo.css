@@ -1,0 +1,28 @@
+.selectedSeatBox {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 2px solid #5441fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f9ab00;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.selected-seat-info,
+.selectedSeatBoxOuterDiv ,.action-buttons{
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.selectedSeatBoxOuterDiv{
+  flex-direction: row;
+}
+
+/* .selected-seat-info{
+    border: 2px solid white;
+} */

@@ -6,8 +6,8 @@ function TimeTheaterSelector({ liveInfo }) {
   const [theater, setTheater] = useState("");
 
   return (
-    <div>
-      <div>
+    <div className="time-theater-selector">
+      <div className="time-selector">
         <label>Time: </label>
         <select
           className="select"
@@ -21,7 +21,7 @@ function TimeTheaterSelector({ liveInfo }) {
           ))}
         </select>
       </div>
-      <div>
+      <div className="theater-selector">
         <label>Theater: </label>
         <select
           className="select"

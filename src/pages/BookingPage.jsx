@@ -1,12 +1,12 @@
-import DatePicker from "../components/DatePicker";
+import DateTimeTheater from "../components/DateTimeTheater";
 import MovieInfo from "../components/MovieInfoBookingPage";
-import TimeTheaterSelector from "../components/TimeTheaterSelector";
-export default function BookingPage({ info ,liveInfo }) {
+import SelectedSeatDiv from "../components/SelectedSeatDiv";
+export default function BookingPage({ info, liveInfo }) {
   return (
     <div id="BookingPage">
       <MovieInfo info={info} />
-      <DatePicker />
-      <TimeTheaterSelector liveInfo={liveInfo} />
+      <DateTimeTheater liveInfo={liveInfo} />
+      <SelectedSeatDiv selectedSeats={["H10", "H11", "H12"]} totalPrice={750} />
     </div>
   );
 }
