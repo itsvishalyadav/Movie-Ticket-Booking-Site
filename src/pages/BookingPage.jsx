@@ -1,11 +1,12 @@
+import DatePicker from "../components/DatePicker";
 import MovieInfo from "../components/MovieInfoBookingPage";
-;
-
-
-export default function BookingPage({info}) {
+import TimeTheaterSelector from "../components/TimeTheaterSelector";
+export default function BookingPage({ info ,liveInfo }) {
   return (
     <div id="BookingPage">
-      <MovieInfo info={info}/>
+      <MovieInfo info={info} />
+      <DatePicker />
+      <TimeTheaterSelector liveInfo={liveInfo} />
     </div>
   );
 }

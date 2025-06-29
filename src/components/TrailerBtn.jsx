@@ -1,7 +1,8 @@
 import { useState } from "react";
 import SmallBTN from "./SmallBTN";
+import "./TrailerBtn.css";
 
-export default function TrailerBtn({customStyles}) {
+export default function TrailerBtn({ customStyles }) {
   const [showOverlay, setShowOverlay] = useState(false);
 
   const styles = {
@@ -12,7 +13,6 @@ export default function TrailerBtn({customStyles}) {
     fontSize: "20px",
     fontWeight: "700",
     cursor: "pointer",
-    
   };
   return (
     <>
@@ -22,20 +22,7 @@ export default function TrailerBtn({customStyles}) {
         TextForButton="▶ Watch Trailer"
       />
       {showOverlay && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.74)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
+        <div className="overlay  ">
           <iframe
             width="80%"
             height="80%"
@@ -49,20 +36,7 @@ export default function TrailerBtn({customStyles}) {
               boxShadow: "0 0 20px #F9AB00",
             }}
           ></iframe>
-          <button
-            onClick={() => setShowOverlay(false)}
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              fontSize: "1rem",
-              border: "2px solid #f9ab00",
-              borderRadius: "5px",
-              backgroundColor: "#1A191F",
-              color: "white",
-              cursor: "pointer",
-              fontWeight: "700",
-            }}
-          >
+          <button onClick={() => setShowOverlay(false)} className="close-btn">
             ✖ Close
           </button>
         </div>

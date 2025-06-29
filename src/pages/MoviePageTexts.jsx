@@ -11,9 +11,9 @@ export default function MoviePageTexts({ info }) {
     <div className="MoviePage">
       <div id="MoviePageTexts">
         <h1 style={headStyle}>
-          Black Panther:{" "}
+          {info.movieFirstName}{" "}
           <span style={{ ...headStyle, color: "#5441FA" }}>
-            Wakanda Forever
+            {info.movieLastName}
           </span>
         </h1>
         <Genres genres={info.genres} />

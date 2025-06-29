@@ -2,7 +2,7 @@ let Styles = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: "#1A191F",
+  backgroundColor: " #1A191F",
   border: "2px solid #f9ab00",
   borderRadius: "5px",
   height: "30px",
@@ -10,7 +10,21 @@ let Styles = {
   cursor: "pointer",
 };
 
-export default function SmallBTN({ TextForButton, otherStyles = {},onClick }) {
+export default function SmallBTN({
+  TextForButton,
+  otherStyles = {},
+  onClick,
+  className = "",
+  noInlineStyles = false,
+}) {
   let mergedStyles = { ...Styles, ...otherStyles };
-  return <button onClick={onClick} style={mergedStyles}>{TextForButton}</button>;
+  return (
+    <button
+      onClick={onClick}
+      style={noInlineStyles ? undefined : mergedStyles}
+      className={className}
+    >
+      {TextForButton}
+    </button>
+  );
 }
