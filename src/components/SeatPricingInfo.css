@@ -12,17 +12,22 @@
 }
 
 .selected-seat-info,
-.selectedSeatBoxOuterDiv ,.action-buttons{
+.selectedSeatBoxOuterDiv,
+.action-buttons {
   display: flex;
   gap: 1rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.selectedSeatBoxOuterDiv{
+.selectedSeatBoxOuterDiv {
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
-/* .selected-seat-info{
-    border: 2px solid white;
-} */
+.selected-seat-info {
+  padding: 60px 10px;
+  border: 2px solid #5441fa;
+  border-radius: 15px;
+  width: 250px;
+}

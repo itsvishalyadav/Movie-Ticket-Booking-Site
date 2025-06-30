@@ -1,0 +1,45 @@
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  grid-gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.seat.selected {
+  background-color: #f9ab00;
+  font-weight: bold;
+  color: #1a191f;
+  transform: scale(1.1);
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #f9ab00;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a191f;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.seat:hover {
+  background-color: #f9ab00;
+  transform: scale(1.1);
+}
+
+.wholeDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+hr{
+    width: 400px;
+    border: 5px solid #f9ab00;
+    border-radius: 10px;
+}

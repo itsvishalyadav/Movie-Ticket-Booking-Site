@@ -1,6 +1,6 @@
 import BigBTN from "./BigBTN";
 import "./SeatPricingInfo.css";
-export default function SeatPricingInfo({ selectedSeats, totalPrice }) {
+export default function SeatPricingInfo({ selectedSeats }) {
   return (
     <div className="selected-seat-info">
       <h2>Selected Seats</h2>
@@ -15,7 +15,7 @@ export default function SeatPricingInfo({ selectedSeats, totalPrice }) {
       ) : (
         <p>No seats selected</p>
       )}
-      <h3>Total Price: ₹{totalPrice}</h3>
+      <h3>Total Price: ₹{selectedSeats.length * 250}</h3>
       <div className="action-buttons">
         <BigBTN
           otherStyles={{ backgroundColor: "#1a191f", height: "35px" }}

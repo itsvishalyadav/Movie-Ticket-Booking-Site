@@ -2,11 +2,14 @@ import "./App.css";
 import BookingPage from "./pages/BookingPage";
 import MoviePageTexts from "./pages/MoviePageTexts";
 import tileImage from "./assets/movieTile.jpeg";
+import bgImage from "./assets/blackPanther.png";
 function App() {
   let movieInfo = {
     movieFirstName: "Black Panther: ",
     movieLastName: "Wakanda Forever",
+    title: "Black Panther: Wakanda Forever",
     movieTile: tileImage,
+    bgImage: bgImage,
     genres: ["Action", "Adventure", "Fantasy"],
     length: "⏱ 2HRS 41MINS",
     languages: "🌐 English",

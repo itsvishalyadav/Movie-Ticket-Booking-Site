@@ -1,6 +1,7 @@
 import DateTimeTheater from "../components/DateTimeTheater";
 import MovieInfo from "../components/MovieInfoBookingPage";
-import SelectedSeatDiv from "../components/SelectedSeatDiv";
+import SelectedSeatDiv from "../components/SeatSelectionDiv";
+import "./BookingPage.css";
 export default function BookingPage({ info, liveInfo }) {
   return (
     <div id="BookingPage">
