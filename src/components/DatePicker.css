@@ -4,9 +4,10 @@
   color: white;
   height: 2.5rem;
   font-size: 1rem;
-  padding: 0 0.75rem;
+  padding: 2rem 1.1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: bold;
   border-radius: 0.625rem;
 }
 
@@ -20,8 +21,8 @@
 
 .btn.selected {
   background-color: #5441FA;
+  transform: scale(1.05);
   color: #1a191f;
-  font-weight: bold;
 }
 
 .date-picker {
@@ -36,7 +37,7 @@
   .btn {
     height: 2rem;
     font-size: 0.95rem;
-    padding: 0.4rem 0.5rem;
+    padding: 1.8rem 0.42rem;
   }
   .date-picker {
     gap: 0.4rem;

@@ -2,7 +2,7 @@
   height: 2.5rem;
   width: 2.5rem;
   border-radius: 0.5rem;
-  border: 0.125rem solid #f9ab00;
+  border: 0.125rem solid #5441fa;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,7 +42,6 @@
   border: 0.125rem solid #5441fa;
   border-radius: 1.25rem;
   width: 15.625rem;
-  background: linear-gradient(135deg, #23222b 40%, #5441fa 80%, #f9ab00 100%);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   transition: box-shadow 0.3s, border-color 0.3s;
   color: #fff;

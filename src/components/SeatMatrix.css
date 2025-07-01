@@ -82,6 +82,7 @@ hr{
     height: min(1.5rem, 8vw);
     font-size: 0.85rem;
     padding: 0;
+    border-radius: 0.35rem;
   }
   .screen-bar {
     width: 98vw;
