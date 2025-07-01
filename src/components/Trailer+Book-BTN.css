@@ -1,7 +1,18 @@
-.TrailerBookBtn {
+.TrailerBookBtn,.TrailerBookBtn__buttons {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
-  margin-top: 20px;
+  gap: 1.875rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+.TrailerBookBtn{
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .TrailerBookBtn {
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
 }

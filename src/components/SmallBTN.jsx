@@ -1,14 +1,4 @@
-let Styles = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: " #1A191F",
-  border: "2px solid #f9ab00",
-  borderRadius: "5px",
-  height: "30px",
-  padding: "5px 15px",
-  cursor: "pointer",
-};
+import './SmallBTN.css';
 
 export default function SmallBTN({
   TextForButton,
@@ -17,12 +7,12 @@ export default function SmallBTN({
   className = "",
   noInlineStyles = false,
 }) {
-  let mergedStyles = { ...Styles, ...otherStyles };
+  let mergedClassName = `small-btn ${className}`;
   return (
     <button
       onClick={onClick}
-      style={noInlineStyles ? undefined : mergedStyles}
-      className={className}
+      style={noInlineStyles ? undefined : otherStyles}
+      className={mergedClassName}
     >
       {TextForButton}
     </button>

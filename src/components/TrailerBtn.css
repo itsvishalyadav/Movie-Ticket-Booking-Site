@@ -12,13 +12,21 @@
 }
 
 .close-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 1.25rem;
+  padding: 0.625rem 1.25rem;
   font-size: 1rem;
-  border: 2px solid #f9ab00;
-  border-radius: 5px;
+  border: 0.125rem solid #f9ab00;
+  border-radius: 0.3125rem;
   background-color: #1a191f;
   color: white;
   cursor: pointer;
   font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .close-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
 }

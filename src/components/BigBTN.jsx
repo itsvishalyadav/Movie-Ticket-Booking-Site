@@ -1,16 +1,4 @@
-const Styles = {
-  borderRadius: "10px",
-  height: "56px",
-  padding: "20px 25px",
-  backgroundColor: " #f9ab00",
-  fontSize: "20px",
-  fontWeight: "700",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  border: "2px solid #f9ab00",
-};
+import './BigBTN.css';
 
 export default function BigBTN({
   TextForButton,
@@ -19,12 +7,12 @@ export default function BigBTN({
   className = "",
   noInlineStyles = false,
 }) {
-  let mergedStyles = { ...Styles, ...otherStyles };
+  let mergedClassName = `big-btn ${className}`;
   return (
     <button
       onClick={onClick}
-      style={noInlineStyles ? undefined : mergedStyles}
-      className={className}
+      style={noInlineStyles ? undefined : otherStyles}
+      className={mergedClassName}
     >
       {TextForButton}
     </button>

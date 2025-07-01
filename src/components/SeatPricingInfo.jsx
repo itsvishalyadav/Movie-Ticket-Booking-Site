@@ -18,11 +18,11 @@ export default function SeatPricingInfo({ selectedSeats }) {
       <h3>Total Price: ₹{selectedSeats.length * 250}</h3>
       <div className="action-buttons">
         <BigBTN
-          otherStyles={{ backgroundColor: "#1a191f", height: "35px" }}
+          otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
           TextForButton={"+ Add Food Items"}
         />
         <BigBTN
-          otherStyles={{ height: "35px" }}
+          otherStyles={{ height: "2.2rem" }}
           TextForButton={"Purchase Seats"}
         />
       </div>

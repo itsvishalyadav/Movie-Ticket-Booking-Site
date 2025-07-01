@@ -8,17 +8,41 @@
 }
 
 #MoviePageTexts {
-  padding: 50px 20px 30px 40px;
+  padding: 3.125rem 1.25rem 1.875rem 2.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   width: 45vw;
   height: 100vh;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
 button:hover {
-  box-shadow: 0 0 15px #f9ab00;
+  box-shadow: 0 0 0.9375rem #f9ab00;
   border-color: #f9ab00;
+}
+
+@media (max-width: 600px) {
+  #MoviePageTexts {
+    padding: 2rem 0.5rem 1rem 1rem;
+    width: 95vw;
+    gap: 0.75rem;
+    align-items: center;
+    text-align: center;
+  }
+  .MoviePage {
+    background-position: right center !important;
+    background-size: cover !important;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 10%, #1a191f 90%), url(../assets/blackPanther.png) !important;
+  }
+}
+
+.movie-heading {
+  font-weight: 900;
+  font-size: 2.5rem;
+}
+
+.movie-heading-highlight {
+  color: #5441FA;
 }

@@ -6,13 +6,12 @@ import Rating from "../components/Rating";
 import TrailerBookBtn from "../components/Trailer+Book-BTN";
 
 export default function MoviePageTexts({ info }) {
-  let headStyle = { fontWeight: "900", fontSize: "40px" };
   return (
     <div className="MoviePage">
       <div id="MoviePageTexts">
-        <h1 style={headStyle}>
+        <h1 className="movie-heading">
           {info.movieFirstName}{" "}
-          <span style={{ ...headStyle, color: "#5441FA" }}>
+          <span className="movie-heading-highlight">
             {info.movieLastName}
           </span>
         </h1>

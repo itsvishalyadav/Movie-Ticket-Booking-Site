@@ -1,0 +1,23 @@
+.big-btn {
+  border-radius: 0.625rem;
+  height: 3.5rem;
+  padding: 1.25rem 1.5625rem;
+  background-color: #f9ab00;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.125rem solid #f9ab00;
+  min-width: 6rem;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .big-btn {
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+  }
+}

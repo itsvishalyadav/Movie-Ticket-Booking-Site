@@ -3,7 +3,15 @@
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
   background: linear-gradient(to top, #1a191f, #36343e);
+}
+
+@media (max-width: 600px) {
+  .date-time-theater {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
 }

@@ -1,0 +1,9 @@
+.plot-title {
+  font-weight: 900;
+  font-style: italic;
+}
+
+.plot-content {
+  padding: 0 1.25rem 1.875rem 2.5rem;
+  font-style: italic;
+} 

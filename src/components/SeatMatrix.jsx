@@ -20,7 +20,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats }) {
               );
             }}
           >
-            {seat }
+            {seat +1}
           </div>
         ))}
       </div>

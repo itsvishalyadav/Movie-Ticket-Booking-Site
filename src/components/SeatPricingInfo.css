@@ -1,14 +1,23 @@
 .selectedSeatBox {
-  height: 40px;
-  width: 40px;
-  border-radius: 5px;
-  border: 2px solid #5441fa;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 0.5rem;
+  border: 0.125rem solid #f9ab00;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #f9ab00;
   font-weight: bold;
   font-size: 1.2rem;
+  background: #23222b;
+  box-shadow: 0 2px 8px 0 rgba(249, 171, 0, 0.10);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.selectedSeatBox.selected {
+  background: linear-gradient(145deg, #5441fa 40%, #f9ab00 100%);
+  color: #1a191f;
+  border-color: #ffe082;
 }
 
 .selected-seat-info,
@@ -20,14 +29,71 @@
   justify-content: center;
   align-items: center;
 }
+
 .selectedSeatBoxOuterDiv {
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .selected-seat-info {
-  padding: 60px 10px;
-  border: 2px solid #5441fa;
-  border-radius: 15px;
-  width: 250px;
+  padding: 2.5rem 1.25rem 2rem 1.25rem;
+  border: 0.125rem solid #5441fa;
+  border-radius: 1.25rem;
+  width: 15.625rem;
+  background: linear-gradient(135deg, #23222b 40%, #5441fa 80%, #f9ab00 100%);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transition: box-shadow 0.3s, border-color 0.3s;
+  color: #fff;
+  align-items: center;
+  text-align: center;
+}
+
+.selected-seat-info:hover {
+  box-shadow: 0 12px 40px 0 #5441fa99, 0 0 16px 2px #f9ab0099;
+  border-color: #f9ab00;
+}
+
+.selected-seat-info h2 {
+  color: #ffe082;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.selected-seat-info h3 {
+  color: #f9ab00;
+  font-size: 1.2rem;
+  margin: 1.2rem 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.selected-seat-info p {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .selected-seat-info {
+    padding: 1.5rem 0.5rem;
+    width: 85vw;
+    font-size: 1rem;
+  }
+  .selectedSeatBox {
+    height: 2rem;
+    width: 2rem;
+    font-size: 1rem;
+  }
 }

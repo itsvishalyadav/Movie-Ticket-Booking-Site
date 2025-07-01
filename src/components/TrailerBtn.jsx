@@ -22,8 +22,8 @@ export default function TrailerBtn() {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{
-              borderRadius: "10px",
-              boxShadow: "0 0 20px #F9AB00",
+              borderRadius: "0.625rem",
+              boxShadow: "0 0 1.25rem #F9AB00",
             }}
           ></iframe>
           <button onClick={() => setShowOverlay(false)} className="close-btn">
