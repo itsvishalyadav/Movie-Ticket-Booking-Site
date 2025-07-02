@@ -6,8 +6,21 @@ export default function BookingPage({ info, liveInfo }) {
   return (
     <div id="BookingPage">
       <MovieInfo info={info} />
-      <DateTimeTheater liveInfo={liveInfo} />
-      <SelectedSeatDiv selectedSeats={["H10", "H11", "H12"]} totalPrice={750} />
+      <div
+        style={{
+          background: `linear-gradient(
+          rgba(0,0,0,0.5), 
+          rgba(0,0,0,0.5)
+        ), url(${info.bgImage1})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+        className="booking-page-datetime-seat-wrapper"
+      >
+        <DateTimeTheater liveInfo={liveInfo} />
+        <SelectedSeatDiv bgImage={info.bgImage1} />
+      </div>
     </div>
   );
 }

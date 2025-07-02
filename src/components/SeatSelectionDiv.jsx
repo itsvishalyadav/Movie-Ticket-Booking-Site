@@ -3,7 +3,7 @@ import SeatPricingInfo from "./SeatPricingInfo";
 import SeatMatrix from "./SeatMatrix";
 import { useState } from "react";
 
-export default function SelectedSeatDiv() {
+export default function SelectedSeatDiv({bgImage}) {
   let [selectedSeats, setSelectedSeats] = useState([]);
   return (
     <div className="selected-seat-div">

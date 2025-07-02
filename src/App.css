@@ -1,0 +1,23 @@
+.background-wrapper {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0) 5%, #1a191f 70%),
+    url(./assets/blackPanther.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .background-wrapper {
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.3) 30%,
+        #1a191f 95%
+      ),
+      url(./assets/bgImagePhone.webp);
+    background-position:center center;
+    background-size: cover;
+  }
+}

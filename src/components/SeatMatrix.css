@@ -4,10 +4,7 @@
   grid-gap: 0.625rem;
   justify-content: center;
   margin-top: 1.25rem;
-  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
   padding: 2rem 1rem 1rem 1rem;
-  border-radius: 1rem;
-  background: rgba(30, 29, 36, 0.7);
 }
 
 .seat {

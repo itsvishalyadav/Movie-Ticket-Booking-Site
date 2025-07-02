@@ -1,0 +1,46 @@
+.detailed-cast-section {
+  width: 60%;
+  box-sizing: border-box;
+  padding: 1rem;
+  padding-left: 2rem;
+}
+
+
+.cast-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.cast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cast-image {
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #f9ab00;
+}
+.cast-name {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .detailed-cast-section {
+    width: 100%;
+    padding: 0;
+  }
+  .cast-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .cast-card {
+    flex: 0 0 auto;
+    width: 120px;
+  }
+}
