@@ -49,14 +49,14 @@ function App() {
   };
   return (
     <div>
-      <div className="background-wrapper">
+      {/* <div className="background-wrapper">
         <Header />
         <MoviePageTexts info={movieInfo} />
-      </div>
-      {/* <div className="booking-page-wrapper">
+      </div> */}
+      <div className="booking-page-wrapper">
         <Header nonSticky />
         <BookingPage info={movieInfo} liveInfo={liveInfo} />
-      </div> */}
+      </div>
     </div>
   );
 }

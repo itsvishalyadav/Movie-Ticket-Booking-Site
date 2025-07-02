@@ -22,8 +22,13 @@ export default function DatePicker() {
         const isSelected = selectedDate === `${item.day}, ${item.date}`;
         return (
           <SmallBTN
-            className={`btn ${isSelected ? "selected" : ""}`}
-            TextForButton={`${item.day} ${item.date}`}
+            className={`btn date-btn-vertical ${isSelected ? "selected" : ""}`}
+            TextForButton={
+              <>
+                <span className="date-btn-day">{item.day}</span>
+                <span className="date-btn-date">{item.date}</span>
+              </>
+            }
             onClick={() => updateButton(`${item.day}, ${item.date}`)}
             noInlineStyles={true}
             key={index}

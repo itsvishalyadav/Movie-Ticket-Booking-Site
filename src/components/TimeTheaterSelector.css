@@ -1,32 +1,37 @@
 .select {
-  padding: 0.5rem;
-  margin: 0.25rem 0;
-  border: 0.0625rem solid #f9ab00;
-  border-radius: 0.625rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f9ab00;
+  font-size: 1rem;
   background-color: #1a191f;
-  color: white;
-  cursor: pointer;
 }
 
 .select:focus {
   outline: none;
   border-color: #5441FA;
 }
+
 .time-theater-selector {
   display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  padding: 1.25rem;
-  border-radius: 0.625rem;
+  align-items: flex-start;
+}
+
+.time-selector, .theater-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.time-selector label, .theater-selector label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
 }
 
 @media (max-width: 600px) {
   .time-theater-selector {
-    flex-direction: column;
     gap: 0.75rem;
-    padding: 0.75rem;
-  }
-  .select {
-    padding: 0.4rem;
-    font-size: 0.95rem;
+    align-items: center;
   }
 }

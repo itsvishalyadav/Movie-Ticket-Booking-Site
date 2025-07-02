@@ -1,8 +1,12 @@
 import DateTimeTheater from "../components/DateTimeTheater";
 import MovieInfo from "../components/MovieInfoBookingPage";
-import SelectedSeatDiv from "../components/SeatSelectionDiv";
+import SeatPricingInfo from "../components/SeatPricingInfo";
+import SeatMatrix from "../components/SeatMatrix";
 import "./BookingPage.css";
+import { useState } from "react";
+
 export default function BookingPage({ info, liveInfo }) {
+  const [selectedSeats, setSelectedSeats] = useState([]);
   return (
     <div id="BookingPage">
       <MovieInfo info={info} />
@@ -16,10 +20,13 @@ export default function BookingPage({ info, liveInfo }) {
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
         }}
-        className="booking-page-datetime-seat-wrapper"
+        className="booking-page-flex-row"
       >
         <DateTimeTheater liveInfo={liveInfo} />
-        <SelectedSeatDiv bgImage={info.bgImage1} />
+        <div className="booking-page-center">
+          <SeatMatrix selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} />
+        </div>
+        <SeatPricingInfo selectedSeats={selectedSeats} />
       </div>
     </div>
   );
