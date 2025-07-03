@@ -29,7 +29,11 @@
   justify-content: center;
   align-items: center;
 }
-
+.dashed-line {
+  width: 100%;
+  border: none;
+  border-top: 3px dashed #5441fa;
+}
 .selectedSeatBoxOuterDiv {
   flex-direction: row;
   flex-wrap: wrap;
@@ -39,8 +43,8 @@
 
 .selected-seat-info {
   padding: 2.5rem 1.25rem 2rem 1.25rem;
-  border: 0.125rem solid #5441fa;
   border-radius: 1.25rem;
+  background-color: #1a191f;
   width: 18rem;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   transition: box-shadow 0.3s, border-color 0.3s;

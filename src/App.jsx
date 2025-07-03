@@ -5,7 +5,6 @@ import tileImage from "./assets/movieTile.jpeg";
 import bgImage from "./assets/blackPanther.png";
 import Header from "./components/Header";
 import bgImagePhone from "./assets/bgImagePhone.webp";
-import bgImage1 from "./assets/bgImage1.jpg";
 
 function App() {
   let movieInfo = {
@@ -14,7 +13,6 @@ function App() {
     title: "Black Panther: Wakanda Forever",
     movieTile: tileImage,
     bgImage: bgImage,
-    bgImage1: bgImage1,
     bgImagePhone: bgImagePhone,
     genres: ["Action", "Adventure", "Fantasy"],
     length: "2H 41M",

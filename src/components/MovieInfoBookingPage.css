@@ -1,29 +1,15 @@
-.movie-info-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.movie-info-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  filter: blur(10px);
-}
 
 .movie-info-container {
   position: relative;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6.25rem;
   padding: 3.75rem 0;
   text-shadow: 0.1875rem 0.1875rem 0.25rem rgb(0, 0, 0);
+  /* backdrop-filter: blur(5px); */
 }
 
 .movie-info-details {

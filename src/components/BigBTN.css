@@ -14,6 +14,10 @@
   max-width: 100%;
   word-break: break-word;
 }
+.big-btn:hover {
+  box-shadow: 0 0 0.9375rem #f9ab00;
+  border-color: #f9ab00;
+}
 
 @media (max-width: 600px) {
   .big-btn {

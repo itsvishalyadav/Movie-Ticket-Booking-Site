@@ -12,14 +12,11 @@ export default function MoviePageTexts({ info }) {
   const [showDetails, setShowDetails] = useState(false);
   useEffect(() => {
   if (showDetails) {
-    // Lock scroll
     document.body.style.overflow = "hidden";
   } else {
-    // Re-enable scroll
     document.body.style.overflow = "";
   }
 
-  // Cleanup if component unmounts
   return () => {
     document.body.style.overflow = "";
   };

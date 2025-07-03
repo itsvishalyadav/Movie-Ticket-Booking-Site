@@ -13,9 +13,9 @@
 
 .time-theater-selector {
   display: flex;
-  flex-direction: column;
   gap: 1.25rem;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .time-selector, .theater-selector {

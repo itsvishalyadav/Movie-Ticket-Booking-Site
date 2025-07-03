@@ -11,27 +11,34 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
   gap: 2.5rem;
   padding: 2.5rem 1.25rem;
 }
-
+.date-time-theater{
+  margin-top: 4rem;
+  min-width: 24rem;
+  max-width: 24px;
+  flex-shrink: 0;
+}
+.seat-pricing-info{
+  align-self: center;
+  margin-right: 2rem;
+}
 .booking-page-center {
-  /* flex: 1 1 0; */
   display: flex;
   justify-content: center;
 }
 
-.date-time-theater {
-  min-width: 270px;
-  max-width: 320px;
-  flex-shrink: 0;
-}
 
 .seat-pricing-info {
   min-width: 270px;
   max-width: 320px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 900px) {
@@ -44,5 +51,8 @@
   .date-time-theater, .seat-pricing-info {
     max-width: 100%;
     min-width: unset;
+  }
+  .seat-pricing-info {
+    margin-right: 0;
   }
 }

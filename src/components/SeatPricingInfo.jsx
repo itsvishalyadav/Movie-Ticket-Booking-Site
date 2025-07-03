@@ -4,6 +4,7 @@ export default function SeatPricingInfo({ selectedSeats }) {
   return (
     <div className="selected-seat-info">
       <h2>Selected Seats</h2>
+      <hr className="dashed-line"/>
       {selectedSeats.length > 0 ? (
         <div className="selectedSeatBoxOuterDiv">
           {selectedSeats.map((seat, index) => (
