@@ -1,6 +1,6 @@
 import MovieTile from "./MovieTile";
-import imdbLogo from "../assets/imdb.svg";
-import TrailerBtn from "./TrailerBtn";
+import imdbLogo from "../../assets/imdb.svg";
+import TrailerBtn from "../Buttons/TrailerBtn";
 import "./MovieInfoBookingPage.css";
 
 export default function MovieInfo({ info }) {

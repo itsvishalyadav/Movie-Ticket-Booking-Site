@@ -1,9 +1,9 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import BookingPage from "./pages/BookingPage";
-import MoviePageTexts from "./pages/MoviePageTexts";
-import AddItemPage from "./pages/AddItemPage";
+import Header from "./components/Layout/Header";
+import BookingPage from "./pages/Booking/BookingPage";
+import MoviePageTexts from "./pages/Movie/MoviePageTexts";
+import AddItemPage from "./pages/Admin/AddItemPage";
 import { getMoviesUrl, getMovieDetails, POPULAR_URL } from "./movieApi";
 
 function App() {
@@ -29,7 +29,14 @@ function App() {
 
   const buildBackgroundStyle = (movie) => {
     const mobileGradient = `linear-gradient(to top, rgba(0,0,0,0.3) 30%, #1a191f 95%), url(${movie.bgImagePhone})`;
-    const desktopGradient = `linear-gradient(to left, rgba(0,0,0,0) 5%, #1a191f 70%), url(${movie.bgImage})`;
+    const desktopGradient = `linear-gradient(
+        to left,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0.2) 30%,
+        rgba(0,0,0,0.7) 50%,
+        rgba(0,0,0,0.9) 70%,
+        #1a191f 100%
+      ), url(${movie.bgImage})`;
 
     return {
       minHeight: "100vh",
@@ -52,13 +59,13 @@ function App() {
             (showBookingPage ? (
               <div>
                 <Header nonSticky />
-                <BookingPage info={popularMovies[17]} liveInfo={liveInfo} />
+                <BookingPage info={popularMovies[1]} liveInfo={liveInfo} />
               </div>
             ) : (
-              <div style={buildBackgroundStyle(popularMovies[17])}>
+              <div style={buildBackgroundStyle(popularMovies[1])}>
                 <Header />
                 <MoviePageTexts
-                  info={popularMovies[17]}
+                  info={popularMovies[1]}
                   onBookTicket={() => setShowBookingPage(true)}
                 />
               </div>

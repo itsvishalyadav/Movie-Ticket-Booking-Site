@@ -104,4 +104,14 @@ async function getMovieDetails(url) {
   };
 }
 
-export { POPULAR_URL, getMoviesUrl, getMovieDetails };
+// Search movies by query
+async function searchMovies(query) {
+  if (!query) return [];
+  const res = await fetch(
+    `${BASE_URL}/search/movie${API_KEY}&query=${encodeURIComponent(query)}`
+  );
+  const data = await res.json();
+  return data.results || [];
+}
+
+export { POPULAR_URL, getMoviesUrl, getMovieDetails, searchMovies };

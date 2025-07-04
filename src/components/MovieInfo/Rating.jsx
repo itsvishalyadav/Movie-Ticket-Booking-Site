@@ -1,6 +1,6 @@
-import imdbLogo from "../assets/imdb.svg";
-import rtLogo from "../assets/Rotten_Tomatoes.svg";
-import heartLogo from "../assets/red-heart-icon.svg";
+import imdbLogo from "../../assets/imdb.svg";
+import rtLogo from "../../assets/Rotten_Tomatoes.svg";
+import heartLogo from "../../assets/red-heart-icon.svg";
 import './Rating.css';
 
 export default function Rating({ ratings }) {

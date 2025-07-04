@@ -1,4 +1,4 @@
-import BigBTN from "./BigBTN";
+import BigBTN from "../Buttons/BigBTN";
 import "./SeatPricingInfo.css";
 export default function SeatPricingInfo({ selectedSeats }) {
   return (
