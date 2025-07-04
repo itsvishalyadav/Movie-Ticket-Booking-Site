@@ -8,19 +8,19 @@ import Rating from "../components/Rating";
 import TrailerBookBtn from "../components/Trailer+Book-BTN";
 import DetailedInfoReviews from "./DetailedInfo&Reviews";
 
-export default function MoviePageTexts({ info }) {
+export default function MoviePageTexts({ info, onBookTicket }) {
   const [showDetails, setShowDetails] = useState(false);
-  useEffect(() => {
-  if (showDetails) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [showDetails]);
+  useEffect(() => {
+    if (showDetails) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showDetails]);
 
   return (
     <div className={`MoviePage${showDetails ? " swipe-up" : ""}`}>
@@ -39,7 +39,10 @@ export default function MoviePageTexts({ info }) {
         />
         <Plot plot={info.plot} />
         <Rating ratings={info.ratings} />
-        <TrailerBookBtn onMoreInfo={() => setShowDetails(true)} />
+        <TrailerBookBtn
+          onMoreInfo={() => setShowDetails(true)}
+          onBookTicket={onBookTicket}
+        />
       </div>
       <DetailedInfoReviews info={info} onClose={() => setShowDetails(false)} />
     </div>
