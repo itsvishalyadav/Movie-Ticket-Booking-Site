@@ -4,6 +4,7 @@ import Header from "./components/Layout/Header";
 import BookingPage from "./pages/Booking/BookingPage";
 import MoviePageTexts from "./pages/Movie/MoviePageTexts";
 import AddItemPage from "./pages/Admin/AddItemPage";
+import Home from "./pages/Home/Home";
 import { getMoviesUrl, getMovieDetails, POPULAR_URL } from "./movieApi";
 
 function App() {
@@ -55,21 +56,23 @@ function App() {
         <p style={{ color: "#fff", padding: "1rem" }}>Loading movies...</p>
       ) : (
         <>
-          {popularMovies.length > 0 &&
+          {/* {popularMovies.length > 0 &&
             (showBookingPage ? (
               <div>
                 <Header nonSticky />
-                <BookingPage info={popularMovies[1]} liveInfo={liveInfo} />
+                <BookingPage info={popularMovies[0]} liveInfo={liveInfo} />
               </div>
             ) : (
-              <div style={buildBackgroundStyle(popularMovies[1])}>
+              <div style={buildBackgroundStyle(popularMovies[0])}>
                 <Header />
                 <MoviePageTexts
-                  info={popularMovies[1]}
+                  info={popularMovies[0]}
                   onBookTicket={() => setShowBookingPage(true)}
                 />
               </div>
-            ))}
+            ))} */}
+
+            <Home/>
 
           {/* <AddItemPage /> */}
         </>
