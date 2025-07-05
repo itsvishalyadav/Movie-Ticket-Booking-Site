@@ -4,21 +4,22 @@ import styles from "./MovieCard.module.css";
 
 /**
  * Displays a single movie poster with an optional rating badge.
- * Expects a `movie` object: { id, title, poster, rating? }
  */
 function MovieCard({ movie }) {
   if (!movie) return null;
 
-  const { title, poster, rating } = movie;
+  const { title, poster, ratings, genres, length } = movie;
 
   return (
     <div className={styles.card}>
       <img src={poster} alt={title} className={styles.poster} />
 
-      {/* Hover overlay with title (and rating if provided) */}
+      {/* Hover overlay with title and rating */}
       <div className={styles.overlay}>
         <p className={styles.title}>{title}</p>
-        {rating && <span className={styles.rating}>⭐ {rating}</span>}
+        <span className={styles.rating}>⭐ {ratings.imdbRating.toFixed(1)}</span>
+        <p className={styles.genre}>{genres.slice(0, 2).join(", ")}</p>
+        <p className={styles.duration}>{length}</p>
       </div>
     </div>
   );

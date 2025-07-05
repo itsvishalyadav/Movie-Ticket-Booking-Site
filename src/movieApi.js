@@ -5,6 +5,10 @@ const BACKDROP_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_URL = "https://image.tmdb.org/t/p/w500";
 
 const POPULAR_URL = MOVIE_BASE_URL + "/popular" + API_KEY;
+const TOP_RATED_URL = MOVIE_BASE_URL + "/top_rated" + API_KEY;
+const NOW_PLAYING_URL = MOVIE_BASE_URL + "/now_playing" + API_KEY;
+const UPCOMING_URL = MOVIE_BASE_URL + "/upcoming" + API_KEY;
+const TRENDING_URL = BASE_URL + "/trending/movie/week" + API_KEY;
 const CREDITS_URL = (id) => `${MOVIE_BASE_URL}/${id}/credits${API_KEY}`;
 
 //contain movie id and movie url
@@ -114,4 +118,13 @@ async function searchMovies(query) {
   return data.results || [];
 }
 
-export { POPULAR_URL, getMoviesUrl, getMovieDetails, searchMovies };
+export { 
+  POPULAR_URL, 
+  TOP_RATED_URL, 
+  NOW_PLAYING_URL, 
+  UPCOMING_URL, 
+  TRENDING_URL,
+  getMoviesUrl, 
+  getMovieDetails, 
+  searchMovies 
+};
