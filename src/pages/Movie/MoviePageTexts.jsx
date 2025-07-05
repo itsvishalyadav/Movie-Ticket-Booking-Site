@@ -8,7 +8,7 @@ import Rating from "../../components/MovieInfo/Rating";
 import TrailerBookBtn from "../../components/Buttons/Trailer+Book-BTN";
 import DetailedInfoReviews from "./DetailedInfo&Reviews";
 
-export default function MoviePageTexts({ info, onBookTicket }) {
+export default function MoviePageTexts({ info }) {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,6 @@ export default function MoviePageTexts({ info, onBookTicket }) {
         <Rating ratings={info.ratings} />
         <TrailerBookBtn
           onMoreInfo={() => setShowDetails(true)}
-          onBookTicket={onBookTicket}
         />
       </div>
       <DetailedInfoReviews info={info} onClose={() => setShowDetails(false)} />

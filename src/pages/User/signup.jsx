@@ -1,68 +1,111 @@
-
-import { useState } from "react"
-import { Link , useNavigate} from "react-router-dom"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 // const navigate = useNavigate();
-import "./Signup.css" 
+import "./signup.css";
 
+function Signup() {
+  let [formState, setFormState] = new useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  let [error, setError] = new useState("");
+  let [isEmpty, setIsEmpty] = new useState({
+    username: false,
+    email: false,
+    password: false,
+  });
+  function handleFormState(event) {
+    setFormState((currState) => {
+      currState[event.target.id] = event.target.value;
+      return { ...currState };
+    });
+    setError("");
+    setIsEmpty({ username: false, email: false, password: false });
+  }
 
-function Signup(){
-    let [formState , setFormState] = new useState({username : "" , email : "" , password : ""});
-    let [error , setError] = new useState("");
-    let [isEmpty , setIsEmpty] = new useState({username : false , email : false , password : false});
-    function handleFormState(event){
-        setFormState((currState) => {
-            currState[event.target.id] = event.target.value;
-            return {...currState};
-        });
-        setError("");
-        setIsEmpty({username : false , email : false , password : false});
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    if (
+      formState.username === "" ||
+      formState.email === "" ||
+      formState.password === ""
+    ) {
+      return setIsEmpty({
+        username: formState.username === "",
+        email: formState.email === "",
+        password: formState.password === "",
+      });
     }
+    const res = await fetch("http://localhost:8080/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: await JSON.stringify({
+        username: formState.username,
+        email: formState.email,
+        password: formState.password,
+      }),
+    });
 
-    async function handleFormSubmit(event) {
-        event.preventDefault();
-        if(formState.username === "" || formState.email === "" || formState.password === ""){
-            return setIsEmpty({username : formState.username === "" , email : formState.email === "" , password : formState.password === ""});
-        }
-        const res = await fetch('http://localhost:8080/api/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: await JSON.stringify({ username : formState.username , email : formState.email , password : formState.password }),
-        });
-
-        setFormState({username : "" , email : "" , password : ""});
-        const data = await res.json();
-        if(!res.ok){
-            setError(data.message);
-        }
+    setFormState({ username: "", email: "", password: "" });
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.message);
     }
-    return (
-        <div className="container">
-            <div className="form-container">
-                <h1 className="heading">Movie<span>Book</span></h1>
-                <form>
-                    <div className="input-div">
-                        <input type = "text" id = "username" className="form-input" placeholder = "Username" value = {formState.username} onChange={handleFormState}></input>
-                        {isEmpty.username && <p className="error">username is required</p>}
-                    </div>
-                    <div className="input-div">
-                        <input type = "email" id = "email" placeholder = "Email" className = "form-input" value = {formState.email} onChange={handleFormState}></input>
-                        {isEmpty.email && <p className="error">email is required</p>}
-                    </div>
-                    <div className="input-div">
-                        <input type = "password" id ="password" className="form-input" placeholder = "Password" value = {formState.password} onChange={handleFormState}></input>
-                        {isEmpty.password && <p className="error">password is required</p>}
-                    </div>
-                    {!(error === "") && <p className="error">! {error}</p>}
-                    <button onClick={handleFormSubmit} className="form-button">SIGN UP</button>
-                    <br></br>
-                </form>
-                <p>Already have an account? <Link to="/login">login!</Link></p>
-            </div>
-        </div>
-        
-        
-    )
+  }
+  return (
+    <div className="container">
+      <div className="form-container">
+        <h1 className="heading">
+          Movie<span>Book</span>
+        </h1>
+        <form>
+          <div className="input-div">
+            <input
+              type="text"
+              id="username"
+              className="form-input"
+              placeholder="Username"
+              value={formState.username}
+              onChange={handleFormState}
+            ></input>
+            {isEmpty.username && <p className="error">username is required</p>}
+          </div>
+          <div className="input-div">
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              className="form-input"
+              value={formState.email}
+              onChange={handleFormState}
+            ></input>
+            {isEmpty.email && <p className="error">email is required</p>}
+          </div>
+          <div className="input-div">
+            <input
+              type="password"
+              id="password"
+              className="form-input"
+              placeholder="Password"
+              value={formState.password}
+              onChange={handleFormState}
+            ></input>
+            {isEmpty.password && <p className="error">password is required</p>}
+          </div>
+          {!(error === "") && <p className="error">! {error}</p>}
+          <button onClick={handleFormSubmit} className="form-button">
+            SIGN UP
+          </button>
+          <br></br>
+        </form>
+        <p>
+          Already have an account? <Link to="/login">login!</Link>
+        </p>
+      </div>
+    </div>
+  );
 }
 
-export default Signup
+export default Signup;

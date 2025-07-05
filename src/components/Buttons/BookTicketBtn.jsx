@@ -1,10 +1,13 @@
+
+import { Link, useParams } from "react-router-dom";
 import BigBTN from "./BigBTN";
 
-export default function BookTicketBtn({ onBookTicket }) {
+export default function BookTicketBtn() {
+  const { title } = useParams();
+
   return (
-    <BigBTN
-      TextForButton="➜ Book Ticket"
-      onClick={onBookTicket}
-    />
+    <Link to={`/movie/${title}/booking`} style={{ textDecoration: 'none' }}>
+      <BigBTN TextForButton="➜ Book Ticket" />
+    </Link>
   );
 }
