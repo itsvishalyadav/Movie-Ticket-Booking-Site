@@ -5,22 +5,71 @@ import BookingPage from "./pages/Booking/BookingPage";
 import MoviePageTexts from "./pages/Movie/MoviePageTexts";
 import AddItemPage from "./pages/Admin/AddItemPage";
 import Home from "./pages/Home/Home";
-import { getMoviesUrl, getMovieDetails, POPULAR_URL } from "./movieApi";
+import { 
+  getMoviesUrl, 
+  getMovieDetails, 
+  POPULAR_URL, 
+  TOP_RATED_URL, 
+  NOW_PLAYING_URL, 
+  UPCOMING_URL, 
+  TRENDING_URL 
+} from "./movieApi";
 
 function App() {
   const [popularMovies, setPopularMovies] = useState([]);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showBookingPage, setShowBookingPage] = useState(false);
 
   useEffect(() => {
-    getMoviesUrl(POPULAR_URL)
-      .then((movies) => {
-        return Promise.all(movies.map((m) => getMovieDetails(m.MOVIE_URL)));
-      })
-      .then((detailedMovies) => {
-        setPopularMovies(detailedMovies);
+    const fetchAllMovies = async () => {
+      try {
+        // Fetch popular movies for hero slider
+        const popularMoviesData = await getMoviesUrl(POPULAR_URL);
+        const detailedPopularMovies = await Promise.all(
+          popularMoviesData.slice(0, 5).map((m) => getMovieDetails(m.MOVIE_URL))
+        );
+        setPopularMovies(detailedPopularMovies);
+
+        // Fetch top rated movies
+        const topRatedData = await getMoviesUrl(TOP_RATED_URL);
+        const detailedTopRated = await Promise.all(
+          topRatedData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+        );
+        setTopRatedMovies(detailedTopRated);
+
+        // Fetch now playing movies
+        const nowPlayingData = await getMoviesUrl(NOW_PLAYING_URL);
+        const detailedNowPlaying = await Promise.all(
+          nowPlayingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+        );
+        setNowPlayingMovies(detailedNowPlaying);
+
+        // Fetch upcoming movies
+        const upcomingData = await getMoviesUrl(UPCOMING_URL);
+        const detailedUpcoming = await Promise.all(
+          upcomingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+        );
+        setUpcomingMovies(detailedUpcoming);
+
+        // Fetch trending movies
+        const trendingData = await getMoviesUrl(TRENDING_URL);
+        const detailedTrending = await Promise.all(
+          trendingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+        );
+        setTrendingMovies(detailedTrending);
+
         setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchAllMovies();
   }, []);
 
   const liveInfo = {
@@ -72,7 +121,13 @@ function App() {
               </div>
             ))} */}
 
-            <Home/>
+            <Home 
+              popularMovies={popularMovies}
+              topRatedMovies={topRatedMovies}
+              nowPlayingMovies={nowPlayingMovies}
+              upcomingMovies={upcomingMovies}
+              trendingMovies={trendingMovies}
+            />
 
           {/* <AddItemPage /> */}
         </>
