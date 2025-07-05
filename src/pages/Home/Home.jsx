@@ -55,7 +55,7 @@ export default function Home({
     trendingMovies
   );
 
-  // Show loading state if no movies are loaded yet
+  //if no movies are loaded yet
   const isLoading = popularMovies.length === 0 && topRatedMovies.length === 0;
 
   if (isLoading) {
@@ -81,7 +81,7 @@ export default function Home({
 
   return (
     <div className={styles.page}>
-      <Header />
+      <Header nonSticky />
 
       {/* Hero Slider */}
       <Slider movies={popularMovies} />

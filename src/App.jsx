@@ -27,38 +27,34 @@ function App() {
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
-        // Fetch popular movies for hero slider
+        //movies for hero slider
         const popularMoviesData = await getMoviesUrl(POPULAR_URL);
         const detailedPopularMovies = await Promise.all(
-          popularMoviesData.slice(0, 5).map((m) => getMovieDetails(m.MOVIE_URL))
+          popularMoviesData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
         );
         setPopularMovies(detailedPopularMovies);
 
-        // Fetch top rated movies
         const topRatedData = await getMoviesUrl(TOP_RATED_URL);
         const detailedTopRated = await Promise.all(
-          topRatedData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+          topRatedData.slice(0, 15).map((m) => getMovieDetails(m.MOVIE_URL))
         );
         setTopRatedMovies(detailedTopRated);
 
-        // Fetch now playing movies
         const nowPlayingData = await getMoviesUrl(NOW_PLAYING_URL);
         const detailedNowPlaying = await Promise.all(
-          nowPlayingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+          nowPlayingData.slice(0, 15).map((m) => getMovieDetails(m.MOVIE_URL))
         );
         setNowPlayingMovies(detailedNowPlaying);
 
-        // Fetch upcoming movies
         const upcomingData = await getMoviesUrl(UPCOMING_URL);
         const detailedUpcoming = await Promise.all(
-          upcomingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+          upcomingData.slice(0, 15).map((m) => getMovieDetails(m.MOVIE_URL))
         );
         setUpcomingMovies(detailedUpcoming);
 
-        // Fetch trending movies
         const trendingData = await getMoviesUrl(TRENDING_URL);
         const detailedTrending = await Promise.all(
-          trendingData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
+          trendingData.slice(0, 15).map((m) => getMovieDetails(m.MOVIE_URL))
         );
         setTrendingMovies(detailedTrending);
 

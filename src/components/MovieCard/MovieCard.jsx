@@ -4,7 +4,6 @@ import styles from "./MovieCard.module.css";
 
 /**
  * Displays a single movie poster with an optional rating badge.
- * Expects a `movie` object from API: { id, title, poster, ratings, genres, length }
  */
 function MovieCard({ movie }) {
   if (!movie) return null;
