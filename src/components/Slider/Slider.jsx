@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // yarn add lucide-react
 import styles from "./Slider.module.css";
+import {Link} from "react-router-dom";
 
 // const slides = [
 //   {
@@ -95,23 +96,25 @@ export default function Slider({ movies = [], autoPlay = true, delay = 5000 }) {
       onTouchEnd={onTouchEnd}
     >
       {slides.map((s, i) => (
-        <div
-          key={s.id}
-          className={`${styles.slide} ${i === index ? styles.active : ""}`}
-          style={{ backgroundImage: `url(${s.image})` }}
-          aria-hidden={i !== index}
-        >
-          <div className={styles.overlay}>
-            <div className={styles.info}>
-              <h2 className={styles.title}>{slides[index].title}</h2>
-              <p className={styles.meta}>
-                ⭐ {slides[index].rating} &nbsp;|&nbsp; {slides[index].genre}{" "}
-                &nbsp;|&nbsp; {slides[index].duration}
-              </p>
-              <button className={styles.bookNow}>Book Now</button>
+        <Link to={`/movie/${s.title}`}>
+          <div
+            key={s.id}
+            className={`${styles.slide} ${i === index ? styles.active : ""}`}
+            style={{ backgroundImage: `url(${s.image})` }}
+            aria-hidden={i !== index}
+          >
+            <div className={styles.overlay}>
+              <div className={styles.info}>
+                <h2 className={styles.title}>{slides[index].title}</h2>
+                <p className={styles.meta}>
+                  ⭐ {slides[index].rating} &nbsp;|&nbsp; {slides[index].genre}{" "}
+                  &nbsp;|&nbsp; {slides[index].duration}
+                </p>
+                <button className={styles.bookNow}>Book Now</button>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
 
       {/* arrows */}
