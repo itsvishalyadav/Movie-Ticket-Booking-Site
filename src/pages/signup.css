@@ -1,0 +1,72 @@
+
+.container{
+    height : 100vh;
+    background: url('https://hotflix.volkovdesign.com/admin/img/section/section.jpg');
+    background-repeat: no-repeat;
+    background-size : cover;
+}
+
+.form-container {
+    height: 650px;
+    border : 0.05px solid rgba(18, 17, 17, 0.179);
+    width : 400px;
+    margin : auto;
+    margin-top: 50px;
+    text-align: center;
+    background-color: #1A191F;
+    border-radius: 1rem;
+}
+
+.heading{
+    margin-bottom: 4rem;
+    margin-top: 3rem;
+}
+
+.heading span{
+    color : #f9ab00
+}
+
+.form-input{
+    width : 80%;
+    height : 2.5rem;
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+    padding : 0rem 0.8rem;
+    background-color:  #222028;
+    border : none;
+}
+
+
+.form-button{
+    width : 85%;
+    height : 2.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+    background-color: #222028;
+    border : 2px solid #f9ab00;
+    transition: all 0.5s ease 0s;
+}
+
+.form-button:hover{
+    background-color:  #f9aa001c;
+}
+
+.form-input:focus{
+    outline : 2px solid #f9ab00;
+}
+
+a{
+    color : #f9ab00;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+.error{
+    color : red;
+    font-size: small;
+}
+
+
