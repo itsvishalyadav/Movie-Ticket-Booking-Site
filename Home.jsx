@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
 import React from "react";
 import Header from "../../components/Header/Header";
-import Slider from "../../components/Slider";
+import Slider from "../../components/Slider/Slider";
 import Rails from "../../components/Rails/Rails";
 import Footer from "../../components/Footer/Footer";
 import styles from "./Home.module.css";
