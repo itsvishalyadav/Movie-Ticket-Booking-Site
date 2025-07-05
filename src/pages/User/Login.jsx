@@ -5,6 +5,7 @@ import "./Signup.css"
 function Login(){
     let [formState , setFormState] = new useState({email : "" , password : ""});
     let [error , setError] = new useState("");
+    let [isEmpty , setIsEmpty] = new useState({email : false , password : false});
     function handleFormState(event){
         setFormState((currState) => {
             currState[event.target.id] = event.target.value;
@@ -12,10 +13,14 @@ function Login(){
         });
 
         setError("");
+        setIsEmpty({email : false , password : false});
     }
 
     async function handleFormSubmit(event) {
         event.preventDefault();
+        if(formState.email === "" || formState.password === ""){
+            return setIsEmpty({email : formState.email === "" , password : formState.password === ""});
+        }
         const res = await fetch('http://localhost:8080/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,11 +39,13 @@ function Login(){
             <div className="form-container">
                 <h1 className="heading">Movie<span>Book</span></h1>
                 <form>
-                    <div>
-                        <input type = "email" id = "email" placeholder = "Email" className = "form-input" value = {formState.email} onChange={handleFormState}></input>
+                    <div className="input-div">
+                        <input type = "email" id = "email" placeholder = "Email" className = "form-input" value = {formState.email} onChange={handleFormState} required></input>
+                        {isEmpty.email && <p className="error">email is required</p>}
                     </div>
-                    <div>
-                        <input type = "password" id ="password" className="form-input" placeholder = "Password" value = {formState.password} onChange={handleFormState}></input>
+                    <div className="input-div">
+                        <input type = "password" id ="password" className="form-input" placeholder = "Password" value = {formState.password} onChange={handleFormState} required></input>
+                        {isEmpty.password && <p className="error">password is required</p>}
                     </div>
                     {!(error === "") && <p className="error">! {error}</p>}
                     <button onClick={handleFormSubmit} className="form-button">LOGIN</button>

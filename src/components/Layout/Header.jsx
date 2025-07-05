@@ -11,9 +11,27 @@ import {
   X,
 } from "lucide-react";
 import styles from "./Header.module.css";
+import { searchMovies } from "../../movieApi";
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ nonSticky = false }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
+
+  // Fetch movies from TMDB via movieApi
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (query) {
+        searchMovies(query).then(setResults);
+      } else {
+        setResults([]);
+      }
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [query]);
 
   return (
     <header className={`${styles.header} ${nonSticky ? styles.nonSticky : ''}`}>
@@ -68,13 +86,45 @@ export default function Header({ nonSticky = false }) {
         className={styles.search}
         role="search"
         onSubmit={(e) => e.preventDefault()}
+        autoComplete="off"
       >
         <Search size={18} className={styles.searchIcon} />
         <input
           type="search"
           placeholder="Movies, cinemas, shows…"
           className={styles.searchInput}
+          value={query}
+          onChange={e => {
+            setQuery(e.target.value);
+            setShowResults(true);
+          }}
+          onBlur={() => setTimeout(() => setShowResults(false), 200)}
+          onFocus={() => query && setShowResults(true)}
         />
+        {showResults && results.length > 0 && (
+          <div className={styles.searchResults}>
+            {results.map(movie => (
+              <div
+                key={movie.id}
+                className={styles.searchResultItem}
+                onMouseDown={() => {
+                  navigate(`/movie/${movie.id}`);
+                  setShowResults(false);
+                  setQuery("");
+                }}
+              >
+                {movie.poster_path && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                    alt={movie.title}
+                    className={styles.resultPoster}
+                  />
+                )}
+                <span>{movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ''}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </form>
 
       {/* ---------- Right: Nav + Profile ---------- */}

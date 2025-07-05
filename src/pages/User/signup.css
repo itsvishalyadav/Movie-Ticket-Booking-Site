@@ -29,7 +29,6 @@
 .form-input{
     width : 80%;
     height : 2.5rem;
-    margin-bottom: 2rem;
     border-radius: 0.5rem;
     padding : 0rem 0.8rem;
     background-color:  #222028;
@@ -67,6 +66,15 @@ a:hover{
 .error{
     color : red;
     font-size: small;
+}
+
+.input-div{
+    margin-bottom: 2rem;
+}
+
+.input-div p{
+    text-align: left;
+    margin-left : 2.5rem;
 }
 
 

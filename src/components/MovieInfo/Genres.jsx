@@ -1,5 +1,5 @@
 import './Genres.css';
-import SmallBTN from "./SmallBTN";
+import SmallBTN from "../Buttons/SmallBTN";
 export default function Genres({ genres }) {
   return (
     <div className="genres">

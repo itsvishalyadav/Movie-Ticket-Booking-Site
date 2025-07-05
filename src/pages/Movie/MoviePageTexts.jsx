@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import "./MoviePageTexts.css";
-import Genres from "../components/Genres";
-import ExtraInfo from "../components/ExtraInfo";
-import Plot from "../components/Plot";
-import Rating from "../components/Rating";
-import TrailerBookBtn from "../components/Trailer+Book-BTN";
+import Genres from "../../components/MovieInfo/Genres";
+import ExtraInfo from "../../components/MovieInfo/ExtraInfo";
+import Plot from "../../components/MovieInfo/Plot";
+import Rating from "../../components/MovieInfo/Rating";
+import TrailerBookBtn from "../../components/Buttons/Trailer+Book-BTN";
 import DetailedInfoReviews from "./DetailedInfo&Reviews";
 
 export default function MoviePageTexts({ info, onBookTicket }) {

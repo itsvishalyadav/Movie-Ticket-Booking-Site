@@ -1,7 +1,7 @@
-import DateTimeTheater from "../components/DateTimeTheater";
-import MovieInfo from "../components/MovieInfoBookingPage";
-import SeatPricingInfo from "../components/SeatPricingInfo";
-import SeatMatrix from "../components/SeatMatrix";
+import DateTimeTheater from "../../components/Booking/DateTimeTheater";
+import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
+import SeatPricingInfo from "../../components/Booking/SeatPricingInfo";
+import SeatMatrix from "../../components/Booking/SeatMatrix";
 import "./BookingPage.css";
 import { useState } from "react";
 

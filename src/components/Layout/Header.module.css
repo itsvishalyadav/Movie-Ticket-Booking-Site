@@ -138,6 +138,36 @@
   box-shadow: 0 0 0 1px var(--accent);
 }
 
+.searchResults {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: #23222b;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  z-index: 20;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  transition: background 0.2s;
+}
+.searchResultItem:hover {
+  background: #2a2a2a;
+}
+.resultPoster {
+  width: 40px;
+  border-radius: 4px;
+}
+
 /* ---------- Right Section ---------- */
 .right {
   display: flex;
