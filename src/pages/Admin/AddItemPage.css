@@ -1,13 +1,12 @@
 .additem-root {
   display: flex;
   min-height: 100vh;
-  background: #10131a;
+  background: #1a191f;
   color: #fff;
-  font-family: 'Segoe UI', 'Arial', sans-serif;
 }
 .sidebar {
   width: 270px;
-  background: #181c24;
+  background: #211F27;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -23,7 +22,7 @@
   margin-bottom: 32px;
 }
 .flix-logo .tv {
-  color: #3b82f6;
+  color: #f9ab00;
   font-size: 1.1rem;
 }
 .user-info {
@@ -64,8 +63,8 @@
 }
 .sidebar-nav > ul > li:hover,
 .nav-section ul li:hover {
-  color: #3b82f6;
-  text-decoration: underline;
+  color: #f9ab00;
+  text-decoration: none;
 }
 .sidebar-nav > ul > li a,
 .nav-section ul li a {
@@ -76,7 +75,7 @@
 }
 .sidebar-nav > ul > li.active,
 .nav-section ul li.active {
-  color: #3b82f6;
+  color: #f9ab00;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -88,7 +87,7 @@
 .additem-main {
   flex: 1;
   padding: 32px 48px;
-  background: #10131a;
+  background: #1a191f;
 }
 .additem-main h1 {
   font-size: 2.3rem;
@@ -96,7 +95,7 @@
   margin-bottom: 32px;
 }
 .additem-form {
-  background: #181c24;
+  background: #211f27;
   border-radius: 18px;
   padding: 32px;
   max-width: 1100px;
@@ -111,26 +110,38 @@
   align-items: flex-start;
 }
 .cover-upload {
-  min-width: 240px;
-  max-width: 240px;
-  height: 340px;
-  background: #23283a;
-  border-radius: 12px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #b3b8c5;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-right: 24px;
+  margin-right: 10px;
   text-align: center;
   box-sizing: border-box;
+  gap: 18px ;
 }
-.cover-upload-label {
-  width: 100%;
-  height: 100%;
+.cover-upload-backdrop {
+  min-width: 340px;
+  max-width: 340px;
+  height: 240px;
   display: flex;
+  background: #1a191f;
   align-items: center;
+  border-radius: 12px;
+  justify-content: center;
+  cursor: pointer;
+}
+.cover-upload-poster {
+  min-width: 240px;
+  max-width: 240px;
+  height: 340px;
+  margin-bottom: 20px;
+  display: flex;
+  background: #1a191f;
+  align-items: center;
+  border-radius: 12px;
   justify-content: center;
   cursor: pointer;
 }
@@ -144,11 +155,10 @@
   box-sizing: border-box;
 }
 .input, .description-input {
-  width: 100%;
   box-sizing: border-box;
 }
 .input {
-  background: #23283a;
+  background: #1a191f;
   border: none;
   border-radius: 8px;
   padding: 14px 16px;
@@ -169,6 +179,8 @@
   resize: vertical;
 }
 .row-fields {
+  flex-wrap: wrap;
+  
   display: flex;
   gap: 18px;
 }
@@ -177,7 +189,7 @@
   align-items: center;
 }
 .photos-upload-label {
-  background: #23283a;
+  background: #1a191f;
   border-radius: 8px;
   padding: 10px 18px;
   color: #b3b8c5;
@@ -186,20 +198,9 @@
   align-items: center;
   gap: 8px;
 }
-.item-type-row {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-size: 1.1rem;
-}
-.item-type-row label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
+
 .upload-video-label {
-  background: #23283a;
+  background: #1a191f;
   border-radius: 8px;
   padding: 10px 18px;
   color: #b3b8c5;
@@ -211,7 +212,7 @@
 .publish-btn {
   width: 100%;
   margin-top: 18px;
-  background: #3b82f6;
+  background: #f9ab00;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -222,7 +223,8 @@
   transition: background 0.2s;
 }
 .publish-btn:hover {
-  background: #2563eb;
+  transform: scale(1.02);
+  box-shadow: #f9ab00 0 0 10px;
 }
 @media (max-width: 900px) {
   .form-content {
