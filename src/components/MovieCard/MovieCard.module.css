@@ -36,9 +36,22 @@
 .title {
   font-weight: 600;
   margin-bottom: 0.2rem;
+  font-size: 0.8rem;
 }
 
 .rating {
   font-size: 0.75rem;
-  color: #f5c518;
+  color: #f9ab00;
+  margin-bottom: 0.2rem;
+}
+
+.genre {
+  font-size: 0.7rem;
+  color: #ccc;
+  margin-bottom: 0.1rem;
+}
+
+.duration {
+  font-size: 0.7rem;
+  color: #aaa;
 }

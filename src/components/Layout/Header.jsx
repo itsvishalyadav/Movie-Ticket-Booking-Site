@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Select from "@radix-ui/react-select";
+import SideBar from "../User/SideBar";
 import {
   MapPin,
   ChevronDown,
@@ -9,6 +10,7 @@ import {
   User2,
   Menu,
   X,
+  Sidebar,
 } from "lucide-react";
 import styles from "./Header.module.css";
 import { searchMovies } from "../../movieApi";
@@ -19,7 +21,34 @@ export default function Header({ nonSticky = false }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [showProfile , setShowProfile] = useState(false);
+  const [user , setUser] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUser = async() => {
+      const res = await fetch("http://localhost:8080/api/isLoggedIn" , {credentials : "include"});
+      const data = await res.json();
+      if(data.user){
+        setUser(data.user);
+      }
+      else{
+        setUser();
+      }
+    };
+    checkUser();
+  });
+
+  // console.log(user);
+
+  async function handleprofile(){
+    if(!user){
+      return navigate("/login");
+    }
+    setShowProfile((curr) =>{
+      return !curr;
+    })
+  }
 
   // Fetch movies from TMDB via movieApi
   React.useEffect(() => {
@@ -34,6 +63,7 @@ export default function Header({ nonSticky = false }) {
   }, [query]);
 
   return (
+    <>
     <header className={`${styles.header} ${nonSticky ? styles.nonSticky : ''}`}>
       {/* ---------- Left: Logo + City ---------- */}
       <div className={styles.left}>
@@ -135,7 +165,7 @@ export default function Header({ nonSticky = false }) {
         <a href="#" className={styles.navItem}>
           <Tag size={18} /> <span>Offers</span>
         </a>
-        <button className={styles.profile} aria-label="Profile">
+        <button className={styles.profile} aria-label="Profile" onClick={handleprofile}>
           <User2 size={20} />
         </button>
       </nav>
@@ -149,5 +179,7 @@ export default function Header({ nonSticky = false }) {
         {mobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
     </header>
+    {showProfile && user && <SideBar username = {user.username}></SideBar>}
+    </>
   );
 } 

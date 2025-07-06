@@ -2,12 +2,12 @@ import TrailerBtn from "./TrailerBtn";
 import BookTicketBtn from "./BookTicketBtn";
 import "./Trailer+Book-BTN.css";
 
-export default function TrailerBookBtn({ onMoreInfo, onBookTicket }) {
+export default function TrailerBookBtn({ onMoreInfo }) {
   return (
     <div className="TrailerBookBtn">
       <div className="TrailerBookBtn__buttons">
         <TrailerBtn />
-        <BookTicketBtn onBookTicket={onBookTicket} />
+        <BookTicketBtn />
       </div>
       <a
         href="#"

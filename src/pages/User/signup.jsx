@@ -6,6 +6,7 @@ import "./Signup.css"
 
 
 function Signup(){
+    const navigate = useNavigate();
     let [formState , setFormState] = new useState({username : "" , email : "" , password : ""});
     let [error , setError] = new useState("");
     let [isEmpty , setIsEmpty] = new useState({username : false , email : false , password : false});
@@ -34,6 +35,9 @@ function Signup(){
         const data = await res.json();
         if(!res.ok){
             setError(data.message);
+        }
+        else{
+            navigate("/home");
         }
     }
     return (

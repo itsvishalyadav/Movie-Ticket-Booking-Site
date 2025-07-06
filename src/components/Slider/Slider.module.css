@@ -55,7 +55,7 @@
 .title {
   font-size: clamp(1.5rem, 4vw, 2.8rem);
   font-weight: 600;
-  color: #f5c518;
+  color: #f9ab00;
   margin-bottom: 0.5rem;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
 }
@@ -69,7 +69,7 @@
 
 /* Book Now Button */
 .bookNow {
-  background: #f5c518;
+  background: #f9ab00;
   color: #000;
   padding: 0.6rem 1.2rem;
   font-weight: 600;
@@ -79,7 +79,7 @@
 }
 .bookNow:hover {
   transform: scale(1.05);
-  background: #ffdd30;
+  background: #f9ab00;
 }
 
 .controlLeft,
@@ -143,6 +143,6 @@
 
 /* active (current slide) */
 .dotActive {
-  background: #f5c518; /* IMDb yellow */
+  background: #f9ab00; /* Theme color */
   transform: scale(1.2); /* gentle pop */
 }

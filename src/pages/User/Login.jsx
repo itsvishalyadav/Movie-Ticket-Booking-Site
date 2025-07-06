@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link , useNavigate} from "react-router-dom"
 import "./Signup.css" 
 
 function Login(){
+    const navigate = useNavigate();
     let [formState , setFormState] = new useState({email : "" , password : ""});
     let [error , setError] = new useState("");
     let [isEmpty , setIsEmpty] = new useState({email : false , password : false});
@@ -33,6 +34,9 @@ function Login(){
         if(!res.ok){
             setError(data.message);
         }
+        else{
+            navigate("/home");
+        }
     }
     return (
         <div className="container">
@@ -51,7 +55,7 @@ function Login(){
                     <button onClick={handleFormSubmit} className="form-button">LOGIN</button>
                     <br></br>
                 </form>
-                <p>Donot have an account? <Link to="/signup">Signup!</Link></p>
+                <p>Do not have an account? <Link to="/signup">Signup!</Link></p>
             </div>
         </div>
         
