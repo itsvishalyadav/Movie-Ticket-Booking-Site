@@ -86,7 +86,7 @@ async function getMovieDetails(url) {
     budget: movie.budget,
     plot: movie.overview,
     popularity: movie.popularity,
-    format: ["3D", "4D", "IMAX"],
+    format: ["3D", "IMAX"],
     genres: movie.genres.map((g) => g.name),
     length: movie.runtime ? `${movie.runtime} Mins` : "N/A",
     languages: Array.from(
