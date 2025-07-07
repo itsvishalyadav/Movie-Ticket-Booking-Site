@@ -9,8 +9,12 @@
   background: #211F27;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 24px;
   padding: 0 0 20px 0;
+}
+.sidebar-nav>ul>li{
+  color: inherit;
+
 }
 .sidebar-header {
   padding: 32px 24px 8px 24px;
@@ -21,7 +25,7 @@
   letter-spacing: 2px;
   margin-bottom: 32px;
 }
-.flix-logo .tv {
+.tv {
   color: #f9ab00;
   font-size: 1.1rem;
 }
@@ -53,21 +57,18 @@
   padding: 0 24px;
   margin: 0;
 }
-.sidebar-nav > ul > li,
-.nav-section ul li {
+.sidebar-nav > ul > li {
   margin: 12px 0;
   font-size: 1.1rem;
   cursor: pointer;
   color: #fff;
   transition: color 0.2s, text-decoration 0.2s;
 }
-.sidebar-nav > ul > li:hover,
-.nav-section ul li:hover {
+.sidebar-nav > ul > li:hover {
   color: #f9ab00;
   text-decoration: none;
 }
-.sidebar-nav > ul > li a,
-.nav-section ul li a {
+.sidebar-nav > ul > li a {
   color: inherit;
   text-decoration: none;
   display: block;
@@ -89,11 +90,6 @@
   padding: 32px 48px;
   background: #1a191f;
 }
-.additem-main h1 {
-  font-size: 2.3rem;
-  font-weight: 600;
-  margin-bottom: 32px;
-}
 .additem-form {
   background: #211f27;
   border-radius: 18px;
@@ -109,42 +105,6 @@
   flex-wrap: wrap;
   align-items: flex-start;
 }
-.cover-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #b3b8c5;
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-right: 10px;
-  text-align: center;
-  box-sizing: border-box;
-  gap: 18px ;
-}
-.cover-upload-backdrop {
-  min-width: 340px;
-  max-width: 340px;
-  height: 240px;
-  display: flex;
-  background: #1a191f;
-  align-items: center;
-  border-radius: 12px;
-  justify-content: center;
-  cursor: pointer;
-}
-.cover-upload-poster {
-  min-width: 240px;
-  max-width: 240px;
-  height: 340px;
-  margin-bottom: 20px;
-  display: flex;
-  background: #1a191f;
-  align-items: center;
-  border-radius: 12px;
-  justify-content: center;
-  cursor: pointer;
-}
 .form-fields {
   flex: 1 1 350px;
   min-width: 350px;
@@ -154,8 +114,10 @@
   gap: 18px;
   box-sizing: border-box;
 }
-.input, .description-input {
-  box-sizing: border-box;
+.section-title {
+  margin-top: 18px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 .input {
   background: #1a191f;
@@ -166,48 +128,64 @@
   font-size: 1.1rem;
   outline: none;
   margin-bottom: 0;
+  min-width: 0;
+  flex: 1 1 0;
 }
 .input:focus {
   border: 1.5px solid #3b82f6;
 }
-.title-input {
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-.description-input {
-  min-height: 90px;
-  resize: vertical;
-}
 .row-fields {
-  flex-wrap: wrap;
-  
   display: flex;
   gap: 18px;
+  flex-wrap: wrap;
 }
-.upload-photos {
-  display: flex;
-  align-items: center;
+.row-fields > * {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
 }
-.photos-upload-label {
-  background: #1a191f;
-  border-radius: 8px;
-  padding: 10px 18px;
-  color: #b3b8c5;
-  cursor: pointer;
+.seat-types-section {
+  margin-top: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
 }
-
-.upload-video-label {
-  background: #1a191f;
-  border-radius: 8px;
-  padding: 10px 18px;
-  color: #b3b8c5;
-  cursor: pointer;
-  display: flex;
+.seat-types-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.seat-type-row {
   align-items: center;
-  gap: 8px;
+}
+.add-seat-type-btn {
+  margin-top: 6px;
+  background: #f9ab00;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.add-seat-type-btn:hover {
+  background: #e09c00;
+}
+.remove-seat-type-btn {
+  margin-left: 4px;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.remove-seat-type-btn:hover {
+  background: #c62828;
 }
 .publish-btn {
   width: 100%;
@@ -231,14 +209,14 @@
     flex-direction: column;
     gap: 18px;
   }
-  .cover-upload {
-    margin-right: 0;
-    margin-bottom: 18px;
-  }
   .additem-main {
     padding: 18px 6px;
   }
   .additem-form {
     padding: 16px;
+  }
+  .row-fields {
+    flex-direction: column;
+    gap: 10px;
   }
 } 

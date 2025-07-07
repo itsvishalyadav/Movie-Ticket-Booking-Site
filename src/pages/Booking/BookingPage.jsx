@@ -12,23 +12,27 @@ import {
   searchMovies
 } from "/src/movieApi.js";
 
-export default function BookingPage() {
+export default function BookingPage({ info, liveInfo }) {
   const { title } = useParams();
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [movieInfo, setMovieInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [movieInfo, setMovieInfo] = useState(info || null);
+  const [loading, setLoading] = useState(!info);
 
-  const liveInfo = {
+  const defaultLiveInfo = {
     timings: ["09:45 AM", "12:30 PM", "03:15 PM", "06:15 PM"],
     theaters: ["Vaishali Nagar", "Sector 17", "City Cinema"],
   };
 
   useEffect(() => {
+    if (info) return; 
     const fetchMovieData = async () => {
       try {
-        const search_url = await searchMovies(title);
-        const MoviesData = await getMoviesUrl(search_url);
-        const detailedMovie = await getMovieDetails(MoviesData[0].MOVIE_URL);
+        const searchResults = await searchMovies(title);
+        if (!searchResults.length) throw new Error("No results");
+        const movie = searchResults[0];
+        const detailedMovie = await getMovieDetails(
+          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=9eec713ccd6e293c48c3085825d25d7e`
+        );
         setMovieInfo(detailedMovie);
         setLoading(false);
       } catch (error) {
@@ -36,9 +40,8 @@ export default function BookingPage() {
         setLoading(false);
       }
     };
-
     fetchMovieData();
-  }, [title]);
+  }, [title, info]);
 
   if (loading) {
     return <p style={{ color: "#fff", padding: "1rem" }}>Loading booking page...</p>;
@@ -63,7 +66,7 @@ export default function BookingPage() {
         <MovieInfo info={movieInfo} />
         <div className="booking-page-flex-row">
           <div className="date-time-theater">
-            <DateTimeTheater liveInfo={liveInfo} />
+            <DateTimeTheater liveInfo={liveInfo || defaultLiveInfo} />
           </div>
           <div className="booking-page-center">
             <SeatMatrix
