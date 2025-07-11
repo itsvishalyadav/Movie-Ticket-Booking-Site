@@ -1,5 +1,35 @@
 import { useState, useRef } from "react";
 import "./DatePicker.css";
+function formatCurrentDate() {
+  const now = new Date();
+
+  const day = now.toLocaleDateString("en-US", { weekday: "short" });
+  const monthDay = now.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+  });
+
+  return `${day}, ${monthDay}`;
+}
+
+function formatShowDate(unix) {
+  const d = new Date(unix * 1000);
+  const day = d.toLocaleDateString("en-US", { weekday: "short" });
+  const monthDay = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+  return `${day}, ${monthDay}`;
+}
+function formatTime(unix) {
+  const date = new Date(unix * 1000);
+  
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  
+  return `${hours}.${minutes} ${ampm}`;
+}
 
 function generateDates(numDays = 30) {
   const dates = [];
@@ -14,17 +44,18 @@ function generateDates(numDays = 30) {
   return dates;
 }
 
-export default function DatePicker() {
-  const [selectedDate, setSelectedDate] = useState("");
+export default function DatePicker({liveInfo , setLiveInfo}) {
+  // const [selectedDate, setSelectedDate] = useState("");
   const containerRef = useRef(null);
   const dates = generateDates(30);
-
   const scrollByAmount = (amount) => {
     containerRef.current.scrollBy({ left: amount, behavior: "smooth" });
   };
 
   const updateButton = (date) => {
-    setSelectedDate(date);
+      setLiveInfo((curr) => {
+        return {...curr , date : date }
+      })
   };
 
   return (
@@ -38,7 +69,7 @@ export default function DatePicker() {
       </button>
       <div className="date-picker" ref={containerRef}>
         {dates.map((item, index) => {
-          const isSelected = selectedDate === `${item.day}, ${item.date}`;
+          const isSelected = liveInfo.date === `${item.day}, ${item.date}`;
           return (
             <button
               key={index}

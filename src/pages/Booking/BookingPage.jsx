@@ -5,6 +5,7 @@ import DateTimeTheater from "../../components/Booking/DateTimeTheater";
 import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
 import SeatPricingInfo from "../../components/Booking/SeatPricingInfo";
 import SeatMatrix from "../../components/Booking/SeatMatrix";
+import { useCity } from "../../contexts/CityContext";
 import "./BookingPage.css";
 import { 
   getMoviesUrl, 
@@ -12,16 +13,55 @@ import {
   searchMovies
 } from "/src/movieApi.js";
 
+function formatCurrentDate() {
+  const now = new Date();
+
+  const day = now.toLocaleDateString("en-US", { weekday: "short" });
+  const monthDay = now.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+  });
+
+  return `${day}, ${monthDay}`;
+}
+
+function formatShowDate(unix) {
+  const d = new Date(unix * 1000);
+  const day = d.toLocaleDateString("en-US", { weekday: "short" });
+  const monthDay = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+  return `${day}, ${monthDay}`;
+}
+function formatTime(unix) {
+  const date = new Date(unix * 1000);
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  
+  return `${hours}.${minutes} ${ampm}`;
+}
+
 export default function BookingPage() {
   const { title } = useParams();
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const { city } = useCity();
   const [movieInfo, setMovieInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const liveInfo = {
-    timings: ["09:45 AM", "12:30 PM", "03:15 PM", "06:15 PM"],
-    theaters: ["Vaishali Nagar", "Sector 17", "City Cinema"],
-  };
+  const [liveInfo , setLiveInfo] = useState({
+    theatres : [] , theatre : "", timings : [] , date : formatCurrentDate() , time : ""
+  });
+  useEffect(() => {
+    const fetchShowData = async () => {
+      const theatreData = await fetch(`http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`);
+      const theatres = await theatreData.json();
+      setLiveInfo((curr) => {
+        return {...curr , theatres : theatres , theatre : theatres[0].name , timings : theatres[0].timings.map(time => formatTime(time.time)) ,  time : theatres[0].timings.map(time => formatTime(time.time))[0]}
+      })
+    };
+    fetchShowData();
+  } , [title , city , liveInfo.date]);
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -63,12 +103,13 @@ export default function BookingPage() {
         <MovieInfo info={movieInfo} />
         <div className="booking-page-flex-row">
           <div className="date-time-theater">
-            <DateTimeTheater liveInfo={liveInfo} />
+            <DateTimeTheater liveInfo = {liveInfo} setLiveInfo={setLiveInfo}/>
           </div>
           <div className="booking-page-center">
             <SeatMatrix
               selectedSeats={selectedSeats}
               setSelectedSeats={setSelectedSeats}
+              liveInfo = {liveInfo}
             />
           </div>
           <div className="seat-pricing-info">

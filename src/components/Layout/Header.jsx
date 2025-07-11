@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Select from "@radix-ui/react-select";
 import SideBar from "../User/SideBar";
+import { useCity } from "../../contexts/CityContext";
 import {
   MapPin,
   ChevronDown,
@@ -16,7 +17,8 @@ import styles from "./Header.module.css";
 import { searchMovies } from "../../movieApi";
 import { useNavigate } from "react-router-dom";
 
-export default function Header({ nonSticky = false }) {
+export default function Header({ nonSticky = false}) {
+  const {city , setCity} = useCity();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -72,7 +74,10 @@ export default function Header({ nonSticky = false }) {
         </a>
 
         {/* Radix Select for city */}
-        <Select.Root defaultValue="Delhi">
+        <Select.Root defaultValue={city} onValueChange = {(value) => {
+          localStorage.setItem("city" , value);
+          setCity(value);
+        }}>
           <Select.Trigger
             className={styles.cityTrigger}
             aria-label="Select your city"
@@ -179,7 +184,7 @@ export default function Header({ nonSticky = false }) {
         {mobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
     </header>
-    {showProfile && user && <SideBar username = {user.username}></SideBar>}
+    {showProfile && user && <SideBar username = {user.username} name = {user.name}></SideBar>}
     </>
   );
 } 

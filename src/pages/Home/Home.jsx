@@ -6,6 +6,7 @@ import Rails from "../../components/Rails/Rails";
 import Footer from "../../components/Layout/Footer";
 import styles from "./Home.module.css";
 import Sidebar from "../../components/User/SideBar";
+import { useState } from "react";
 
 /* ---------------------------------------------------------------
    Dummy movie data (swap with API later)
@@ -56,6 +57,8 @@ export default function Home({
     trendingMovies
   );
 
+
+
   //if no movies are loaded yet
   const isLoading = popularMovies.length === 0 && topRatedMovies.length === 0;
 
@@ -82,7 +85,7 @@ export default function Home({
 
   return (
     <div className={styles.page}>
-      <Header nonSticky />
+      <Header nonSticky/>
       {/* Hero Slider */}
       <Slider movies={popularMovies} />
 

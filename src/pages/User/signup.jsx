@@ -7,37 +7,38 @@ import "./Signup.css"
 
 function Signup(){
     const navigate = useNavigate();
-    let [formState , setFormState] = new useState({username : "" , email : "" , password : ""});
+    let [formState , setFormState] = new useState({name : "" , username : "" , email : "" , password : ""});
     let [error , setError] = new useState("");
-    let [isEmpty , setIsEmpty] = new useState({username : false , email : false , password : false});
+    let [isEmpty , setIsEmpty] = new useState({name : false , username : false , email : false , password : false});
     function handleFormState(event){
         setFormState((currState) => {
             currState[event.target.id] = event.target.value;
             return {...currState};
         });
         setError("");
-        setIsEmpty({username : false , email : false , password : false});
+        setIsEmpty({name : false , username : false , email : false , password : false});
     }
 
     async function handleFormSubmit(event) {
         event.preventDefault();
-        if(formState.username === "" || formState.email === "" || formState.password === ""){
-            return setIsEmpty({username : formState.username === "" , email : formState.email === "" , password : formState.password === ""});
+        if(formState.name === "" || formState.username === "" || formState.email === "" || formState.password === ""){
+            return setIsEmpty({name : formState.name === "" , username : formState.username === "" , email : formState.email === "" , password : formState.password === ""});
         }
         const res = await fetch('http://localhost:8080/api/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: await JSON.stringify({ username : formState.username , email : formState.email , password : formState.password }),
+            body: await JSON.stringify({name : formState.name , username : formState.username , email : formState.email , password : formState.password }),
         });
 
-        setFormState({username : "" , email : "" , password : ""});
+
+        // setFormState({name : "" , username : "" , email : "" , password : ""});
         const data = await res.json();
         if(!res.ok){
             setError(data.message);
         }
         else{
-            navigate("/home");
+            navigate("/verify" , {state : {email : formState.email}});
         }
     }
     return (
@@ -45,6 +46,10 @@ function Signup(){
             <div className="form-container">
                 <h1 className="heading">Movie<span>Book</span></h1>
                 <form>
+                    <div className="input-div">
+                        <input type = "text" id = "name" className="form-input" placeholder = "Name" value = {formState.name} onChange={handleFormState}></input>
+                        {isEmpty.name && <p className="error">name is required</p>}
+                    </div>
                     <div className="input-div">
                         <input type = "text" id = "username" className="form-input" placeholder = "Username" value = {formState.username} onChange={handleFormState}></input>
                         {isEmpty.username && <p className="error">username is required</p>}

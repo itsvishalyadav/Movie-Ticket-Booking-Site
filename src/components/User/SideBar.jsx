@@ -1,6 +1,6 @@
 import "./Sidebar.css"
 import { useNavigate } from "react-router-dom";
-function SideBar({username , name = "Piyush Agrawal"}){
+function SideBar({username , name}){
     const navigate = useNavigate();
     async function handleSignout(){
         const res = await fetch("http://localhost:8080/api/signout" , {credentials : "include"});
