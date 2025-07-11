@@ -121,12 +121,11 @@ export default function Header({ nonSticky = false}) {
         className={styles.search}
         role="search"
         onSubmit={(e) => e.preventDefault()}
-        autoComplete="off"
       >
         <Search size={18} className={styles.searchIcon} />
         <input
           type="search"
-          placeholder="Movies, cinemas, shows…"
+          placeholder="Movies, cinemas...."
           className={styles.searchInput}
           value={query}
           onChange={e => {
@@ -143,7 +142,7 @@ export default function Header({ nonSticky = false}) {
                 key={movie.id}
                 className={styles.searchResultItem}
                 onMouseDown={() => {
-                  navigate(`/movie/${movie.id}`);
+                  navigate(`/movie/${movie.title}`);
                   setShowResults(false);
                   setQuery("");
                 }}

@@ -23,8 +23,11 @@ function MoviePage() {
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
-        const search_url = await searchMovies(title);
-        const MoviesData = await getMoviesUrl(search_url);
+        const searchResults = await searchMovies(title);
+        const MoviesData = searchResults.map(movie => ({
+          id: movie.id,
+          MOVIE_URL: `https://api.themoviedb.org/3/movie/${movie.id}?api_key=9eec713ccd6e293c48c3085825d25d7e`
+        }));
         const detailedMovies = await Promise.all(
           MoviesData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
         );

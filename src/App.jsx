@@ -5,6 +5,7 @@ import Login from "./pages/User/Login";
 import MoviePage from "./pages/Movie/MoviePage";
 import Signup from "./pages/User/signup";
 import BookingPage from "./pages/Booking/BookingPage";
+import AddItemPage from "./pages/Admin/AddItemPage";
 import Verify from "./pages/User/verify";
 import { CityProvider , useCity } from "./contexts/CityContext.jsx";
 function App(){
@@ -17,6 +18,7 @@ function App(){
         <Route path="/verify" element={<Verify/>}></Route>
         <Route path="/movie/:title" element={<MoviePage/>}></Route>
         <Route path="/movie/:title/booking" element={<BookingPage/>}></Route>
+        <Route path="/admin/add-item" element={<AddItemPage/>}></Route>
       </Routes>
     </CityProvider>
   );

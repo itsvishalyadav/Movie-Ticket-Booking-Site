@@ -66,9 +66,12 @@ export default function BookingPage() {
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
-        const search_url = await searchMovies(title);
-        const MoviesData = await getMoviesUrl(search_url);
-        const detailedMovie = await getMovieDetails(MoviesData[0].MOVIE_URL);
+        const searchResults = await searchMovies(title);
+        if (!searchResults.length) throw new Error("No results");
+        const movie = searchResults[0];
+        const detailedMovie = await getMovieDetails(
+          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=9eec713ccd6e293c48c3085825d25d7e`
+        );
         setMovieInfo(detailedMovie);
         setLoading(false);
       } catch (error) {
@@ -76,9 +79,8 @@ export default function BookingPage() {
         setLoading(false);
       }
     };
-
     fetchMovieData();
-  }, [title]);
+  }, []);
 
   if (loading) {
     return <p style={{ color: "#fff", padding: "1rem" }}>Loading booking page...</p>;
