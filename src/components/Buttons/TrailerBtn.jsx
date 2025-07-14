@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./TrailerBtn.css";
 import BigBTN from "./BigBTN";
 
-export default function TrailerBtn() {
+export default function TrailerBtn({ trailer }) {
   const [showOverlay, setShowOverlay] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ export default function TrailerBtn() {
           <iframe
             width="80%"
             height="80%"
-            src="https://www.youtube.com/embed/_Z3QKkl1WyM?autoplay=1"
+            src={trailer}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -64,18 +64,36 @@ function getMovieCredits(id) {
       };
     });
 }
+function getTrailer(id) {
+  return fetch(`${MOVIE_BASE_URL}/${id}/videos${API_KEY}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const trailerObj = (data.results || []).find(
+        (video) =>
+          video.type === "Trailer" &&
+          video.site === "YouTube" &&
+          video.official === true
+      );
+      if (trailerObj) {
+        return `https://www.youtube.com/embed/${trailerObj.key}?autoplay=1`;
+      }
+      return null;
+    });
+}
 
 //gives an array containing all info about the movie
 async function getMovieDetails(url) {
   const response = await fetch(url);
-  const movie = await response.json();
+  const movie = await response.json();  
   const credits = await getMovieCredits(movie.id);
+  const trailer = await getTrailer(movie.id);
   return {
     id: movie.id,
     title: movie.title,
     poster: POSTER_URL + movie.poster_path,
     bgImage: BACKDROP_URL + movie.backdrop_path,
     bgImagePhone: POSTER_URL + movie.poster_path,
+    trailer : trailer,
     ratings: {
       imdbRating: movie.vote_average,
       rtRating: 84,

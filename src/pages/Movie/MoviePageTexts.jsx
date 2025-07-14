@@ -39,7 +39,7 @@ export default function MoviePageTexts({ info }) {
         />
         <Plot plot={info.plot} />
         <Rating ratings={info.ratings} />
-        <TrailerBookBtn
+        <TrailerBookBtn trailer={info.trailer}
           onMoreInfo={() => setShowDetails(true)}
         />
       </div>

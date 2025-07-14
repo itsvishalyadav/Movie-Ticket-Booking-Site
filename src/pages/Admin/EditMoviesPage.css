@@ -1,0 +1,203 @@
+.editmovies-root {
+  display: flex;
+  min-height: 100vh;
+  background: #1a191f;
+  color: #fff;
+}
+
+.sidebar {
+  width: 270px;
+  background: #211F27;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 0 20px 0;
+}
+
+.editmovies-main {
+  flex: 1;
+  padding: 32px 48px;
+  background: #1a191f;
+}
+
+.editmovies-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.editmovies-form {
+  background: #211f27;
+  border-radius: 18px;
+  padding: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  box-shadow: 0 2px 16px 0 #00000030;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-fields {
+  flex: 1 1 350px;
+  min-width: 350px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+}
+
+.seat-types-section {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row-fields {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.seat-type-row {
+  align-items: center;
+}
+
+.add-seat-type-btn {
+  margin-top: 6px;
+}
+
+.editmovies-form input,
+.editmovies-form textarea {
+  background: #1a191f;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #fff;
+  font-size: 1.1rem;
+  outline: none;
+  margin-bottom: 0;
+  min-width: 0;
+  flex: 1 1 0;
+}
+.editmovies-form input:focus,
+.editmovies-form textarea:focus {
+  border: 1.5px solid #3b82f6;
+}
+
+.editmovies-form label {
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.editmovies-form .form-actions {
+  display: flex;
+  gap: 18px;
+}
+
+.editmovies-form button {
+  background: #f9ab00;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 16px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  box-shadow: 0 2px 16px 0 #00000030;
+}
+.editmovies-form button:hover {
+  background: #e09c00;
+  transform: scale(1.02);
+  box-shadow: #f9ab00 0 0 10px;
+}
+
+.editmovies-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.editmovies-list-item {
+  background: #292929;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.editmovies-list-item .movie-info {
+  flex: 1;
+}
+
+.editmovies-list-item .movie-actions button {
+  margin-left: 0.5rem;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.editmovies-list-item .movie-actions button.edit {
+  background: #f9ab00;
+  color: #fff;
+}
+
+.editmovies-list-item .movie-actions button.edit:hover {
+  background: #e09c00;
+}
+
+.editmovies-list-item .movie-actions button.delete:hover {
+  background: #c62828;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  /* background: #23283a; */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0px;
+  border: 2px solid #f9ab00;
+  border-radius: 12px;
+  padding: 6px 14px;
+}
+
+@media (max-width: 900px) {
+  .editmovies-main {
+    padding: 18px 6px;
+  }
+  .editmovies-form {
+    padding: 16px;
+  }
+  .editmovies-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .row-fields {
+    flex-direction: column;
+    gap: 10px;
+  }
+} 

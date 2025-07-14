@@ -17,7 +17,7 @@ export default function MovieInfo({ info }) {
           <span>●</span>
           <span>{info.genres.join(" / ")}</span>
         </div>
-        <TrailerBtn customStyles={{ height: "1.25rem", width: "13.75rem" }} />
+        <TrailerBtn trailer={info.trailer} customStyles={{ height: "1.25rem", width: "13.75rem" }} />
       </div>
     </div>
   );
