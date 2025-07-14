@@ -1,3 +1,9 @@
+.outer-div{
+  display: flex;
+  gap: 8rem;
+  align-items: center;
+}
+
 .wholeDiv {
   display: flex;
   flex-direction: column;

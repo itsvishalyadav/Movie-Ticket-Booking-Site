@@ -17,6 +17,7 @@ function SideBar({username , name}){
                     <p>{username}</p>
                 </div>
             </div>
+            <hr className="sidebar-hr"/>
             <div className="navs">
                 <p>👤 My Account</p>
                 <p>🎫 My Bookings</p>

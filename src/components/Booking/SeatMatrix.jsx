@@ -1,5 +1,9 @@
 import { useEffect , useState} from "react";
 import "./SeatMatrix.css";
+import {io} from "socket.io-client";
+import BigBTN from "../Buttons/BigBTN";
+import "./SeatPricingInfo.css";
+const socket = io("http://localhost:8080");
 function formatTime(unix) {
   const date = new Date(unix * 1000);
   let hours = date.getHours();
@@ -11,19 +15,32 @@ function formatTime(unix) {
   
   return `${hours}.${minutes} ${ampm}`;
 }
+
 export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo}) {
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats , setBookedSeats] = useState([]);
+  const [showId , setShowId] = useState("");
   useEffect(() => {
-    const getSeatInfo = async () => {
-      const showId = (liveInfo.theatres.filter((theatre) => theatre.name === liveInfo.theatre))[0].timings.filter((time) => formatTime(time.time) === liveInfo.time)[0].showId;
-      const data = await fetch(`http://localhost:8080/api/shows/seatInfo/${showId}`)
-      setBookedSeats(await data.json());
-      // setSelectedSeats(selectedSeats.filter((seat) => !bookedSeats.includes(seat)));
-    }
-    getSeatInfo();
-  })
+      let currShowId = (liveInfo.theatres.filter((theatre) => theatre.name === liveInfo.theatre))[0].timings.filter((time) => formatTime(time.time) === liveInfo.time)[0].showId; 
+      setShowId(currShowId);
+      setSelectedSeats([]);
+      socket.emit('joinShow', currShowId);
+
+      socket.on('seatData', ({ bookedSeats }) => setBookedSeats(bookedSeats));
+      socket.on('seatsBooked', (seats) => setBookedSeats(prev => [...prev, ...seats]));
+      socket.on('lockSuccess', (seat) => setSelectedSeats(prev => [...prev, seat]));
+      socket.on('lockFailed', (msg) => alert(msg));
+
+      return () => {
+        socket.off('seatData');
+        socket.off('seatsBooked');
+        socket.off('lockSuccess');
+        socket.off('lockFailed');
+      };
+  }, [liveInfo]);
+
   return (
+    <div className="outer-div">
     <div className="wholeDiv">
       <hr />
       <h2>Screen This Way</h2>
@@ -34,15 +51,16 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
             key={seat+1}
             className={`seat ${selectedSeats.includes(seat+1) ? "selected" : ""}`}
             onClick={() => {
-              !bookedSeats.includes(seat + 1) &&
-              setSelectedSeats((prevSelectedSeats) =>
-                prevSelectedSeats.includes(seat + 1)
-                  ? prevSelectedSeats.filter((s) => s !== seat+1)
-                  : [...prevSelectedSeats, seat + 1]
-              );
+              if(bookedSeats.includes(seat + 1)) return;
+              if(selectedSeats.includes(seat + 1)){
+                socket.emit("unlockSeat" , {showId , seatNumber : seat + 1});
+                setSelectedSeats(prev => prev.filter(s => s!== seat+1));
+              }
+              else{
+                socket.emit("lockSeat" , {showId , seatNumber : seat + 1});
+              }
             }}
           >
-            {console.log(bookedSeats)}
             {bookedSeats.includes(seat+1) ? (<img src="/bookedchair.png" alt="" />) 
              : (selectedSeats.includes(seat+1) ? (
               <img
@@ -71,6 +89,38 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
           <span>Booked Seat</span>
         </div>
       </div>
+    </div>
+    <div className="selected-seat-info">
+      <h2>Selected Seats</h2>
+      <hr className="dashed-line"/>
+      {selectedSeats.length > 0 ? (
+        <div className="selectedSeatBoxOuterDiv">
+          {selectedSeats.map((seat, index) => (
+            <div className="selectedSeatBox" key={index}>
+              {seat}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No seats selected</p>
+      )}
+      <h3>Total Price: ₹{selectedSeats.length * 250}</h3>
+      <div className="action-buttons">
+        <BigBTN
+          otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
+          TextForButton={"+ Add Food Items"}
+        />
+        <BigBTN
+          otherStyles={{ height: "2.2rem" }}
+          TextForButton={"Purchase Seats"}
+          onClick={() => {
+            if (selectedSeats.length === 0) return alert('No seats selected');
+            socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats });
+            setSelectedSeats([]);
+          }}
+        />
+      </div>
+    </div>
     </div>
   );
 }

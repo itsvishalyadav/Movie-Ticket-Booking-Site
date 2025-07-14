@@ -41,6 +41,16 @@
   margin-bottom: 0.5rem;
 }
 
+/* .seat-pricing-info {
+  min-width: 270px;
+  max-width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
+
 .selected-seat-info {
   padding: 2.5rem 1.25rem 2rem 1.25rem;
   border-radius: 1.25rem;
@@ -51,6 +61,7 @@
   color: #fff;
   align-items: center;
   text-align: center;
+  height : 400px;
 }
 
 .selected-seat-info:hover {

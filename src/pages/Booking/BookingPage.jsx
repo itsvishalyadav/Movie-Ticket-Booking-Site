@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import DateTimeTheater from "../../components/Booking/DateTimeTheater";
 import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
-import SeatPricingInfo from "../../components/Booking/SeatPricingInfo";
 import SeatMatrix from "../../components/Booking/SeatMatrix";
 import { useCity } from "../../contexts/CityContext";
 import "./BookingPage.css";
@@ -113,9 +112,6 @@ export default function BookingPage() {
               setSelectedSeats={setSelectedSeats}
               liveInfo = {liveInfo}
             />
-          </div>
-          <div className="seat-pricing-info">
-            <SeatPricingInfo selectedSeats={selectedSeats} />
           </div>
         </div>
       </div>
