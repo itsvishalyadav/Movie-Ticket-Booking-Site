@@ -10,6 +10,7 @@ import Verify from "./pages/User/verify";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import EditMoviesPage from "./pages/Admin/EditMoviesPage";
 import EditCinemasPage from "./pages/Admin/EditCinemasPage";
+import ThankYouPage from "./pages/Booking/ThankYouPage";
 import { CityProvider , useCity } from "./contexts/CityContext.jsx";
 function App(){
   return (
@@ -21,6 +22,7 @@ function App(){
         <Route path="/verify" element={<Verify/>}></Route>
         <Route path="/movie/:title" element={<MoviePage/>}></Route>
         <Route path="/movie/:title/booking" element={<BookingPage/>}></Route>
+        <Route path="/thank-you" element={<ThankYouPage/>}></Route>
         <Route path="/admin/add-item" element={<AddItemPage/>}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard/>}></Route>
         <Route path="/admin/edit-movies" element={<EditMoviesPage/>}></Route>

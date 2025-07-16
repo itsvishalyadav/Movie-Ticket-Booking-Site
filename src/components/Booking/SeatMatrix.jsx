@@ -3,6 +3,7 @@ import "./SeatMatrix.css";
 import {io} from "socket.io-client";
 import BigBTN from "../Buttons/BigBTN";
 import "./SeatPricingInfo.css";
+import { useNavigate } from "react-router-dom";
 const socket = io("http://localhost:8080");
 function formatTime(unix) {
   const date = new Date(unix * 1000);
@@ -16,10 +17,11 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo}) {
+export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, title, city }) {
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats , setBookedSeats] = useState([]);
   const [showId , setShowId] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
       let currShowId = (liveInfo.theatres.filter((theatre) => theatre.name === liveInfo.theatre))[0].timings.filter((time) => formatTime(time.time) === liveInfo.time)[0].showId; 
       setShowId(currShowId);
@@ -117,6 +119,15 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
             if (selectedSeats.length === 0) return alert('No seats selected');
             socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats });
             setSelectedSeats([]);
+            navigate("/thank-you", {
+              state: {
+                movieName: title,
+                cinemaName: liveInfo.theatre,
+                location: city,
+                timing: `${liveInfo.date} ${liveInfo.time}`,
+                screenNumber: liveInfo.screenNumber || "N/A"
+              }
+            });
           }}
         />
       </div>

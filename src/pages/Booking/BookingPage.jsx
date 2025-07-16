@@ -110,7 +110,9 @@ export default function BookingPage() {
             <SeatMatrix
               selectedSeats={selectedSeats}
               setSelectedSeats={setSelectedSeats}
-              liveInfo = {liveInfo}
+              liveInfo={liveInfo}
+              title={title}
+              city={city}
             />
           </div>
         </div>
