@@ -16,6 +16,7 @@ import {
 import styles from "./Header.module.css";
 import { searchMovies } from "../../movieApi";
 import { useNavigate } from "react-router-dom";
+import CitySelector from "../CitySelector";
 
 export default function Header({ nonSticky = false}) {
   const {city , setCity} = useCity();
@@ -26,6 +27,7 @@ export default function Header({ nonSticky = false}) {
   const [showProfile , setShowProfile] = useState(false);
   const [user , setUser] = useState();
   const navigate = useNavigate();
+  const [showCitySelector, setShowCitySelector] = useState(false);
 
   useEffect(() => {
     const checkUser = async() => {
@@ -52,8 +54,9 @@ export default function Header({ nonSticky = false}) {
     })
   }
 
-  // Fetch movies from TMDB via movieApi
-  React.useEffect(() => {
+
+  // limit the api calls while searching movies
+  useEffect(() => {
     const handler = setTimeout(() => {
       if (query) {
         searchMovies(query).then(setResults);
@@ -73,47 +76,33 @@ export default function Header({ nonSticky = false}) {
           Movie<span>Book</span>
         </a>
 
-        {/* Radix Select for city */}
-        <Select.Root defaultValue={city} onValueChange = {(value) => {
-          localStorage.setItem("city" , value);
-          setCity(value);
-        }}>
-          <Select.Trigger
+        {/* City Selector with search */}
+        <div style={{ position: "relative" }}>
+          <button
             className={styles.cityTrigger}
             aria-label="Select your city"
+            onClick={() => setShowCitySelector((v) => !v)}
+            style={{ minWidth: 120 }}
           >
             <MapPin size={16} />
-            <Select.Value placeholder="Select city" />
-            <Select.Icon className={styles.cityChevron}>
-              <ChevronDown size={16} />
-            </Select.Icon>
-          </Select.Trigger>
-
-          <Select.Portal>
-            <Select.Content
-              side="bottom"
-              position="popper"
-              className={styles.cityContent}
-            >
-              <Select.Viewport className={styles.cityViewport}>
-                {[
-                  ["Delhi", "New Delhi"],
-                  ["Mumbai", "Mumbai"],
-                  ["Bangalore", "Bangalore"],
-                  ["Hyderabad", "Hyderabad"],
-                ].map(([value, label]) => (
-                  <Select.Item
-                    key={value}
-                    value={value}
-                    className={styles.cityItem}
-                  >
-                    <Select.ItemText>{label}</Select.ItemText>
-                  </Select.Item>
-                ))}
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+            <span>{city || "Select city"}</span>
+            <ChevronDown size={16} className={styles.cityChevron} />
+          </button>
+          {showCitySelector && (
+            <div style={{ position: "absolute", zIndex: 100, top: "110%", left: 0 }}>
+              <CitySelector
+                onSelect={(c) => {
+                  setCity(c.name);
+                  localStorage.setItem("city", c.name);
+                  setShowCitySelector(false);
+                }}
+                selectedCityId={null}
+                placeholder="Search city..."
+                style={{ width: 260 }}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ---------- Center: Search ---------- */}

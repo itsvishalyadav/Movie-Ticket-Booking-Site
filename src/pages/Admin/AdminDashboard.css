@@ -5,6 +5,16 @@
   color: #fff;
 }
 
+.city-selector{
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background: #211f27;
+  border-radius: 8px;
+  margin: 16px 0px;
+
+}
+
 .sidebar {
   width: 270px;
   background: #211F27;
