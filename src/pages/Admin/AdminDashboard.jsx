@@ -1,6 +1,7 @@
 import React from "react";
 import "./AdminDashboard.css";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/userContext";
 
 const mockShows = [
   {
@@ -18,6 +19,8 @@ const mockShows = [
 ];
 
 const AdminDashboard = () => {
+  const {user} = useUser();
+  console.log(user);
   return (
     <section className="admindashboard-root">
       <aside className="sidebar">
@@ -33,7 +36,7 @@ const AdminDashboard = () => {
             </div>
             <div>
               <div className="user-role">Admin</div>
-              <div className="user-name">John Doe</div>
+              <div className="user-name">{user.name}</div>
             </div>
           </div>
         </div>

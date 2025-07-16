@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import DateTimeTheater from "../../components/Booking/DateTimeTheater";
 import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
 import SeatMatrix from "../../components/Booking/SeatMatrix";
 import { useCity } from "../../contexts/CityContext";
+import { useUser } from "../../contexts/userContext";
 import "./BookingPage.css";
 import { 
   getMoviesUrl, 
@@ -44,13 +45,16 @@ function formatTime(unix) {
 
 export default function BookingPage() {
   const { title } = useParams();
+  const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState([]);
   const { city } = useCity();
+  const { user } = useUser();
   const [movieInfo, setMovieInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [liveInfo , setLiveInfo] = useState({
     theatres : [] , theatre : "", timings : [] , date : formatCurrentDate() , time : ""
   });
+
   useEffect(() => {
     const fetchShowData = async () => {
       const theatreData = await fetch(`http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`);

@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { Link , useNavigate} from "react-router-dom"
+import { useUser } from "../../contexts/userContext";
 import "./Signup.css" 
 
 function Login(){
     const navigate = useNavigate();
+    let {setUser} = useUser();
     let [formState , setFormState] = new useState({email : "" , password : ""});
     let [error , setError] = new useState("");
     let [isEmpty , setIsEmpty] = new useState({email : false , password : false});
@@ -35,6 +37,7 @@ function Login(){
             setError(data.message);
         }
         else{
+            setUser(data.user);
             navigate("/home");
         }
     }

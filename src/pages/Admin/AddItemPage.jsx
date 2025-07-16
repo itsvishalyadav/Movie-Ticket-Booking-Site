@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import "./AddItemPage.css";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
+import { useUser } from "../../contexts/userContext";
 
 const AddItemPage = () => {
+  const {user} = useUser();
   const [form, setForm] = useState({
-    movie: {},
     title: "",
-    cinema: {},
-    showTiming: "",
-    seatTypes: [{ name: "", price: "", number: "" }],
+    showTime: "",
+    showDate : "",
+    theatreId : "",
   });
 
   const handleChange = (e) => {
@@ -22,7 +23,20 @@ const AddItemPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Publish clicked! (Form data not actually submitted)");
+    fetch("http://localhost:8080/api/shows", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+    setForm({
+      title: "",
+      showTime: "",
+      showDate : "",
+      theatreId : "",
+    })
   };
 
   
@@ -45,7 +59,7 @@ const AddItemPage = () => {
             </div>
             <div>
               <div className="user-role">Admin</div>
-              <div className="user-name">John Doe</div>
+              <div className="user-name">{user.name}</div>
             </div>
           </div>
         </div>
@@ -94,22 +108,47 @@ const AddItemPage = () => {
                 className="input title-input"
                 required
               />
-              <h3 className="section-title">Cinema & Show Details</h3>
-              <SearchBar
-                placeholder="Search Cinema"
-                onSelectMovie={() => {}}
-              />
-              <label>Show Timing</label>
+              <h3 className="section-title">Theatre ID</h3>
               <input
-                type="time"
-                id="showTiming"
-                name="showTiming"
-                value={form.showTiming}
+                type="text"
+                name="theatreId"
+                placeholder="Theatre"
+                value={form.theatreId}
                 onChange={handleChange}
-                className="input"
+                className="input title-input"
                 required
               />
+              <div className="show-timings">
+                <div className="show-date">
+                  <label htmlFor="showDate">Show Date</label>
+                  <br></br>
+                  <input
+                    type="date"
+                    id="showDate"
+                    name="showDate"
+                    value={form.showDate}
+                    onChange={handleChange}
+                    className="input showDate"
+                    required
+                  />
+
+                </div>
+                <div className="show-time">
+                  <label htmlFor="showTiming">Show Time</label>
+                  <br></br>
+                  <input
+                    type="time"
+                    id="showTiming"
+                    name="showTime"
+                    value={form.showTime}
+                    onChange={handleChange}
+                    className="input showTiming"
+                    required
+                  />
+                </div>
+                
               
+              </div>
 
               <button className="publish-btn" type="submit">
                 PUBLISH

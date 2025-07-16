@@ -1,0 +1,74 @@
+.booking-container{
+    display : flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    background: #1a191f;
+}
+
+.booking-item {
+  background: #211f27;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 2px 16px 0 #00000030;
+  min-width: 320px;
+  margin: 2rem;
+}
+
+.booking-seat-container{
+    display : flex;
+}
+
+.booking-seat{
+    width : 30px;
+    height : 30px;
+    border : 1px solid #f9ab00;
+    border-radius : 5px;
+    text-align: center;
+    margin : 5px;
+    line-height: 30px;
+    
+}
+
+.cancel-button{
+    background-color: #f9ab00;
+    border: none;
+    height : 25px;
+    padding: 2px 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+}
+
+.cancel-seat-div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background: #211f27;
+    z-index: 999;
+    text-align: center;
+    padding: 20px 20px;
+    border-radius: 16px;
+}
+
+.bgBlur{
+    opacity: 0.2;
+}
+
+.cancel-seat-outer-div{
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    position : fixed;
+    top: 45%;
+    left: 42%;
+}
+
+.close-button{
+    position: relative;
+    font-size: large;
+    font-weight: 900;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+}

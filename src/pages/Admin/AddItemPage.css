@@ -204,6 +204,18 @@
   transition: background 0.2s;
 }
 
+.show-timings{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+.show-time,.show-date{
+  width: 100%;
+}
+.showTiming,.showDate{
+  width: 100%;
+}
+
 .addshow-title{
   font-size: 2rem;
   margin-bottom: 1.5rem;

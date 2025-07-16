@@ -31,7 +31,7 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-function generateDates(numDays = 30) {
+function generateDates(numDays) {
   const dates = [];
   const today = new Date();
   for (let i = 0; i < numDays; i++) {
@@ -47,7 +47,7 @@ function generateDates(numDays = 30) {
 export default function DatePicker({liveInfo , setLiveInfo}) {
   // const [selectedDate, setSelectedDate] = useState("");
   const containerRef = useRef(null);
-  const dates = generateDates(30);
+  const dates = generateDates(5);
   const scrollByAmount = (amount) => {
     containerRef.current.scrollBy({ left: amount, behavior: "smooth" });
   };

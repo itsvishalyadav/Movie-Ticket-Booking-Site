@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./EditCinemasPage.css";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/userContext";
 
 const mockCinemas = [
   {
@@ -16,6 +17,7 @@ const mockCinemas = [
 ];
 
 const EditCinemasPage = () => {
+  const {user} = useUser();
   const [cinemas, setCinemas] = useState(mockCinemas);
   const [form, setForm] = useState({
     name: "",
@@ -156,7 +158,7 @@ const EditCinemasPage = () => {
             </div>
             <div>
               <div className="user-role">Admin</div>
-              <div className="user-name">John Doe</div>
+              <div className="user-name">{user.name}</div>
             </div>
           </div>
         </div>

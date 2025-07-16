@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as Select from "@radix-ui/react-select";
 import SideBar from "../User/SideBar";
 import { useCity } from "../../contexts/CityContext";
+import { useUser } from "../../contexts/userContext";
 import {
   MapPin,
   ChevronDown,
@@ -19,29 +20,13 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header({ nonSticky = false}) {
   const {city , setCity} = useCity();
+  const {user , setUser} = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showProfile , setShowProfile] = useState(false);
-  const [user , setUser] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkUser = async() => {
-      const res = await fetch("http://localhost:8080/api/isLoggedIn" , {credentials : "include"});
-      const data = await res.json();
-      if(data.user){
-        setUser(data.user);
-      }
-      else{
-        setUser();
-      }
-    };
-    checkUser();
-  });
-
-  // console.log(user);
 
   async function handleprofile(){
     if(!user){

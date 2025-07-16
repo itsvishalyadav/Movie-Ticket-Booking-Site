@@ -1,5 +1,5 @@
 .sidebar-container{
-    height : 300px !important;
+    /* height : 300px !important; */
     width : 300px;
     background-image: none;
     border-radius : 12px;
@@ -19,7 +19,7 @@
     border-bottom:1px;
 }
 
-.user-info{
+.sidebar-user-info{
     display : flex;
     padding : 25px;
     background-color: #2b2b2b;
@@ -48,7 +48,7 @@
     border-radius: 50%;
 }
 
-.navs{
+.sidebar-navs{
     flex : 1;
     padding : 25px;
     background-color: #2b2b2b;
@@ -56,18 +56,29 @@
     border-radius: 0 0 12px 12px;
 }
 
-.navs p{
+.sidebar-navs p {
     flex : 1;
     margin-bottom: 10px;
-    color :rgba(255, 255, 255, 0.7);
+    color :rgba(255, 255, 255, 0.7) !important;
     cursor: pointer;
 }
 
-.navs p:hover{
-    color : white;
+.sidebar-navs p:hover {
+    color : white !important;
     font-size: 17px;
+    text-decoration: none !important;
 }
 
-.navs > p{
+.sidebar-link:hover{
+    color : white !important;
+    font-size: 17px;
+    text-decoration: none !important;
+}
+
+.sidebar-link{
+    color :rgba(255, 255, 255, 0.7)
+}
+
+.sidebar-navs > p{
     margin-top: 10px;
 }

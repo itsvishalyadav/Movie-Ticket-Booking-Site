@@ -3,6 +3,7 @@ import "./SeatMatrix.css";
 import {io} from "socket.io-client";
 import BigBTN from "../Buttons/BigBTN";
 import "./SeatPricingInfo.css";
+import { useUser } from "../../contexts/userContext";
 const socket = io("http://localhost:8080");
 function formatTime(unix) {
   const date = new Date(unix * 1000);
@@ -17,17 +18,21 @@ function formatTime(unix) {
 }
 
 export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo}) {
+  const {user} = useUser();
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats , setBookedSeats] = useState([]);
   const [showId , setShowId] = useState("");
   useEffect(() => {
+    if (!liveInfo.theatres || liveInfo.theatres.length === 0) return;
       let currShowId = (liveInfo.theatres.filter((theatre) => theatre.name === liveInfo.theatre))[0].timings.filter((time) => formatTime(time.time) === liveInfo.time)[0].showId; 
       setShowId(currShowId);
       setSelectedSeats([]);
       socket.emit('joinShow', currShowId);
 
       socket.on('seatData', ({ bookedSeats }) => setBookedSeats(bookedSeats));
-      socket.on('seatsBooked', (seats) => setBookedSeats(prev => [...prev, ...seats]));
+      socket.on('seatsBooked', (seats) => {
+        setBookedSeats(prev => [...prev, ...seats]);
+      });
       socket.on('lockSuccess', (seat) => setSelectedSeats(prev => [...prev, seat]));
       socket.on('lockFailed', (msg) => alert(msg));
 
@@ -115,7 +120,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
           TextForButton={"Purchase Seats"}
           onClick={() => {
             if (selectedSeats.length === 0) return alert('No seats selected');
-            socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats });
+            socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats , userId : user._id});
             setSelectedSeats([]);
           }}
         />
