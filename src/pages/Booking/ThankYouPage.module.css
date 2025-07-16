@@ -6,6 +6,10 @@
   flex-direction: column;
 }
 
+.qrCode {
+  margin: 20px 0;
+}
+
 .content {
   max-width: 500px;
   margin: 20px auto 20px auto;

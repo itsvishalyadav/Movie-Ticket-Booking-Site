@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "../../components/Layout/Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ThankYouPage.module.css";
+import QRCode from "react-qr-code";
 
 const ThankYouPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const ThankYouPage = () => {
         <p>Your booking was successful. Enjoy your show!</p>
         <div className={styles.ticket}>
           <h2 className={styles.ticketTitle}>🎟️ Digital Ticket</h2>
+          <QRCode className={styles.qrCode} value={ticketId} size={128} bgColor="#232323" fgColor="#f9ab00"  />
           <div className={styles.ticketDetails}>
             <p className={styles.details}><strong className={styles.boldText}>Ticket ID:</strong> {ticketId}</p>
             <p className={styles.details}><strong className={styles.boldText}>Movie:</strong> {booking.movieName || "Ballerina"}</p>
