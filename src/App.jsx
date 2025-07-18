@@ -11,6 +11,7 @@ import Bookings from "./pages/User/Bookings.jsx"
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import EditMoviesPage from "./pages/Admin/EditMoviesPage";
 import EditCinemasPage from "./pages/Admin/EditCinemasPage";
+import ThankYouPage from "./pages/Booking/ThankYouPage";
 import { CityProvider , useCity } from "./contexts/CityContext.jsx";
 import { UserProvider, useUser } from "./contexts/userContext.jsx";
 
@@ -43,6 +44,7 @@ function App(){
           <Route path="/admin/edit-movies" element={<EditMoviesPage/>}></Route>
           <Route path="/admin/edit-cinemas" element={<EditCinemasPage/>}></Route>
           <Route path="/bookings" element={<Bookings></Bookings>}></Route>
+          <Route path="/thank-you" element={<ThankYouPage/>}></Route>
         </Routes>
       </CityProvider>
     </UserProvider>  

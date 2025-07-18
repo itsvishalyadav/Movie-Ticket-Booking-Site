@@ -1,0 +1,646 @@
+[
+  {
+    "id": 133482,
+    "name": "Port Blair",
+    "state_id": 4023,
+    "state_code": "AN",
+    "state_name": "Andaman and Nicobar Islands"
+  },
+  {
+    "id": 134356,
+    "name": "Vijayawada",
+    "state_id": 4017,
+    "state_code": "AP",
+    "state_name": "Andhra Pradesh"
+  },
+  {
+    "id": 134369,
+    "name": "Visakhapatnam",
+    "state_id": 4017,
+    "state_code": "AP",
+    "state_name": "Andhra Pradesh"
+  },
+  {
+    "id": 132178,
+    "name": "Itanagar",
+    "state_id": 4024,
+    "state_code": "AR",
+    "state_name": "Arunachal Pradesh"
+  },
+  {
+    "id": 132039,
+    "name": "Guwahati",
+    "state_id": 4027,
+    "state_code": "AS",
+    "state_name": "Assam"
+  },
+  {
+    "id": 132470,
+    "name": "Kharagpur",
+    "state_id": 4037,
+    "state_code": "BR",
+    "state_name": "Bihar"
+  },
+  {
+    "id": 133386,
+    "name": "Patna",
+    "state_id": 4037,
+    "state_code": "BR",
+    "state_name": "Bihar"
+  },
+  {
+    "id": 58190,
+    "name": "Chandigarh",
+    "state_id": 4031,
+    "state_code": "CH",
+    "state_name": "Chandigarh"
+  },
+  {
+    "id": 58055,
+    "name": "Bilaspur",
+    "state_id": 4040,
+    "state_code": "CT",
+    "state_name": "Chhattisgarh"
+  },
+  {
+    "id": 132612,
+    "name": "Kota",
+    "state_id": 4040,
+    "state_code": "CT",
+    "state_name": "Chhattisgarh"
+  },
+  {
+    "id": 133590,
+    "name": "Raipur",
+    "state_id": 4040,
+    "state_code": "CT",
+    "state_name": "Chhattisgarh"
+  },
+  {
+    "id": 131679,
+    "name": "Delhi",
+    "state_id": 4021,
+    "state_code": "DL",
+    "state_name": "Delhi"
+  },
+  {
+    "id": 133342,
+    "name": "Panaji",
+    "state_id": 4009,
+    "state_code": "GA",
+    "state_name": "Goa"
+  },
+  {
+    "id": 57606,
+    "name": "Ahmedabad",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 132230,
+    "name": "Jamnagar",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 132285,
+    "name": "Jodhpur",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 133679,
+    "name": "Rajkot",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 134096,
+    "name": "Surat",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 134310,
+    "name": "Vadodara",
+    "state_id": 4030,
+    "state_code": "GJ",
+    "state_name": "Gujarat"
+  },
+  {
+    "id": 57675,
+    "name": "Ambala",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 57988,
+    "name": "Bhiwani",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 58054,
+    "name": "Bilaspur",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 131853,
+    "name": "Faridabad",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 131991,
+    "name": "Gorakhpur",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 132032,
+    "name": "Gurgaon",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 133647,
+    "name": "Rohtak",
+    "state_id": 4007,
+    "state_code": "HR",
+    "state_name": "Haryana"
+  },
+  {
+    "id": 58041,
+    "name": "Bilaspur",
+    "state_id": 4020,
+    "state_code": "HP",
+    "state_name": "Himachal Pradesh"
+  },
+  {
+    "id": 133871,
+    "name": "Shimla",
+    "state_id": 4020,
+    "state_code": "HP",
+    "state_name": "Himachal Pradesh"
+  },
+  {
+    "id": 134020,
+    "name": "Srinagar",
+    "state_id": 4029,
+    "state_code": "JK",
+    "state_name": "Jammu and Kashmir"
+  },
+  {
+    "id": 58076,
+    "name": "Bokaro",
+    "state_id": 4025,
+    "state_code": "JH",
+    "state_name": "Jharkhand"
+  },
+  {
+    "id": 131715,
+    "name": "Dhanbad",
+    "state_id": 4025,
+    "state_code": "JH",
+    "state_name": "Jharkhand"
+  },
+  {
+    "id": 132231,
+    "name": "Jamshedpur",
+    "state_id": 4025,
+    "state_code": "JH",
+    "state_name": "Jharkhand"
+  },
+  {
+    "id": 133606,
+    "name": "Ranchi",
+    "state_id": 4025,
+    "state_code": "JH",
+    "state_name": "Jharkhand"
+  },
+  {
+    "id": 134154,
+    "name": "Thiruvananthapuram",
+    "state_id": 4028,
+    "state_code": "KL",
+    "state_name": "Kerala"
+  },
+  {
+    "id": 134161,
+    "name": "Thrissur",
+    "state_id": 4028,
+    "state_code": "KL",
+    "state_name": "Kerala"
+  },
+  {
+    "id": 57995,
+    "name": "Bhopal",
+    "state_id": 4039,
+    "state_code": "MP",
+    "state_name": "Madhya Pradesh"
+  },
+  {
+    "id": 132040,
+    "name": "Gwalior",
+    "state_id": 4039,
+    "state_code": "MP",
+    "state_name": "Madhya Pradesh"
+  },
+  {
+    "id": 132166,
+    "name": "Indore",
+    "state_id": 4039,
+    "state_code": "MP",
+    "state_name": "Madhya Pradesh"
+  },
+  {
+    "id": 132181,
+    "name": "Jabalpur",
+    "state_id": 4039,
+    "state_code": "MP",
+    "state_name": "Madhya Pradesh"
+  },
+  {
+    "id": 134263,
+    "name": "Ujjain",
+    "state_id": 4039,
+    "state_code": "MP",
+    "state_name": "Madhya Pradesh"
+  },
+  {
+    "id": 132556,
+    "name": "Kolhapur",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 132759,
+    "name": "Latur",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133024,
+    "name": "Mumbai",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133116,
+    "name": "Nagpur",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133177,
+    "name": "Nashik",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133504,
+    "name": "Pune",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133986,
+    "name": "Solapur",
+    "state_id": 4008,
+    "state_code": "MH",
+    "state_name": "Maharashtra"
+  },
+  {
+    "id": 133870,
+    "name": "Shillong",
+    "state_id": 4006,
+    "state_code": "ML",
+    "state_name": "Meghalaya"
+  },
+  {
+    "id": 57610,
+    "name": "Aizawl",
+    "state_id": 4036,
+    "state_code": "MZ",
+    "state_name": "Mizoram"
+  },
+  {
+    "id": 58000,
+    "name": "Bhubaneswar",
+    "state_id": 4013,
+    "state_code": "OR",
+    "state_name": "Odisha"
+  },
+  {
+    "id": 133490,
+    "name": "Puducherry",
+    "state_id": 4011,
+    "state_code": "PY",
+    "state_name": "Puducherry"
+  },
+  {
+    "id": 57686,
+    "name": "Amritsar",
+    "state_id": 4015,
+    "state_code": "PB",
+    "state_name": "Punjab"
+  },
+  {
+    "id": 132785,
+    "name": "Ludhiana",
+    "state_id": 4015,
+    "state_code": "PB",
+    "state_name": "Punjab"
+  },
+  {
+    "id": 57614,
+    "name": "Ajmer",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 132201,
+    "name": "Jaipur",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 132286,
+    "name": "Jodhpur",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 132593,
+    "name": "Kota",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 133589,
+    "name": "Raipur",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 134250,
+    "name": "Udaipur",
+    "state_id": 4014,
+    "state_code": "RJ",
+    "state_name": "Rajasthan"
+  },
+  {
+    "id": 131905,
+    "name": "Gangtok",
+    "state_id": 4034,
+    "state_code": "SK",
+    "state_name": "Sikkim"
+  },
+  {
+    "id": 131517,
+    "name": "Chennai",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 131618,
+    "name": "Coimbatore",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 132821,
+    "name": "Madurai",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 133763,
+    "name": "Salem",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 134180,
+    "name": "Tiruchirappalli",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 134185,
+    "name": "Tirunelveli",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 134341,
+    "name": "Vellore",
+    "state_id": 4035,
+    "state_code": "TN",
+    "state_name": "Tamil Nadu"
+  },
+  {
+    "id": 132132,
+    "name": "Hyderabad",
+    "state_id": 4012,
+    "state_code": "TG",
+    "state_name": "Telangana"
+  },
+  {
+    "id": 134395,
+    "name": "Warangal",
+    "state_id": 4012,
+    "state_code": "TG",
+    "state_name": "Telangana"
+  },
+  {
+    "id": 134249,
+    "name": "Udaipur",
+    "state_id": 4038,
+    "state_code": "TR",
+    "state_name": "Tripura"
+  },
+  {
+    "id": 57601,
+    "name": "Agra",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 57654,
+    "name": "Aligarh",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 147429,
+    "name": "Allahabad",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 57867,
+    "name": "Bareilly",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 58159,
+    "name": "Bilaspur",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 131953,
+    "name": "Ghaziabad",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 131992,
+    "name": "Gorakhpur",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 132384,
+    "name": "Kanpur",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 132592,
+    "name": "Kota",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 132782,
+    "name": "Lucknow",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 132958,
+    "name": "Meerut",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 133001,
+    "name": "Moradabad",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 133230,
+    "name": "Noida",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 133753,
+    "name": "Saharanpur",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 134327,
+    "name": "Varanasi",
+    "state_id": 4022,
+    "state_code": "UP",
+    "state_name": "Uttar Pradesh"
+  },
+  {
+    "id": 131676,
+    "name": "Dehradun",
+    "state_id": 4016,
+    "state_code": "UK",
+    "state_name": "Uttarakhand"
+  },
+  {
+    "id": 133666,
+    "name": "Raipur",
+    "state_id": 4016,
+    "state_code": "UK",
+    "state_name": "Uttarakhand"
+  },
+  {
+    "id": 134027,
+    "name": "Srinagar",
+    "state_id": 4016,
+    "state_code": "UK",
+    "state_name": "Uttarakhand"
+  },
+  {
+    "id": 141966,
+    "name": "Howrah",
+    "state_id": 4853,
+    "state_code": "WB",
+    "state_name": "West Bengal"
+  },
+  {
+    "id": 141995,
+    "name": "Kharagpur",
+    "state_id": 4853,
+    "state_code": "WB",
+    "state_name": "West Bengal"
+  },
+  {
+    "id": 142001,
+    "name": "Kolkata",
+    "state_id": 4853,
+    "state_code": "WB",
+    "state_name": "West Bengal"
+  },
+  {
+    "id": 142088,
+    "name": "Siliguri",
+    "state_id": 4853,
+    "state_code": "WB",
+    "state_name": "West Bengal"
+  }
+]

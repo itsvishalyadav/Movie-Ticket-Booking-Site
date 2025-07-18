@@ -4,6 +4,7 @@ import {io} from "socket.io-client";
 import BigBTN from "../Buttons/BigBTN";
 import "./SeatPricingInfo.css";
 import { useUser } from "../../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 const socket = io("http://localhost:8080");
 function formatTime(unix) {
   const date = new Date(unix * 1000);
@@ -17,11 +18,12 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo}) {
+export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo , title}) {
   const {user} = useUser();
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats , setBookedSeats] = useState([]);
   const [showId , setShowId] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     if (!liveInfo.theatres || liveInfo.theatres.length === 0) return;
       let currShowId = (liveInfo.theatres.filter((theatre) => theatre.name === liveInfo.theatre))[0].timings.filter((time) => formatTime(time.time) === liveInfo.time)[0].showId; 
@@ -54,7 +56,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
         {seats.map((seat) => (
           <div
             key={seat+1}
-            className={`seat ${selectedSeats.includes(seat+1) ? "selected" : ""}`}
+            className={`seat ${bookedSeats.includes(seat + 1) ? "booked" : (selectedSeats.includes(seat+1) ? "selected" : "")}`}
             onClick={() => {
               if(bookedSeats.includes(seat + 1)) return;
               if(selectedSeats.includes(seat + 1)){
@@ -66,7 +68,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
               }
             }}
           >
-            {bookedSeats.includes(seat+1) ? (<img src="/bookedchair.png" alt="" />) 
+            {bookedSeats.includes(seat+1) ? (<img className="booked-seat" src="/bookedchair.png" alt="" />) 
              : (selectedSeats.includes(seat+1) ? (
               <img
                 className="selected-chair"
@@ -89,7 +91,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
           <img src="/emptychair.png" alt="Empty Seat" />
           <span>Empty Seat</span>
         </div>
-        <div className="seat-info-item">
+        <div className="seat-info-item ">
           <img src="/bookedchair.png" alt="" />
           <span>Booked Seat</span>
         </div>
@@ -122,6 +124,15 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo})
             if (selectedSeats.length === 0) return alert('No seats selected');
             socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats , userId : user._id});
             setSelectedSeats([]);
+            navigate("/thank-you", {
+              state: {
+                movieName: title,
+                cinemaName: liveInfo.theatre,
+                // location: city,
+                timing: `${liveInfo.date} ${liveInfo.time}`,
+                screenNumber: liveInfo.screenNumber || "N/A"
+              }
+            });
           }}
         />
       </div>

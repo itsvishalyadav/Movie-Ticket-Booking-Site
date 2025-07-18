@@ -59,6 +59,7 @@ export default function BookingPage() {
     const fetchShowData = async () => {
       const theatreData = await fetch(`http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`);
       const theatres = await theatreData.json();
+      console.log(city);
       setLiveInfo((curr) => {
         return {...curr , theatres : theatres , theatre : theatres[0].name , timings : theatres[0].timings.map(time => formatTime(time.time)) ,  time : theatres[0].timings.map(time => formatTime(time.time))[0]}
       })
@@ -114,7 +115,9 @@ export default function BookingPage() {
             <SeatMatrix
               selectedSeats={selectedSeats}
               setSelectedSeats={setSelectedSeats}
-              liveInfo = {liveInfo}
+              liveInfo={liveInfo}
+              title={title}
+              city={city}
             />
           </div>
         </div>

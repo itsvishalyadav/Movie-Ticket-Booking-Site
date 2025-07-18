@@ -138,6 +138,27 @@
   box-shadow: 0 0 0 1px var(--accent);
 }
 
+.authButtons{
+  display: flex;
+  gap: 20px;
+  
+}
+.authButtons a{
+  color: white;
+  text-decoration: none;
+}
+.navLoginBtn{
+  border: 2px solid #f9ab00;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+.navSignupBtn{
+  padding: 4px 10px;
+  background-color: #f9ab00;
+  border-radius: 10px;
+  color: black;
+  font-weight: 800;
+}
 .searchResults {
   position: absolute;
   top: 110%;

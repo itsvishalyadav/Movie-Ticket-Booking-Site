@@ -3,6 +3,9 @@ import * as Select from "@radix-ui/react-select";
 import SideBar from "../User/SideBar";
 import { useCity } from "../../contexts/CityContext";
 import { useUser } from "../../contexts/userContext";
+import {Link} from "react-router-dom";
+import Login from "../../pages/User/Login";
+import Signup from "../../pages/User/Signup";
 import {
   MapPin,
   ChevronDown,
@@ -17,16 +20,18 @@ import {
 import styles from "./Header.module.css";
 import { searchMovies } from "../../movieApi";
 import { useNavigate } from "react-router-dom";
+import CitySelector from "../CitySelector";
 
 export default function Header({ nonSticky = false}) {
   const {city , setCity} = useCity();
-  const {user , setUser} = useUser();
+  const {user} = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showProfile , setShowProfile] = useState(false);
   const navigate = useNavigate();
+  const [showCitySelector, setShowCitySelector] = useState(false);
 
   async function handleprofile(){
     if(!user){
@@ -37,8 +42,9 @@ export default function Header({ nonSticky = false}) {
     })
   }
 
-  // Fetch movies from TMDB via movieApi
-  React.useEffect(() => {
+
+  // limit the api calls while searching movies
+  useEffect(() => {
     const handler = setTimeout(() => {
       if (query) {
         searchMovies(query).then(setResults);
@@ -58,47 +64,33 @@ export default function Header({ nonSticky = false}) {
           Movie<span>Book</span>
         </a>
 
-        {/* Radix Select for city */}
-        <Select.Root defaultValue={city} onValueChange = {(value) => {
-          localStorage.setItem("city" , value);
-          setCity(value);
-        }}>
-          <Select.Trigger
+        {/* City Selector with search */}
+        <div style={{ position: "relative" }}>
+          <button
             className={styles.cityTrigger}
             aria-label="Select your city"
+            onClick={() => setShowCitySelector((v) => !v)}
+            style={{ minWidth: 120 }}
           >
             <MapPin size={16} />
-            <Select.Value placeholder="Select city" />
-            <Select.Icon className={styles.cityChevron}>
-              <ChevronDown size={16} />
-            </Select.Icon>
-          </Select.Trigger>
-
-          <Select.Portal>
-            <Select.Content
-              side="bottom"
-              position="popper"
-              className={styles.cityContent}
-            >
-              <Select.Viewport className={styles.cityViewport}>
-                {[
-                  ["Delhi", "New Delhi"],
-                  ["Mumbai", "Mumbai"],
-                  ["Bangalore", "Bangalore"],
-                  ["Hyderabad", "Hyderabad"],
-                ].map(([value, label]) => (
-                  <Select.Item
-                    key={value}
-                    value={value}
-                    className={styles.cityItem}
-                  >
-                    <Select.ItemText>{label}</Select.ItemText>
-                  </Select.Item>
-                ))}
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+            <span>{city || "Select city"}</span>
+            <ChevronDown size={16} className={styles.cityChevron} />
+          </button>
+          {showCitySelector && (
+            <div style={{ position: "absolute", zIndex: 100, top: "110%", left: 0 }}>
+              <CitySelector
+                onSelect={(c) => {
+                  setCity(c.name);
+                  localStorage.setItem("city", c.name);
+                  setShowCitySelector(false);
+                }}
+                selectedCityId={null}
+                placeholder="Search city..."
+                style={{ width: 260 }}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ---------- Center: Search ---------- */}
@@ -147,13 +139,14 @@ export default function Header({ nonSticky = false}) {
       </form>
 
       {/* ---------- Right: Nav + Profile ---------- */}
-      <nav className={`${styles.right} ${mobileOpen ? styles.rightOpen : ""}`}>
-        <a href="#" className={styles.navItem}>
+      {user ? (<>
+        <nav className={`${styles.right} ${mobileOpen ? styles.rightOpen : ""}`}>
+        <Link to="/bookings" className={styles.navItem}>
           <Ticket size={18} /> <span>My Bookings</span>
-        </a>
-        <a href="#" className={styles.navItem}>
+        </Link>
+        <Link to="/offers" className={styles.navItem}>
           <Tag size={18} /> <span>Offers</span>
-        </a>
+        </Link>
         <button className={styles.profile} aria-label="Profile" onClick={handleprofile}>
           <User2 size={20} />
         </button>
@@ -167,6 +160,13 @@ export default function Header({ nonSticky = false}) {
       >
         {mobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
+      </>) : (
+      <div className={styles.authButtons}>
+        <Link to="/login"><div className={styles.navLoginBtn}>Login</div></Link>
+        <Link to="/signup"><div className={styles.navSignupBtn}>Signup</div></Link>
+      </div>
+      )}
+      
     </header>
     {showProfile && user && <SideBar username = {user.username} name = {user.name}></SideBar>}
     </>

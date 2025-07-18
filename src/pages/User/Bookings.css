@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     margin-top: 20px;
     background: #1a191f;
+    justify-content: center;
 }
 
 .booking-item {

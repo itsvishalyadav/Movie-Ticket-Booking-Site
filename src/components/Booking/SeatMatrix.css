@@ -65,6 +65,9 @@ hr {
 .seat.selected img {
   transform: scale(1.3);
 }
+.booked:hover img{
+  transform: none;
+}
 
 @media (max-width: 600px) {
   .seat-grid {
