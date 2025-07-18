@@ -93,7 +93,6 @@ export default function Home({
       {sections.map(({ key, title, movies }) => (
         <Rails key={key} title={title} movies={movies} />
       ))}
-
       <Footer />
     </div>
   );

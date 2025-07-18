@@ -77,8 +77,6 @@ function HomePage() {
               upcomingMovies={upcomingMovies}
               trendingMovies={trendingMovies}
             />
-
-          {/* <AddItemPage /> */}
         </>
       )}
     </div>
