@@ -1,4 +1,4 @@
-import './BigBTN.css';
+import styles from './BigBTN.module.css';
 
 export default function BigBTN({
   TextForButton,
@@ -7,7 +7,7 @@ export default function BigBTN({
   className = "",
   noInlineStyles = false,
 }) {
-  let mergedClassName = `big-btn ${className}`;
+  let mergedClassName = `${styles["big-btn"]} ${className}`;
   return (
     <button
       onClick={onClick}

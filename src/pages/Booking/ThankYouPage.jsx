@@ -1,6 +1,7 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "../../components/Layout/Header";
+import Footer from "../../components/Layout/Footer";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ThankYouPage.module.css";
 import QRCode from "react-qr-code";
@@ -39,6 +40,7 @@ const ThankYouPage = () => {
           Explore more shows
         </button>
       </div>
+      <Footer />
     </div>
   );
 };

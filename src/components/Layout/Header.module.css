@@ -9,14 +9,15 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 1.2rem;
-  /* backdrop-filter: blur(12px); */
-  background: transparent;
-  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
+  background: #1A191F;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nonSticky {
   position: static !important;
   top: auto !important;
+  background: transparent !important;
+  border-bottom: none !important;
 }
 
 /* ---------- Left Section ---------- */

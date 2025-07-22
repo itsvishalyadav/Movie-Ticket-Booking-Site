@@ -1,8 +1,8 @@
-import { useEffect , useState} from "react";
-import "./SeatMatrix.css";
-import {io} from "socket.io-client";
+import { useEffect, useState } from "react";
+import styles from "./SeatMatrix.module.css";
+import { io } from "socket.io-client";
 import BigBTN from "../Buttons/BigBTN";
-import "./SeatPricingInfo.css";
+import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useNavigate } from "react-router-dom";
 const socket = io("http://localhost:8080");
 function formatTime(unix) {
@@ -17,7 +17,7 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, title, city }) {
+export default function SeatMatrix({ selectedSeats, setSelectedSeats, liveInfo, title, city }) {
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats , setBookedSeats] = useState([]);
   const [showId , setShowId] = useState("");
@@ -42,63 +42,67 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, 
   }, [liveInfo]);
 
   return (
-    <div className="outer-div">
-    <div className="wholeDiv">
+    <div className={styles["outer-div"]}>
+      <div className={styles.wholeDiv}>
       <hr />
       <h2>Screen This Way</h2>
 
-      <div className="seat-grid">
+        <div className={styles["seat-grid"]}>
         {seats.map((seat) => (
           <div
-            key={seat+1}
-            className={`seat ${selectedSeats.includes(seat+1) ? "selected" : ""}`}
+              key={seat + 1}
+              className={`${styles.seat} ${selectedSeats.includes(seat + 1) ? styles.selected : ""
+                }`}
             onClick={() => {
-              if(bookedSeats.includes(seat + 1)) return;
-              if(selectedSeats.includes(seat + 1)){
-                socket.emit("unlockSeat" , {showId , seatNumber : seat + 1});
-                setSelectedSeats(prev => prev.filter(s => s!== seat+1));
-              }
-              else{
-                socket.emit("lockSeat" , {showId , seatNumber : seat + 1});
+                if (bookedSeats.includes(seat + 1)) return;
+                if (selectedSeats.includes(seat + 1)) {
+                  socket.emit("unlockSeat", { showId, seatNumber: seat + 1 });
+                  setSelectedSeats((prev) => prev.filter((s) => s !== seat + 1));
+                } else {
+                  socket.emit("lockSeat", { showId, seatNumber: seat + 1 });
               }
             }}
           >
-            {bookedSeats.includes(seat+1) ? (<img src="/bookedchair.png" alt="" />) 
-             : (selectedSeats.includes(seat+1) ? (
+              {bookedSeats.includes(seat + 1) ? (
+                <img src="/bookedchair.png" alt="" />
+              ) : selectedSeats.includes(seat + 1) ? (
               <img
-                className="selected-chair"
+                  className={styles["selected-chair"]}
                 src="/selectedchair.png"
                 alt="Seat"
               />
             ) : (
-              <img className="empty-chair" src="/emptychair.png" alt="Seat" />
-            ))
-            }
+                <img
+                  className={styles["empty-chair"]}
+                  src="/emptychair.png"
+                  alt="Seat"
+                />
+              )}
           </div>
         ))}
       </div>
-      <div className="seat-info">
-        <div className="seat-info-item">
+        <div className={styles["seat-info"]}>
+          <div className={styles["seat-info-item"]}>
           <img src="/selectedchair.png" alt="Selected Seat" />
           <span>Selected Seat</span>
         </div>
-        <div className="seat-info-item">
+          <div className={styles["seat-info-item"]}>
           <img src="/emptychair.png" alt="Empty Seat" />
           <span>Empty Seat</span>
         </div>
-        <div className="seat-info-item">
+          <div className={styles["seat-info-item"]}>
           <img src="/bookedchair.png" alt="" />
           <span>Booked Seat</span>
         </div>
       </div>
     </div>
-    <div className="selected-seat-info">
+      <div className={seatPricingStyles["selected-seat-info"]}>
       <h2>Selected Seats</h2>
-      <hr className="dashed-line"/>
+        <hr className={seatPricingStyles["dashed-line"]} />
       {selectedSeats.length > 0 ? (
-        <div className="selectedSeatBoxOuterDiv">
+          <div className={seatPricingStyles.selectedSeatBoxOuterDiv}>
           {selectedSeats.map((seat, index) => (
-            <div className="selectedSeatBox" key={index}>
+              <div className={seatPricingStyles.selectedSeatBox} key={index}>
               {seat}
             </div>
           ))}
@@ -107,7 +111,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, 
         <p>No seats selected</p>
       )}
       <h3>Total Price: ₹{selectedSeats.length * 250}</h3>
-      <div className="action-buttons">
+        <div className={seatPricingStyles["action-buttons"]}>
         <BigBTN
           otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
           TextForButton={"+ Add Food Items"}
@@ -116,8 +120,11 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, 
           otherStyles={{ height: "2.2rem" }}
           TextForButton={"Purchase Seats"}
           onClick={() => {
-            if (selectedSeats.length === 0) return alert('No seats selected');
-            socket.emit('confirmSeats', { showId , seatNumbers: selectedSeats });
+              if (selectedSeats.length === 0) return alert("No seats selected");
+              socket.emit("confirmSeats", {
+                showId,
+                seatNumbers: selectedSeats,
+              });
             setSelectedSeats([]);
             navigate("/thank-you", {
               state: {
@@ -125,8 +132,8 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo, 
                 cinemaName: liveInfo.theatre,
                 location: city,
                 timing: `${liveInfo.date} ${liveInfo.time}`,
-                screenNumber: liveInfo.screenNumber || "N/A"
-              }
+                  screenNumber: liveInfo.screenNumber || "N/A",
+                },
             });
           }}
         />

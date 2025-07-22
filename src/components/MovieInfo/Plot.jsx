@@ -1,9 +1,9 @@
-import './Plot.css';
+import styles from './Plot.module.css';
 export default function Plot({ plot }) {
   return (
-    <div className='plot-container'>
-      <p className="plot-title">PLOT:-</p>
-      <p className="plot-content">{plot}</p>
+    <div className={styles['plot-container']}>
+      <p className={styles['plot-title']}>PLOT:-</p>
+      <p className={styles['plot-content']}>{plot}</p>
     </div>
   );
 }

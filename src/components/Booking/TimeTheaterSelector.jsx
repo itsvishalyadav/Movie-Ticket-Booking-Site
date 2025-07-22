@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./TimeTheaterSelector.css";
+import styles from "./TimeTheaterSelector.module.css";
 function formatCurrentDate() {
   const now = new Date();
 
@@ -31,17 +31,19 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-function TimeTheaterSelector({ liveInfo  , setLiveInfo}) {
+function TimeTheaterSelector({ liveInfo, setLiveInfo }) {
   return (
-    <div className="time-theater-selector">
-      <div className="time-selector">
+    <div className={styles["time-theater-selector"]}>
+      <div className={styles["time-selector"]}>
         <label>Time: </label>
         <select
-          className="select"
+          className={styles.select}
           value={liveInfo.time}
-          onChange={(e) => setLiveInfo((curr) => {
-            return {...curr , time : e.target.value}
-          })}
+          onChange={(e) =>
+            setLiveInfo((curr) => {
+              return { ...curr, time: e.target.value };
+            })
+          }
         >
           {liveInfo.timings.map((timing, index) => (
             <option key={index} value={timing}>
@@ -50,16 +52,25 @@ function TimeTheaterSelector({ liveInfo  , setLiveInfo}) {
           ))}
         </select>
       </div>
-      <div className="theater-selector">
+      <div className={styles["theater-selector"]}>
         <label>Theater: </label>
         <select
-          className="select"
+          className={styles.select}
           value={liveInfo.theatre}
-          onChange={(e) => setLiveInfo((curr) => {
-            let timings = liveInfo.theatres.filter((theatre) => theatre.name === e.target.value)[0].timings
+          onChange={(e) =>
+            setLiveInfo((curr) => {
+              let timings = liveInfo.theatres.filter(
+                (theatre) => theatre.name === e.target.value
+              )[0].timings;
             let time = timings[0];
-            return {...curr , theatre : e.target.value , timings : timings.map(time => formatTime(time.time)) ,  time : formatTime(time.time)}
-          })}
+              return {
+                ...curr,
+                theatre: e.target.value,
+                timings: timings.map((time) => formatTime(time.time)),
+                time: formatTime(time.time),
+              };
+            })
+          }
         >
           {liveInfo.theatres.map((theater, index) => (
             <option key={index} value={theater.name}>

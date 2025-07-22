@@ -1,9 +1,9 @@
-import "./ExtraInfo.css";
+import styles from "./ExtraInfo.module.css";
 export default function ExtraInfo({ info }) {
   return (
     <p>
       {Object.entries(info).map(([key, value]) => (
-        <span className="extra-info-value" key={key}>
+        <span className={styles["extra-info-value"]} key={key}>
           {key === "length" && `⏱ ${value}`}
           {key === "languages" && (
             <>

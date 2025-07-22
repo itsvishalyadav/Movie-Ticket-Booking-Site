@@ -1,6 +1,9 @@
 
 import { useEffect, useState } from "react";
 import Home from "./Home";
+import Header from "../../components/Layout/Header";
+import Footer from "../../components/Layout/Footer";
+import Loader from "../../components/Loader/Loader";
 import { 
   getMoviesUrl, 
   getMovieDetails, 
@@ -65,20 +68,20 @@ function HomePage() {
   }, []);
   
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Header />
       {loading ? (
-        <p style={{ color: "#fff", padding: "1rem" }}>Loading movies...</p>
+        <Loader />
       ) : (
-        <>
-            <Home 
-              popularMovies={popularMovies}
-              topRatedMovies={topRatedMovies}
-              nowPlayingMovies={nowPlayingMovies}
-              upcomingMovies={upcomingMovies}
-              trendingMovies={trendingMovies}
-            />
-        </>
+        <Home 
+          popularMovies={popularMovies}
+          topRatedMovies={topRatedMovies}
+          nowPlayingMovies={nowPlayingMovies}
+          upcomingMovies={upcomingMovies}
+          trendingMovies={trendingMovies}
+        />
       )}
+      <Footer />
     </div>
   );
 }

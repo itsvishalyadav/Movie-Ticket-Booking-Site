@@ -12,6 +12,12 @@ import EditMoviesPage from "./pages/Admin/EditMoviesPage";
 import EditCinemasPage from "./pages/Admin/EditCinemasPage";
 import ThankYouPage from "./pages/Booking/ThankYouPage";
 import { CityProvider , useCity } from "./contexts/CityContext.jsx";
+import About from "./pages/footer/About";
+import Services from "./pages/footer/Services";
+import Privacy from "./pages/footer/Privacy";
+import Terms from "./pages/footer/Terms";
+import FAQ from "./pages/footer/FAQ";
+import Contact from "./pages/footer/Contact";
 function App(){
   return (
     <CityProvider>
@@ -27,6 +33,12 @@ function App(){
         <Route path="/admin/dashboard" element={<AdminDashboard/>}></Route>
         <Route path="/admin/edit-movies" element={<EditMoviesPage/>}></Route>
         <Route path="/admin/edit-cinemas" element={<EditCinemasPage/>}></Route>
+        <Route path="/about" element={<About/>}></Route>
+        <Route path="/services" element={<Services/>}></Route>
+        <Route path="/privacy" element={<Privacy/>}></Route>
+        <Route path="/terms" element={<Terms/>}></Route>
+        <Route path="/faq" element={<FAQ/>}></Route>
+        <Route path="/contact" element={<Contact/>}></Route>
       </Routes>
     </CityProvider>
   );

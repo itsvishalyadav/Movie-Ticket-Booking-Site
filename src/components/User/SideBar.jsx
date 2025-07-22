@@ -1,27 +1,27 @@
-import "./Sidebar.css"
+import styles from "./Sidebar.module.css";
 import { useNavigate } from "react-router-dom";
-function SideBar({username , name}){
+function SideBar({ username, name }) {
     const navigate = useNavigate();
-    async function handleSignout(){
-        const res = await fetch("http://localhost:8080/api/signout" , {credentials : "include"});
+    async function handleSignout() {
+        const res = await fetch("http://localhost:8080/api/signout", { credentials: "include" });
         navigate("/home");
     }
     return (
-        <div className="sidebar-container">
-            <div className="user-info">
-                <div className="img">
+        <div className={styles["sidebar-container"]}>
+            <div className={styles["user-info"]}>
+                <div className={styles.img}>
                     <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"></img>
                 </div>
-                <div className="info">
+                <div className={styles.info}>
                     <h3>{name}</h3>
                     <p>{username}</p>
                 </div>
             </div>
-            <hr className="sidebar-hr"/>
-            <div className="navs">
+            <hr className={styles["sidebar-hr"]} />
+            <div className={styles.navs}>
                 <p>👤 My Account</p>
                 <p>🎫 My Bookings</p>
-                <p onClick = {handleSignout}>➡️ Sign Out</p>
+                <p onClick={handleSignout}>➡️ Sign Out</p>
             </div>
         </div>
     );

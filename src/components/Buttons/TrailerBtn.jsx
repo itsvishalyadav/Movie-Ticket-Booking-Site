@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./TrailerBtn.css";
+import styles from "./TrailerBtn.module.css";
 import BigBTN from "./BigBTN";
 
 export default function TrailerBtn({ trailer }) {
@@ -12,7 +12,7 @@ export default function TrailerBtn({ trailer }) {
         TextForButton="▶ Watch Trailer"
       />
       {showOverlay && (
-        <div className="overlay">
+        <div className={styles.overlay}>
           <iframe
             width="80%"
             height="80%"
@@ -26,7 +26,7 @@ export default function TrailerBtn({ trailer }) {
               boxShadow: "0 0 1.25rem #F9AB00",
             }}
           ></iframe>
-          <button onClick={() => setShowOverlay(false)} className="close-btn">
+          <button onClick={() => setShowOverlay(false)} className={styles["close-btn"]}>
             ✖ Close
           </button>
         </div>

@@ -1,10 +1,10 @@
-import "./DetailedMovieInfo.css";
+import styles from "./DetailedMovieInfo.module.css";
 
 export default function DetailedMovieInfo({ info, onClose }) {
   return (
-    <div className="detailed-info-section">
+    <div className={styles["detailed-info-section"]}>
       <button
-        className="close-details-btn"
+        className={styles["close-details-btn"]}
         onClick={onClose}
         title="Back to top"
       >
@@ -13,21 +13,21 @@ export default function DetailedMovieInfo({ info, onClose }) {
       <h2>
         {info.movieFirstName} {info.movieLastName}
       </h2>
-      <div className="detailed-info-list">
+      <div className={styles["detailed-info-list"]}>
         {/* Director */}
         <div>
-          <b className="infoHead">Director:</b>{" "}
+          <b className={styles.infoHead}>Director:</b>{" "}
           {info.director ? info.director.name : "Unknown"}
         </div>
 
         {/* Year */}
         <div>
-          <b className="infoHead">Year:</b> {info.year}
+          <b className={styles.infoHead}>Year:</b> {info.year}
         </div>
 
         {/* Country */}
         <div>
-          <b className="infoHead">Country:</b>{" "}
+          <b className={styles.infoHead}>Country:</b>{" "}
           {info.country
             ? Array.isArray(info.country)
               ? info.country.join(", ")
@@ -37,7 +37,7 @@ export default function DetailedMovieInfo({ info, onClose }) {
 
         {/* Genres */}
         <div>
-          <b className="infoHead">Genres:</b>{" "}
+          <b className={styles.infoHead}>Genres:</b>{" "}
           {info.genres && info.genres.length > 0
             ? info.genres.join(", ")
             : "N/A"}
@@ -45,7 +45,7 @@ export default function DetailedMovieInfo({ info, onClose }) {
 
         {/* Languages */}
         <div>
-          <b className="infoHead">Languages:</b>{" "}
+          <b className={styles.infoHead}>Languages:</b>{" "}
           {info.languages && info.languages.length > 0
             ? info.languages.join(", ")
             : "N/A"}
@@ -53,7 +53,7 @@ export default function DetailedMovieInfo({ info, onClose }) {
 
         {/* Format */}
         <div>
-          <b className="infoHead">Format:</b>{" "}
+          <b className={styles.infoHead}>Format:</b>{" "}
           {info.format && info.format.length > 0
             ? info.format.join(", ")
             : "N/A"}
@@ -61,7 +61,7 @@ export default function DetailedMovieInfo({ info, onClose }) {
 
         {/* Duration */}
         <div>
-          <b className="infoHead">Duration:</b>{" "}
+          <b className={styles.infoHead}>Duration:</b>{" "}
           {info.length ? info.length : "N/A"}
         </div>
       </div>

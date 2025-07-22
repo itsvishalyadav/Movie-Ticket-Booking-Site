@@ -72,8 +72,8 @@ export default function Header({ nonSticky = false}) {
     <header className={`${styles.header} ${nonSticky ? styles.nonSticky : ''}`}>
       {/* ---------- Left: Logo + City ---------- */}
       <div className={styles.left}>
-        <a href="/" className={styles.logo}>
-          Movie<span>Book</span>
+        <a href="/home" className={styles.logo}>
+          MovieBook
         </a>
 
         {/* City Selector with search */}

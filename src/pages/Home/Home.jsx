@@ -1,12 +1,8 @@
 // src/pages/Home.jsx
 import React from "react";
-import Header from "../../components/Layout/Header";
 import Slider from "../../components/Slider/Slider";
 import Rails from "../../components/Rails/Rails";
-import Footer from "../../components/Layout/Footer";
 import styles from "./Home.module.css";
-import Sidebar from "../../components/User/SideBar";
-import { useState } from "react";
 
 /* ---------------------------------------------------------------
    Dummy movie data (swap with API later)
@@ -57,43 +53,12 @@ export default function Home({
     trendingMovies
   );
 
-
-
-  //if no movies are loaded yet
-  const isLoading = popularMovies.length === 0 && topRatedMovies.length === 0;
-
-  if (isLoading) {
-    return (
-      <div className={styles.page}>
-        <Header />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            color: "#fff",
-            fontSize: "1.2rem",
-          }}
-        >
-          Loading movies...
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className={styles.page}>
-      <Header nonSticky/>
-      {/* Hero Slider */}
       <Slider movies={popularMovies} />
-
-      {/* Dynamic Rails */}
       {sections.map(({ key, title, movies }) => (
         <Rails key={key} title={title} movies={movies} />
       ))}
-      <Footer />
     </div>
   );
 }

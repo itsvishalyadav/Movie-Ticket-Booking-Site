@@ -1,4 +1,4 @@
-import './SmallBTN.css';
+import styles from './SmallBTN.module.css';
 
 export default function SmallBTN({
   TextForButton,
@@ -7,7 +7,7 @@ export default function SmallBTN({
   className = "",
   noInlineStyles = false,
 }) {
-  let mergedClassName = `small-btn ${className}`;
+  let mergedClassName = `${styles["small-btn"]} ${className}`;
   return (
     <button
       onClick={onClick}

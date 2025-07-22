@@ -1,0 +1,70 @@
+.container {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.inputSection {
+  margin-top: 1rem;
+  background: #222;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+
+.textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  resize: none;
+}
+
+.stars {
+  margin: 0.5rem 0;
+  display: flex;
+}
+
+.star {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.submitButton {
+  background: #f9ab00;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-weight: 800;
+}
+.submitButton:hover{
+    box-shadow: 0 0 0.9375rem #f9ab00;
+}
+
+.commentSection {
+  margin-top: 1.5rem;
+}
+
+.commentCard {
+  background: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.commentStars {
+  color: #ffc107;
+  margin-bottom: 0.3rem;
+}
+
+.commentText {
+  color: #ccc;
+}
+
+.noComments {
+  color: #888;
+}

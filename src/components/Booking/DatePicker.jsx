@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import "./DatePicker.css";
+import styles from "./DatePicker.module.css";
 function formatCurrentDate() {
   const now = new Date();
 
@@ -59,31 +59,35 @@ export default function DatePicker({liveInfo , setLiveInfo}) {
   };
 
   return (
-    <div className="date-picker-wrapper">
+    <div className={styles["date-picker-wrapper"]}>
       <button
-        className="scroll-btn"
+        className={styles["scroll-btn"]}
         onClick={() => scrollByAmount(-188)}
         aria-label="Scroll Left"
       >
         &#8592;
       </button>
-      <div className="date-picker" ref={containerRef}>
+      <div className={styles["date-picker"]} ref={containerRef}>
         {dates.map((item, index) => {
           const isSelected = liveInfo.date === `${item.day}, ${item.date}`;
           return (
             <button
               key={index}
-              className={`btn date-btn-vertical ${isSelected ? "selected" : ""}`}
+              className={
+                styles.btn + " " +
+                styles["date-btn-vertical"] +
+                (isSelected ? " " + styles.selected : "")
+              }
               onClick={() => updateButton(`${item.day}, ${item.date}`)}
             >
-              <span className="date-btn-day">{item.day}</span>
-              <span className="date-btn-date">{item.date}</span>
+              <span className={styles["date-btn-day"]}>{item.day}</span>
+              <span className={styles["date-btn-date"]}>{item.date}</span>
             </button>
           );
         })}
       </div>
       <button
-        className="scroll-btn"
+        className={styles["scroll-btn"]}
         onClick={() => scrollByAmount(188)}
         aria-label="Scroll Right"
       >

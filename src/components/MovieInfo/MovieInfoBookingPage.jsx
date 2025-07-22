@@ -1,16 +1,16 @@
 import MovieTile from "./MovieTile";
 import imdbLogo from "../../assets/imdb.svg";
 import TrailerBtn from "../Buttons/TrailerBtn";
-import "./MovieInfoBookingPage.css";
+import styles from "./MovieInfoBookingPage.module.css";
 
 export default function MovieInfo({ info }) {
   return (
-    <div className="movie-info-container">
-      <MovieTile className="movie-tile" movieTile={info.movieTile} />
-      <div className="movie-info-details">
+    <div className={styles["movie-info-container"]}>
+      <MovieTile className={styles["movie-tile"]} movieTile={info.movieTile} />
+      <div className={styles["movie-info-details"]}>
         <h2>{info.title}</h2>
-        <div className="movie-info-meta">
-          <img className="imdb-logo" src={imdbLogo} alt="IMDb" />
+        <div className={styles["movie-info-meta"]}>
+          <img className={styles["imdb-logo"]} src={imdbLogo} alt="IMDb" />
           <span>{info.ratings.imdbRating}/10</span>
           <span>●</span>
           <span>{info.length}</span>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Layout/Header";
+import Loader from "../../components/Loader/Loader";
 import DateTimeTheater from "../../components/Booking/DateTimeTheater";
 import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
 import SeatMatrix from "../../components/Booking/SeatMatrix";
@@ -82,7 +83,7 @@ export default function BookingPage() {
   }, []);
 
   if (loading) {
-    return <p style={{ color: "#fff", padding: "1rem" }}>Loading booking page...</p>;
+    return <Loader />;
   }
 
   if (!movieInfo) {

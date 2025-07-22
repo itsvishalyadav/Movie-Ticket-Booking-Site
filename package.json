@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@radix-ui/react-select": "^2.2.5",
     "cors": "^2.8.5",
     "http-status-code": "^2.1.0",
@@ -17,6 +18,7 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
     "react-qr-code": "^2.0.18",
     "react-router-dom": "^7.6.3",
     "socket-io": "^1.0.0",
