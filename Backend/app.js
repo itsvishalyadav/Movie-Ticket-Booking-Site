@@ -362,78 +362,6 @@ app.get("/api/movies/:city/nowplaying" , async (req ,res) => {
 })
 
 
-app.get("/api/movies/:city/trending", async (req, res) => {
-  const city = req.params.city;
-const currentUnix = Math.floor(Date.now() / 1000); // current UNIX time
-    const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
-  try {
-    const trending = await Show.aggregate([
-      {
-        $lookup: {
-          from: "movies",
-          localField: "movie",
-          foreignField: "_id",
-          as: "movieDetails"
-        }
-      },
-      { $unwind: "$movieDetails" },
-
-      {
-        $lookup: {
-          from: "theatres",
-          localField: "theatre",
-          foreignField: "_id",
-          as: "theatreDetails"
-        }
-      },
-      { $unwind: "$theatreDetails" },
-
-      {
-        $match: {
-          "theatreDetails.city": city,
-          startTime: { $gte: currentUnix },
-          "movieDetails.releaseDate": { $lte: today },
-        }
-      },
-
-      {
-        $group: {
-          _id: "$movie",
-          trendingShow: { $first: "$$ROOT" }
-        }
-      },
-
-      { $replaceRoot: { newRoot: "$trendingShow" } },
-
-      {
-        $lookup: {
-          from: "movies",
-          localField: "movie",
-          foreignField: "_id",
-          as: "movie"
-        }
-      },
-      { $unwind: "$movie" },
-      {
-            $project: {
-                _id: "$movieDetails._id",
-                title: "$movieDetails.title",
-                poster: "$movieDetails.poster",
-                genres: "$movieDetails.genres",
-                ratings: "$movieDetails.ratings",
-                length : "$movieDetails.length"
-            }
-            
-        }
-    ]);
-
-    res.json(trending);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err });
-  }
-});
-
 
 // ✅ POPULAR SHOWS
 app.get("/api/movies/:city/popular", async (req, res) => {
@@ -468,8 +396,8 @@ app.get("/api/movies/:city/popular", async (req, res) => {
           startTime: { $gte: currentUnix },
           "movieDetails.releaseDate": { $lte: today },
           $or: [
-            { "movieDetails.ratings": { $gte: 8 } },
-            { "movieDetails.popularity": { $gte: 800 } }
+            { "movieDetails.ratings": { $gte: 7 } },
+            { "movieDetails.popularity": { $gte: 600 } }
           ]
         }
       },
