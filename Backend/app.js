@@ -21,7 +21,7 @@ const {Server} = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'https://getmyseat.onrender.com',
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -71,7 +71,7 @@ const sendVerificationCode = async (email , verificationCode) => {
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: ['https://getmyseat.onrender.com'],
   credentials: true,       // allow cookies to be sent
 }));
 

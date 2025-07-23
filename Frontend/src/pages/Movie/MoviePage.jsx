@@ -12,7 +12,9 @@ function MoviePage() {
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
-        const movieData = await fetch(`http://localhost:8080/api/movies/${title}`);
+        const movieData = await fetch(
+          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+        );
         const detailedMovies = await movieData.json();
         setMovies(detailedMovies);
         setLoading(false);

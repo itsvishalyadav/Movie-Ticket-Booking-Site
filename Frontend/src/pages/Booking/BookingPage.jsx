@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams , useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import Loader from "../../components/Loader/Loader";
 import DateTimeTheater from "../../components/Booking/DateTimeTheater";
@@ -24,12 +24,12 @@ function formatCurrentDate() {
 function formatTime(unix) {
   const date = new Date(unix * 1000);
   let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
   hours = hours % 12;
   if (hours === 0) hours = 12;
-  
+
   return `${hours}.${minutes} ${ampm}`;
 }
 
@@ -39,28 +39,48 @@ export default function BookingPage() {
   const { city } = useCity();
   const [movieInfo, setMovieInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [liveInfo , setLiveInfo] = useState({
-    theatres : [] , theatre : "", timings : [] , date : formatCurrentDate() , time : ""
+  const [liveInfo, setLiveInfo] = useState({
+    theatres: [],
+    theatre: "",
+    timings: [],
+    date: formatCurrentDate(),
+    time: "",
   });
 
   useEffect(() => {
     const fetchShowData = async () => {
-      const theatreData = await fetch(`http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`);
+      const theatreData = await fetch(
+        `https://getmyseatbackend.onrender.com/api/shows/${city}/${title}/${liveInfo.date}`
+      );
       const theatres = await theatreData.json();
       console.log(city);
-      theatres.length > 0 ? setLiveInfo((curr) => {
-        return {...curr , theatres : theatres , theatre : theatres[0].name , timings : theatres[0].timings.map(time => formatTime(time.time)) ,  time : theatres[0].timings.map(time => formatTime(time.time))[0]}
-      }) : setLiveInfo({
-    theatres : [] , theatre : "", timings : [] , date : formatCurrentDate() , time : ""
-  })
+      theatres.length > 0
+        ? setLiveInfo((curr) => {
+            return {
+              ...curr,
+              theatres: theatres,
+              theatre: theatres[0].name,
+              timings: theatres[0].timings.map((time) => formatTime(time.time)),
+              time: theatres[0].timings.map((time) => formatTime(time.time))[0],
+            };
+          })
+        : setLiveInfo({
+            theatres: [],
+            theatre: "",
+            timings: [],
+            date: formatCurrentDate(),
+            time: "",
+          });
     };
     fetchShowData();
-  } , [title , city , liveInfo.date]);
+  }, [title, city, liveInfo.date]);
 
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
-        const movieData = await fetch(`http://localhost:8080/api/movies/${title}`);
+        const movieData = await fetch(
+          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+        );
         const detailedMovie = await movieData.json();
         console.log(detailedMovie);
         setMovieInfo(detailedMovie[0]);
@@ -96,7 +116,7 @@ export default function BookingPage() {
         <MovieInfo info={movieInfo} />
         <div className="booking-page-flex-row">
           <div className="date-time-theater">
-            <DateTimeTheater liveInfo = {liveInfo} setLiveInfo={setLiveInfo}/>
+            <DateTimeTheater liveInfo={liveInfo} setLiveInfo={setLiveInfo} />
           </div>
           <div className="booking-page-center">
             <SeatMatrix
