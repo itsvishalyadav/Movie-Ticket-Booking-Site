@@ -402,7 +402,7 @@ app.get("/api/movies/:city/popular", async (req, res) => {
         $match: {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
-          "movieDetails.releaseDate": {$and:[{ $lte: today },{$gte: startDate}]},
+          "movieDetails.releaseDate": { $gte: startDate, $lte: today },
           
           $or: [
             { "movieDetails.ratings.imdbRating": { $gte: 7 } },
