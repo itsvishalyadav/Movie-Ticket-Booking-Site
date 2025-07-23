@@ -396,7 +396,7 @@ app.get("/api/movies/:city/popular", async (req, res) => {
           startTime: { $gte: currentUnix },
           "movieDetails.releaseDate": { $lte: today },
           $or: [
-            { "movieDetails.ratings": { $gte: 7 } },
+            { "movieDetails.ratings.imdbRating": { $gte: 7 } },
             { "movieDetails.popularity": { $gte: 600 } }
           ]
         }
@@ -474,7 +474,7 @@ app.get("/api/movies/:city/toprated", async (req, res) => {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
           "movieDetails.releaseDate": { $lte: today },
-          "movieDetails.ratings": { $gte: 8.5 } // adjust threshold if needed
+          "movieDetails.ratingsimdbRating": { $gte: 8 } // adjust threshold if needed
         }
       },
 
