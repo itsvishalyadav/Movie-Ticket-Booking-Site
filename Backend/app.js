@@ -372,10 +372,12 @@ app.get("/api/movies/:city/nowplaying", async (req, res) => {
 // ✅ POPULAR SHOWS
 app.get("/api/movies/:city/popular", async (req, res) => {
   const city = req.params.city;
-  const currentUnix = Math.floor(Date.now() / 1000); // current UNIX time
-  const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
-  const tenDaysAgo = new Date(today.getTime() - 10 * 24 * 60 * 60 * 1000);
+  const currentUnix = Math.floor(Date.now() / 1000);
+  const todayDate = new Date();
+  const today = todayDate.toISOString().split("T")[0];
+  const tenDaysAgo = new Date(todayDate.getTime() - 10 * 24 * 60 * 60 * 1000);
   const startDate = tenDaysAgo.toISOString().split("T")[0];
+
   try {
     const popular = await Show.aggregate([
       {
@@ -403,7 +405,7 @@ app.get("/api/movies/:city/popular", async (req, res) => {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
           "movieDetails.releaseDate": { $gte: startDate, $lte: today },
-          
+
           $or: [
             { "movieDetails.ratings.imdbRating": { $gte: 7 } },
             { "movieDetails.popularity": { $gte: 600 } },
