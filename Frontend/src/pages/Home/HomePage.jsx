@@ -11,7 +11,6 @@ function HomePage() {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [trendingMovies, setTrendingMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,11 +40,7 @@ function HomePage() {
         const detailedUpcoming = await upcomingData.json();
         setUpcomingMovies(detailedUpcoming);
 
-        const trendingData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${city}/trending`
-        );
-        const detailedTrending = await trendingData.json();
-        setTrendingMovies(detailedTrending);
+        
         setLoading(false);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -69,7 +64,7 @@ function HomePage() {
           topRatedMovies={topRatedMovies}
           nowPlayingMovies={nowPlayingMovies}
           upcomingMovies={upcomingMovies}
-          trendingMovies={trendingMovies}
+          
         />
       )}
       <Footer />

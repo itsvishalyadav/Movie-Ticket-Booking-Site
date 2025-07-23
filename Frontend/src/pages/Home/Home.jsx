@@ -8,12 +8,11 @@ const getSections = (
   nowPlayingMovies,
   upcomingMovies,
   topRatedMovies,
-  trendingMovies
+  
 ) => [
   { key: "nowShowing", title: "🎬 Now Showing", movies: nowPlayingMovies },
   { key: "comingSoon", title: "📅 Coming Soon", movies: upcomingMovies },
   { key: "topRated", title: "⭐ Top Rated", movies: topRatedMovies },
-  { key: "trending", title: "🔥 Trending Now", movies: trendingMovies },
 ];
 
 export default function Home({
@@ -21,13 +20,12 @@ export default function Home({
   topRatedMovies = [],
   nowPlayingMovies = [],
   upcomingMovies = [],
-  trendingMovies = [],
 }) {
   const sections = getSections(
     nowPlayingMovies,
     upcomingMovies,
     topRatedMovies,
-    trendingMovies
+    
   );
 
   return (
