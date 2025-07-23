@@ -473,8 +473,7 @@ app.get("/api/movies/:city/toprated", async (req, res) => {
         $match: {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
-          "movieDetails.releaseDate": { $lte: today },
-          "movieDetails.ratingsimdbRating": { $gte: 8 } // adjust threshold if needed
+          "movieDetails.ratings.imdbRating": { $gte: 8 } // adjust threshold if needed
         }
       },
 
