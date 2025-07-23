@@ -1,0 +1,110 @@
+.aboutRoot {
+  background: #1a191f;
+  color: #fff;
+  min-height: 70vh;
+  padding: 0 0 0.5rem 0;
+}
+.aboutHero {
+  background: linear-gradient(90deg, #211f27 60%, #191a1f 100%);
+  padding: 3rem 0 2rem 0;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 32px 0 #00000040;
+}
+.aboutTitle {
+  font-size: 2.7rem;
+  font-weight: 800;
+  color: #f9ab00;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+.aboutDesc {
+  font-size: 1.25rem;
+  color: #e0e0e0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.aboutSection {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0rem 1rem;
+  margin-bottom: 2rem;
+}
+.socialLinks {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+}
+.socialLinks a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #35363c;
+  border-radius: 50%;
+
+  color: #fff;
+  font-size: 2rem;
+  transition: background 0.2s;
+}
+.socialLinks a:hover {
+  background:var(--accent,#f9ab00) ;
+  transform: scale(1.1);
+}
+
+.aboutSectionTitle {
+  color: #f9ab00;
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+.aboutSectionDesc {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.teamGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.teamCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #23222b;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px 0 #00000030;
+  padding: 2rem 1.5rem;
+  min-width: 220px;
+  max-width: 240px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.teamCard:hover {
+  transform: translateY(-10px);
+}
+.teamImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 16px;
+  border: 3px solid #f9ab00;
+  object-fit: cover;
+}
+.teamName {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+.teamRole {
+  color: #b3b8c5;
+  font-size: 1rem;
+  margin: 0;
+} 

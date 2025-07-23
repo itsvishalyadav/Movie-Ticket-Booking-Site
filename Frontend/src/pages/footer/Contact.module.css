@@ -1,0 +1,96 @@
+.contactRoot {
+  background: #1a191f;
+  color: #fff;
+  min-height: 70vh;
+  padding: 0 0 0.5rem 0;
+}
+.contactHero {
+  background: linear-gradient(90deg, #211f27 60%, #191a1f 100%);
+  padding: 3rem 0 2rem 0;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 32px 0 #00000040;
+}
+.contactTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f9ab00;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+.contactDesc {
+  font-size: 1.15rem;
+  color: #e0e0e0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.contactSection {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+
+}
+.contactFormCard {
+  background: #23222b;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px 0 #00000030;
+  padding: 2.5rem 2rem;
+  margin-bottom: 32px;
+}
+.contactThankYou {
+  text-align: center;
+  color: #f9ab00;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contactLabel {
+  color: #f9ab00;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.contactInput, .contactTextarea {
+  background: #1a191f;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #fff;
+  font-size: 1.1rem;
+  outline: none;
+  margin-bottom: 0;
+}
+.contactTextarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.contactButton {
+  background: #f9ab00;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 16px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 2px 16px 0 #00000030;
+}
+.contactInfo {
+  text-align: center;
+  color: #e0e0e0;
+  font-size: 1.1rem;
+}
+.contactInfo b {
+  color: #f9ab00;
+}
+.contactInfo a {
+  color: #f9ab00;
+}
+.contactInfo .contactInfoRow {
+  margin-bottom: 8px;
+} 
