@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 const Theatre = require("../models/theatre.js");
 const Screen = require("../models/screens.js");
@@ -5,7 +7,7 @@ const Show = require("../models/shows.js");
 const User = require("../models/user.js");
 const Movie = require("../models/movie.js");
 const initData = require("./data.js");
-const mongoUrl = 'mongodb+srv://agrawalpiyush415:8qcLCV3QMsbOHa7D@cluster0.zdgl421.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoUrl = process.env.MONGO_URL;
 const axios = require("axios");
 async function main(){
     await mongoose.connect(mongoUrl);

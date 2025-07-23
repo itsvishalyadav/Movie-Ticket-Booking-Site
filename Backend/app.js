@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -12,6 +14,7 @@ const Booking = require("./models/booking.js");
 const Movie = require("./models/movie.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const mongoUrl = process.env.MONGO_URL;
 const cors = require("cors");
 const http = require("http");
 const {Server} = require("socket.io");
@@ -23,7 +26,7 @@ const io = new Server(server, {
     credentials: true
   }
 });
-const mongoUrl = 'mongodb+srv://agrawalpiyush415:8qcLCV3QMsbOHa7D@cluster0.zdgl421.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
 async function main(){
     await mongoose.connect(mongoUrl);
 }
@@ -48,8 +51,8 @@ const sessionOptions = {
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'agrawalpiyush415@gmail.com',
-    pass: 'mdxu kkiv emsw gznd'
+    user: 'tickt.booking@gmail.com',
+    pass: process.env.PASSWORD
   }
 });
 
