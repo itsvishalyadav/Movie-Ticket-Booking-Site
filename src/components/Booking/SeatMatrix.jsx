@@ -1,11 +1,11 @@
 import { useEffect , useState} from "react";
 import "./SeatMatrix.css";
-import {io} from "socket.io-client";
 import BigBTN from "../Buttons/BigBTN";
 import "./SeatPricingInfo.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
-const socket = io("http://localhost:8080");
+import {io} from "socket.io-client";
+export const socket = io("http://localhost:8080");
 function formatTime(unix) {
   const date = new Date(unix * 1000);
   let hours = date.getHours();
@@ -33,8 +33,13 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo ,
 
       socket.on('seatData', ({ bookedSeats }) => setBookedSeats(bookedSeats));
       socket.on('seatsBooked', (seats) => {
+        console.log(seats);
         setBookedSeats(prev => [...prev, ...seats]);
       });
+      socket.on('seatsCancelled' , (seats) => {
+        console.log(seats);
+        setBookedSeats(prev => prev.filter(seat => !seats.includes(seat)));
+      })
       socket.on('lockSuccess', (seat) => setSelectedSeats(prev => [...prev, seat]));
       socket.on('lockFailed', (msg) => alert(msg));
 
@@ -43,6 +48,7 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo ,
         socket.off('seatsBooked');
         socket.off('lockSuccess');
         socket.off('lockFailed');
+        socket.off('seatsCancelled');
       };
   }, [liveInfo]);
 
@@ -140,3 +146,4 @@ export default function SeatMatrix({ selectedSeats, setSelectedSeats ,liveInfo ,
     </div>
   );
 }
+

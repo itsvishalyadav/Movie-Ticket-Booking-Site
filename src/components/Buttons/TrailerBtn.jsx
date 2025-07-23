@@ -2,9 +2,15 @@ import { useState } from "react";
 import "./TrailerBtn.css";
 import BigBTN from "./BigBTN";
 
+const convertToEmbedUrl = (url) => {
+  if (url.includes("watch?v=")) {
+    const videoId = url.split("watch?v=")[1].split("&")[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return url;
+};
 export default function TrailerBtn({ trailer }) {
   const [showOverlay, setShowOverlay] = useState(false);
-
   return (
     <>
       <BigBTN
@@ -16,7 +22,7 @@ export default function TrailerBtn({ trailer }) {
           <iframe
             width="80%"
             height="80%"
-            src={trailer}
+            src={convertToEmbedUrl(trailer)}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

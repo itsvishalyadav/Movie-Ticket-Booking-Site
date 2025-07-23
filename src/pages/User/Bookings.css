@@ -1,4 +1,4 @@
-.booking-container{
+.booking-container-upcoming , .booking-container-ended{
     display : flex;
     flex-wrap: wrap;
     margin-top: 20px;
@@ -28,6 +28,17 @@
     margin : 5px;
     line-height: 30px;
     
+}
+
+.booking-seat-selected{
+    width : 30px;
+    height : 30px;
+    border : 1px solid #f9ab00;
+    border-radius : 5px;
+    text-align: center;
+    margin : 5px;
+    line-height: 30px;
+    background-color: #f9ab00;
 }
 
 .cancel-button{

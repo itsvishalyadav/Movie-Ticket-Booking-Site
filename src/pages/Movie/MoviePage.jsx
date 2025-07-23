@@ -4,17 +4,6 @@ import BookingPage from "../Booking/BookingPage";
 import MoviePageTexts from "./MoviePageTexts";
 import {useParams} from "react-router-dom";
 
-import { 
-  getMoviesUrl, 
-  getMovieDetails, 
-  POPULAR_URL, 
-  TOP_RATED_URL, 
-  NOW_PLAYING_URL, 
-  UPCOMING_URL, 
-  TRENDING_URL,
-  searchMovies
-} from "/src/movieApi.js";
-
 function MoviePage() {
   const {title} = useParams();
   let [movies , setMovies] = useState([]);
@@ -23,14 +12,8 @@ function MoviePage() {
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
-        const searchResults = await searchMovies(title);
-        const MoviesData = searchResults.map(movie => ({
-          id: movie.id,
-          MOVIE_URL: `https://api.themoviedb.org/3/movie/${movie.id}?api_key=9eec713ccd6e293c48c3085825d25d7e`
-        }));
-        const detailedMovies = await Promise.all(
-          MoviesData.slice(0, 10).map((m) => getMovieDetails(m.MOVIE_URL))
-        );
+        const movieData = await fetch(`http://localhost:8080/api/movies/${title}`);
+        const detailedMovies = await movieData.json();
         setMovies(detailedMovies);
         setLoading(false);
       } catch (error) {
@@ -41,10 +24,6 @@ function MoviePage() {
 
     fetchAllMovies();
   }, []);
-  const liveInfo = {
-    timings: ["09:45 AM", "12:30 PM", "03:15 PM", "06:15 PM"],
-    theaters: ["Vaishali Nagar", "Sector 17", "City Cinema"],
-  };
 
   const buildBackgroundStyle = (movie) => {
     const mobileGradient = `linear-gradient(to top, rgba(0,0,0,0.3) 30%, #1a191f 95%), url(${movie.bgImagePhone})`;

@@ -2,6 +2,8 @@ import {useEffect , useState} from "react"
 import { useUser } from "../../contexts/userContext"
 import Header from "../../components/Layout/Header";
 import "./Bookings.css"
+import { socket } from "../../components/Booking/SeatMatrix";
+import { useNavigate} from "react-router-dom";
 function formatShowDate(unix) {
   const d = new Date(unix * 1000);
   const day = d.toLocaleDateString("en-US", { weekday: "short" });
@@ -19,11 +21,28 @@ function formatTime(unix) {
   
   return `${hours}.${minutes} ${ampm}`;
 }
+
 export default function Bookings(){
+    const navigate = useNavigate();
     const {user , loading} = useUser();
     const [bookings , setBookings] = useState([]);
     const [cancel , setCancel] = useState(false);
-    const [cancelSeats , setCancelSeats] = useState([]);
+    const [cancelBooking , setCancelBooking] = useState({});
+    const [selectedSeats , setSelectedSeats] = useState([]);
+
+    useEffect(() => {
+        socket.on('bookingSeatsCancelled' , (newBookings) => {
+          setBookings(newBookings);
+          setCancel(false);
+          setSelectedSeats([]);
+          setCancelBooking({});
+        })
+        return () => {
+            socket.off('seatsCancelled');
+          };
+      }, []);
+
+
     useEffect(() => {
         if(loading) return;
         const func = async () => {
@@ -36,16 +55,34 @@ export default function Bookings(){
 
     const handleCancel = (e) => {
         setCancel(!cancel);
-        setCancelSeats(bookings[e.target.id].seats);
+        setCancelBooking(bookings[e.target.id]);
     }
 
     return(
        <>
         <div className={`booking-div ${cancel ? "bgBlur" : ""}`}>
             <Header></Header>
-            <div className="booking-container">
+            <h3>Upcoming</h3>
+            <div className="booking-container-upcoming">
                 {bookings.map((booking , index) => (
-                    <div className="booking-item">
+                    booking.show.startTime - Math.floor(Date.now() / 1000) > 0 && <div className="booking-item">
+                        <p>Movie : {booking.show.movie.title}</p>
+                        <p>Theatre : {booking.show.theatre.name}</p>
+                        <p>Location : {booking.show.theatre.location}</p>
+                        <p>Start Time : {formatShowDate(booking.show.startTime)} , {formatTime(booking.show.startTime)}</p>
+                        <p>Seats : </p>
+                        <div className="booking-seat-container">
+                            {booking.seats.map(seat => <div className="booking-seat">{seat}</div>)}
+                        </div>
+                        {booking.show.startTime - Math.floor(Date.now() / 1000) > 3600 && <button className="cancel-button" id = {`${index}`} onClick={handleCancel}>Cancel Seat</button>}
+                        <p>Booking Time : {formatShowDate(booking.time)} , {formatTime(booking.time)}</p>
+                    </div>
+                ))}
+            </div>
+            <h3>Ended</h3>
+            <div className="booking-container-ended">
+                {bookings.map((booking , index) => (
+                    booking.show.startTime - Math.floor(Date.now() / 1000) < 0 && <div className="booking-item">
                         <p>Movie : {booking.show.movie}</p>
                         <p>Theatre : {booking.show.theatre.name}</p>
                         <p>Location : {booking.show.theatre.location}</p>
@@ -64,13 +101,27 @@ export default function Bookings(){
             <div className="cancel-seat-div">
                 <p>Select seats to be cancelled : </p>
                 <div className="booking-seat-container">
-                    {cancelSeats.map(seat => <div className="booking-seat">{seat}</div>)}
+                    {cancelBooking.seats.map(seat => !selectedSeats.includes(seat) ? 
+                    (<div className="booking-seat" onClick = {
+                        () => {
+                            setSelectedSeats([...selectedSeats , seat]);
+                        }
+                    }>{seat}</div>) : 
+                    (<div className="booking-seat-selected" onClick={
+                        () => {
+                            setSelectedSeats(selectedSeats.filter(seats => seats !== seat));
+                        }
+                    }>{seat}</div>))}
                 </div>
-                <button className="cancel-button">Cancel Seat</button>
+                <button className="cancel-button" onClick={
+                    () => {
+                        socket.emit('cancelSeats' , {seats : selectedSeats , booking : cancelBooking});
+                    }
+                }>Cancel Seat</button>
             </div>
             <div className="close-button" onClick = {() => {
                 setCancel(false);
-                setCancelSeats([]);
+                setCancelBooking({});
             }}>X</div>
         </div>}
         </>

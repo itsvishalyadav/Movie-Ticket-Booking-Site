@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes , Route , Navigate} from "react-router-dom";
-import HomePage from "./pages/Home/HomePage";
+import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/User/Login";
 import MoviePage from "./pages/Movie/MoviePage";
 import Signup from "./pages/User/Signup.jsx";
@@ -31,7 +31,7 @@ function App(){
     <UserProvider>
       <CityProvider>
         <Routes>
-          <Route path="/home" element={<HomePage/>}></Route>
+          <Route path="/home" element={<Home/>}></Route>
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/signup" element={<Signup/>}></Route>
           <Route path="/verify" element={<Verify/>}></Route>

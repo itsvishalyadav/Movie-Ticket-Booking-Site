@@ -41,7 +41,7 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <div className="user-role">Admin</div>
-                <div className="user-name">John Doe</div>
+                <div className="user-name">{user.name}</div>
               </div>
             </div>
           </div>
