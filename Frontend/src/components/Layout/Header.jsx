@@ -3,13 +3,8 @@ import * as Select from "@radix-ui/react-select";
 import SideBar from "../User/SideBar";
 import { useCity } from "../../contexts/CityContext";
 import { useUser } from "../../contexts/userContext";
-<<<<<<< HEAD
-import {Link} from "react-router-dom";
-import { useLocation } from "react-router-dom";
-=======
 import { Link, useNavigate } from "react-router-dom";
 import SearchResults from "../../pages/Search/SearchResults";
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
 import {
   MapPin,
   ChevronDown,
@@ -23,18 +18,11 @@ import {
 import styles from "./Header.module.css";
 import CitySelector from "../CitySelector";
 
-<<<<<<< HEAD
-export default function Header({ nonSticky = false}) {
-  const location = useLocation();
-  const {city , setCity} = useCity();
-  const {user} = useUser();
-=======
 // import SearchResults from "../../pages/Search/SearchResults";
 
 export default function Header({ nonSticky = false }) {
   const { city, setCity } = useCity();
   const { user } = useUser();
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
   const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [showProfile, setShowProfile] = useState(false);
@@ -172,21 +160,6 @@ export default function Header({ nonSticky = false }) {
               </button>
             </nav>
 
-<<<<<<< HEAD
-      {/* ---------- Burger (mobile) ---------- */}
-      <button
-        className={styles.burger}
-        aria-label="Toggle menu"
-        onClick={() => setMobileOpen((p) => !p)}
-      >
-        {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-      </>) : (
-      <div className={styles.authButtons}>
-        <Link to="/login" state={{ from: location }} replace><div className={styles.navLoginBtn}>Login</div></Link>
-        <Link to="/signup" state={{ from: location }} replace><div className={styles.navSignupBtn}>Signup</div></Link>
-      </div>
-=======
             {/* ---------- Burger (mobile) ---------- */}
             <button
               className={styles.burger}
@@ -209,7 +182,6 @@ export default function Header({ nonSticky = false }) {
       </header>
       {showProfile && user && (
         <SideBar username={user.username} name={user.name}></SideBar>
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       )}
     </>
   );

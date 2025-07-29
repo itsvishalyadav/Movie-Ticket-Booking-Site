@@ -51,11 +51,7 @@ export default function Bookings() {
     if (loading) return;
     const func = async () => {
       const data = await fetch(
-<<<<<<< HEAD
-        `http://localhost:8080/api/bookings/${user._id}`
-=======
         ` http://localhost:8080/api/bookings/${user._id}`
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       );
       const bookingData = await data.json();
       setBookings(bookingData);
@@ -73,82 +69,6 @@ export default function Bookings() {
     <>
       <div className={`booking-div ${cancel ? "bgBlur" : ""}`}>
         <Header></Header>
-<<<<<<< HEAD
-        <h3>Upcoming</h3>
-        <div className="booking-container-upcoming">
-          {bookings.map(
-            (booking, index) =>
-              booking.show.startTime - Math.floor(Date.now() / 1000) > 0 && (
-                <div className="booking-item">
-                  <p>Movie : {booking.show.movie.title}</p>
-                  <p>Theatre : {booking.show.theatre.name}</p>
-                  <p>Location : {booking.show.theatre.location}</p>
-                  <p>
-                    Start Time : {formatShowDate(booking.show.startTime)} ,{" "}
-                    {formatTime(booking.show.startTime)}
-                  </p>
-                  <p>Seats : </p>
-                  <div className="booking-seat-container">
-                    {booking.seats.map((seat) => (
-                      <div className="booking-seat">{seat}</div>
-                    ))}
-                  </div>
-                  {booking.show.startTime - Math.floor(Date.now() / 1000) >
-                    3600 && (
-                    <button
-                      className="cancel-button"
-                      id={`${index}`}
-                      onClick={handleCancel}
-                    >
-                      Cancel Seat
-                    </button>
-                  )}
-                  <p>
-                    Booking Time : {formatShowDate(booking.time)} ,{" "}
-                    {formatTime(booking.time)}
-                  </p>
-                </div>
-              )
-          )}
-        </div>
-        <h3>Ended</h3>
-        <div className="booking-container-ended">
-          {bookings.map(
-            (booking, index) =>
-              booking.show.startTime - Math.floor(Date.now() / 1000) < 0 && (
-                <div className="booking-item">
-                  <p>Movie : {booking.show.movie.title}</p>
-                  <p>Theatre : {booking.show.theatre.name}</p>
-                  <p>Location : {booking.show.theatre.location}</p>
-                  <p>
-                    Start Time : {formatShowDate(booking.show.startTime)} ,{" "}
-                    {formatTime(booking.show.startTime)}
-                  </p>
-                  <p>Seats : </p>
-                  <div className="booking-seat-container">
-                    {booking.seats.map((seat) => (
-                      <div className="booking-seat">{seat}</div>
-                    ))}
-                  </div>
-                  {booking.show.startTime - Math.floor(Date.now() / 1000) >
-                    3600 && (
-                    <button
-                      className="cancel-button"
-                      id={`${index}`}
-                      onClick={handleCancel}
-                    >
-                      Cancel Seat
-                    </button>
-                  )}
-                  <p>
-                    Booking Time : {formatShowDate(booking.time)} ,{" "}
-                    {formatTime(booking.time)}
-                  </p>
-                </div>
-              )
-          )}
-        </div>
-=======
         {loader ? (
           <Loader />
         ) : (
@@ -237,7 +157,6 @@ export default function Bookings() {
             </div>
           </>
         )}
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       </div>
       {cancel && (
         <div className="cancel-seat-outer-div">

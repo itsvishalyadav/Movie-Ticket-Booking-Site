@@ -29,11 +29,7 @@ function Login() {
         password: formState.password === "",
       });
     }
-<<<<<<< HEAD
-    const res = await fetch("http://localhost:8080/api/login", {
-=======
     const res = await fetch(" http://localhost:8080/api/login", {
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -50,11 +46,7 @@ function Login() {
       setError(data.message);
     } else {
       setUser(data.user);
-<<<<<<< HEAD
-      navigate(from , { replace: true });
-=======
       navigate("/");
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
     }
   }
   return (

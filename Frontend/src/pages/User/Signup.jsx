@@ -43,22 +43,6 @@ function Signup() {
         password: formState.password === "",
       });
     }
-<<<<<<< HEAD
-    const res = await fetch(
-      "http://localhost:8080/api/signup",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: await JSON.stringify({
-          name: formState.name,
-          username: formState.username,
-          email: formState.email,
-          password: formState.password,
-        }),
-      }
-    );
-=======
     const res = await fetch(" http://localhost:8080/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,7 +54,6 @@ function Signup() {
         password: formState.password,
       }),
     });
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
 
     // setFormState({name : "" , username : "" , email : "" , password : ""});
     const data = await res.json();

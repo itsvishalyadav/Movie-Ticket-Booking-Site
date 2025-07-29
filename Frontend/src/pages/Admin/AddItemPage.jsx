@@ -40,11 +40,7 @@ const AddItemPage = () => {
       },
     };
 
-<<<<<<< HEAD
-    await fetch("http://localhost:8080/api/shows", {
-=======
     await fetch(" http://localhost:8080/api/shows", {
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       method: "POST",
       credentials: "include",
       headers: {
@@ -66,13 +62,7 @@ const AddItemPage = () => {
 
   useEffect(() => {
     const getTheatres = async () => {
-<<<<<<< HEAD
-      const data = await fetch(
-        `http://localhost:8080/api/theatres/${city}`
-      );
-=======
       const data = await fetch(` http://localhost:8080/api/theatres/${city}`);
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       setTheatres(await data.json());
     };
     city && getTheatres();
@@ -80,13 +70,7 @@ const AddItemPage = () => {
 
   useEffect(() => {
     const getMovies = async () => {
-<<<<<<< HEAD
-      const data = await fetch(
-        "http://localhost:8080/api/movies"
-      );
-=======
       const data = await fetch(" http://localhost:8080/api/movies");
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       setMovies(await data.json());
     };
     getMovies();

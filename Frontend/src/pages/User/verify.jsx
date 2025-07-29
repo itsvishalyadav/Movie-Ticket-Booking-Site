@@ -26,20 +26,6 @@ function Verify() {
     if (formState.verificationCode === "") {
       return setIsEmpty({ verificationCode: true });
     }
-<<<<<<< HEAD
-    const res = await fetch(
-      "http://localhost:8080/api/verify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: await JSON.stringify({
-          email: location.state.email,
-          verificationCode: formState.verificationCode,
-        }),
-      }
-    );
-=======
     const res = await fetch(" http://localhost:8080/api/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -49,7 +35,6 @@ function Verify() {
         verificationCode: formState.verificationCode,
       }),
     });
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
 
     setFormState({ verificationCode: "" });
     const data = await res.json();
@@ -57,11 +42,7 @@ function Verify() {
       setError(data.message);
     } else {
       setUser(data.user);
-<<<<<<< HEAD
-      navigate(from , { replace: true });
-=======
       navigate("/");
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
     }
   }
   return (

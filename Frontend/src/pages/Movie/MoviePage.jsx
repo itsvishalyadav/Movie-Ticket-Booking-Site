@@ -14,11 +14,7 @@ function MoviePage() {
     const fetchAllMovies = async () => {
       try {
         const movieData = await fetch(
-<<<<<<< HEAD
-          `http://localhost:8080/api/movies/${title}`
-=======
           ` http://localhost:8080/api/movies/${title}`
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
         );
         const detailedMovies = await movieData.json();
         const reviewsData = await fetch(
