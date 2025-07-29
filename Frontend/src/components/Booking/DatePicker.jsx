@@ -1,34 +1,15 @@
-import { useState, useRef } from "react";
+// DatePicker.jsx
+import React, { useRef, useEffect } from "react";
 import styles from "./DatePicker.module.css";
+
 function formatCurrentDate() {
   const now = new Date();
-
   const day = now.toLocaleDateString("en-US", { weekday: "short" });
   const monthDay = now.toLocaleDateString("en-US", {
     month: "short",
     day: "2-digit",
   });
-
   return `${day}, ${monthDay}`;
-}
-
-function formatShowDate(unix) {
-  const d = new Date(unix * 1000);
-  const day = d.toLocaleDateString("en-US", { weekday: "short" });
-  const monthDay = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-  return `${day}, ${monthDay}`;
-}
-function formatTime(unix) {
-  const date = new Date(unix * 1000);
-  
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-  
-  return `${hours}.${minutes} ${ampm}`;
 }
 
 function generateDates(numDays) {
@@ -38,24 +19,34 @@ function generateDates(numDays) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
     const day = date.toLocaleDateString("en-US", { weekday: "short" });
-    const monthDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+    const monthDay = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+    });
     dates.push({ day, date: monthDay });
   }
   return dates;
 }
 
-export default function DatePicker({liveInfo , setLiveInfo}) {
-  // const [selectedDate, setSelectedDate] = useState("");
+export default function DatePicker({ liveInfo, setLiveInfo }) {
   const containerRef = useRef(null);
   const dates = generateDates(5);
+
+  // On mount, if no date is selected yet, default to today
+  useEffect(() => {
+    if (!liveInfo.date) {
+      setLiveInfo((curr) => ({ ...curr, date: formatCurrentDate() }));
+    }
+  }, [liveInfo.date, setLiveInfo]);
+
   const scrollByAmount = (amount) => {
-    containerRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    }
   };
 
-  const updateButton = (date) => {
-      setLiveInfo((curr) => {
-        return {...curr , date : date }
-      })
+  const updateButton = (dateStr) => {
+    setLiveInfo((curr) => ({ ...curr, date: dateStr }));
   };
 
   return (
@@ -67,18 +58,19 @@ export default function DatePicker({liveInfo , setLiveInfo}) {
       >
         &#8592;
       </button>
+
       <div className={styles["date-picker"]} ref={containerRef}>
-        {dates.map((item, index) => {
-          const isSelected = liveInfo.date === `${item.day}, ${item.date}`;
+        {dates.map((item, idx) => {
+          const label = `${item.day}, ${item.date}`;
+          const isSelected = liveInfo.date === label;
           return (
             <button
-              key={index}
+              key={idx}
               className={
-                styles.btn + " " +
-                styles["date-btn-vertical"] +
-                (isSelected ? " " + styles.selected : "")
+                `${styles.btn} ${styles["date-btn-vertical"]}` +
+                (isSelected ? ` ${styles.selected}` : "")
               }
-              onClick={() => updateButton(`${item.day}, ${item.date}`)}
+              onClick={() => updateButton(label)}
             >
               <span className={styles["date-btn-day"]}>{item.day}</span>
               <span className={styles["date-btn-date"]}>{item.date}</span>
@@ -86,6 +78,7 @@ export default function DatePicker({liveInfo , setLiveInfo}) {
           );
         })}
       </div>
+
       <button
         className={styles["scroll-btn"]}
         onClick={() => scrollByAmount(188)}

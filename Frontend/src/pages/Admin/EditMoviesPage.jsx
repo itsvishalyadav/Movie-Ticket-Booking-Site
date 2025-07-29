@@ -114,7 +114,7 @@ const EditMoviesPage = () => {
     <section className="editmovies-root">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link to="/home">
+          <Link to="/">
             <div className="flix-logo">GetMySeat</div>
           </Link>
           <div className="user-info">

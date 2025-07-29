@@ -1,35 +1,22 @@
 import React, { useState } from "react";
-// import "./AdminShared.css";
+import "./AdminShared.css";
 import "./EditCinemasPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 
 const mockCinemas = [
-  {
-    id: 1,
-    name: "PVR Cinemas",
-    location: "Connaught Place, Delhi",
-  },
-  {
-    id: 2,
-    name: "INOX",
-    location: "Phoenix Mall, Mumbai",
-  },
+  { id: 1, name: "PVR Cinemas", location: "Connaught Place, Delhi" },
+  { id: 2, name: "INOX", location: "Phoenix Mall, Mumbai" },
 ];
 
-const EditCinemasPage = () => {
+export default function EditCinemasPage() {
   const { user } = useUser();
   const [cinemas, setCinemas] = useState(mockCinemas);
   const [form, setForm] = useState({
     name: "",
     location: "",
     theaters: [
-      {
-        theaterNo: "",
-        seatingRows: "",
-        seatingColumns: "",
-        seatTypes: [{ name: "", price: "", number: "" }],
-      },
+      { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
     ],
   });
   const [editId, setEditId] = useState(null);
@@ -41,75 +28,67 @@ const EditCinemasPage = () => {
 
   const handleTheaterChange = (idx, e) => {
     const { name, value } = e.target;
-    setForm((prev) => {
-      const theaters = prev.theaters.map((theater, i) =>
-        i === idx ? { ...theater, [name]: value } : theater
-      );
-      return { ...prev, theaters };
-    });
+    setForm((prev) => ({
+      ...prev,
+      theaters: prev.theaters.map((t, i) =>
+        i === idx ? { ...t, [name]: value } : t
+      ),
+    }));
   };
-  const addTheater = () => {
+
+  const addTheater = () =>
     setForm((prev) => ({
       ...prev,
       theaters: [
         ...prev.theaters,
-        {
-          theaterNo: "",
-          seatingRows: "",
-          seatingColumns: "",
-          seatTypes: [{ name: "", price: "", number: "" }],
-        },
+        { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
       ],
     }));
-  };
-  const removeTheater = (idx) => {
+
+  const removeTheater = (idx) =>
     setForm((prev) => ({
       ...prev,
       theaters: prev.theaters.filter((_, i) => i !== idx),
     }));
-  };
-  const handleSeatTypeChange = (theaterIdx, seatIdx, e) => {
+
+  const handleSeatTypeChange = (tIdx, sIdx, e) => {
     const { name, value } = e.target;
-    setForm((prev) => {
-      const theaters = prev.theaters.map((theater, i) => {
-        if (i !== theaterIdx) return theater;
-        const seatTypes = theater.seatTypes.map((type, j) =>
-          j === seatIdx ? { ...type, [name]: value } : type
-        );
-        return { ...theater, seatTypes };
-      });
-      return { ...prev, theaters };
-    });
+    setForm((prev) => ({
+      ...prev,
+      theaters: prev.theaters.map((t, i) => {
+        if (i !== tIdx) return t;
+        return {
+          ...t,
+          seatTypes: t.seatTypes.map((st, j) =>
+            j === sIdx ? { ...st, [name]: value } : st
+          ),
+        };
+      }),
+    }));
   };
-  const addSeatType = (theaterIdx) => {
-    setForm((prev) => {
-      const theaters = prev.theaters.map((theater, i) =>
-        i === theaterIdx
+
+  const addSeatType = (tIdx) =>
+    setForm((prev) => ({
+      ...prev,
+      theaters: prev.theaters.map((t, i) =>
+        i === tIdx
           ? {
-              ...theater,
-              seatTypes: [
-                ...theater.seatTypes,
-                { name: "", price: "", number: "" },
-              ],
+              ...t,
+              seatTypes: [...t.seatTypes, { name: "", price: "", number: "" }],
             }
-          : theater
-      );
-      return { ...prev, theaters };
-    });
-  };
-  const removeSeatType = (theaterIdx, seatIdx) => {
-    setForm((prev) => {
-      const theaters = prev.theaters.map((theater, i) =>
-        i === theaterIdx
-          ? {
-              ...theater,
-              seatTypes: theater.seatTypes.filter((_, j) => j !== seatIdx),
-            }
-          : theater
-      );
-      return { ...prev, theaters };
-    });
-  };
+          : t
+      ),
+    }));
+
+  const removeSeatType = (tIdx, sIdx) =>
+    setForm((prev) => ({
+      ...prev,
+      theaters: prev.theaters.map((t, i) =>
+        i === tIdx
+          ? { ...t, seatTypes: t.seatTypes.filter((_, j) => j !== sIdx) }
+          : t
+      ),
+    }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -124,35 +103,40 @@ const EditCinemasPage = () => {
       name: "",
       location: "",
       theaters: [
-        {
-          theaterNo: "",
-          seatingRows: "",
-          seatingColumns: "",
-          seatTypes: [{ name: "", price: "", number: "" }],
-        },
+        { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
       ],
     });
     setEditId(null);
   };
 
   const handleEdit = (cinema) => {
-    setForm({ name: cinema.name, location: cinema.location });
+    setForm({
+      name: cinema.name,
+      location: cinema.location,
+      theaters: cinema.theaters,
+    });
     setEditId(cinema.id);
   };
 
   const handleDelete = (id) => {
     setCinemas((prev) => prev.filter((c) => c.id !== id));
     if (editId === id) {
-      setForm({ name: "", location: "" });
+      setForm({
+        name: "",
+        location: "",
+        theaters: [
+          { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
+        ],
+      });
       setEditId(null);
     }
   };
 
   return (
-    <section className="admin-root">
+    <div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link to="/home">
+          <Link to="/admin/dashboard">
             <div className="flix-logo">GetMySeat</div>
           </Link>
           <div className="user-info">
@@ -163,7 +147,7 @@ const EditCinemasPage = () => {
             </div>
             <div>
               <div className="user-role">Admin</div>
-              <div className="user-name">{user.name}</div>
+              <div className="user-name">{user?.name || "Loading..."}</div>
             </div>
           </div>
         </div>
@@ -185,11 +169,10 @@ const EditCinemasPage = () => {
         </nav>
         <footer className="sidebar-footer">© Movie Book, 2025.</footer>
       </aside>
+
       <main className="editcinemas-main">
-        <h2 className="editcinemas-title">Edit Cinemas</h2>
+        <h2 className="section-title">Edit Cinemas</h2>
         <form className="editcinemas-form" onSubmit={handleSubmit}>
-          <h3 className="section-title">Theater Details</h3>
-          <label htmlFor="cinema-name">Cinema Name</label>
           <div className="form-row">
             <div className="form-col">
               <label htmlFor="cinema-name">Cinema Name</label>
@@ -198,8 +181,9 @@ const EditCinemasPage = () => {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                required
                 placeholder="Enter cinema name"
+                required
+                className="input"
               />
             </div>
             <div className="form-col">
@@ -209,16 +193,19 @@ const EditCinemasPage = () => {
                 name="location"
                 value={form.location}
                 onChange={handleChange}
-                required
                 placeholder="Enter cinema location"
+                required
+                className="input"
               />
             </div>
           </div>
+
+          {/* Theaters & Seat Types */}
           <div className="form-section">
-            <h3>Theaters</h3>
             {form.theaters.map((theater, tIdx) => (
-              <div key={tIdx} className="form-row">
+              <div key={tIdx} className="form-row theater-row">
                 <div className="form-col">
+                  <label>Theater #{tIdx + 1}</label>
                   <input
                     type="text"
                     name="theaterNo"
@@ -228,40 +215,21 @@ const EditCinemasPage = () => {
                     className="input"
                     required
                   />
-                  <input
-                    type="number"
-                    name="seatingRows"
-                    placeholder="Rows"
-                    value={theater.seatingRows}
-                    onChange={(e) => handleTheaterChange(tIdx, e)}
-                    className="input"
-                    min="1"
-                    required
-                  />
-                  <input
-                    type="number"
-                    name="seatingColumns"
-                    placeholder="Columns"
-                    value={theater.seatingColumns}
-                    onChange={(e) => handleTheaterChange(tIdx, e)}
-                    className="input"
-                    min="1"
-                    required
-                  />
                   {form.theaters.length > 1 && (
                     <button
                       type="button"
-                      className="remove-seat-type-btn"
+                      className="remove-btn"
                       onClick={() => removeTheater(tIdx)}
                     >
                       Remove Theater
                     </button>
                   )}
                 </div>
+
                 <div className="seat-types-section">
-                  <label className="seat-types-label">Seat Types</label>
+                  <label>Seat Types</label>
                   {theater.seatTypes.map((type, sIdx) => (
-                    <div className="row-fields seat-type-row" key={sIdx}>
+                    <div className="seat-type-row" key={sIdx}>
                       <input
                         type="text"
                         name="name"
@@ -281,103 +249,73 @@ const EditCinemasPage = () => {
                         min="0"
                         required
                       />
-                      <input
-                        type="number"
-                        name="number"
-                        placeholder="# Seats"
-                        value={type.number}
-                        onChange={(e) => handleSeatTypeChange(tIdx, sIdx, e)}
-                        className="input"
-                        min="1"
-                        required
-                      />
+
                       {theater.seatTypes.length > 1 && (
                         <button
                           type="button"
+                          className="remove-btn"
                           onClick={() => removeSeatType(tIdx, sIdx)}
-                          className="remove-seat-type-btn"
                         >
                           Remove
                         </button>
                       )}
                     </div>
                   ))}
+
                   <button
                     type="button"
+                    className="add-btn"
                     onClick={() => addSeatType(tIdx)}
-                    className="add-seat-type-btn"
                   >
                     Add Seat Type
                   </button>
                 </div>
               </div>
             ))}
-            <button
-              type="button"
-              className="add-seat-type-btn"
-              onClick={addTheater}
-              style={{ marginTop: 8 }}
-            >
-              Add Theater
+
+            <button type="button" className="add-btn" onClick={addTheater}>
+              Add Another Theater
             </button>
           </div>
-          <section className="form-actions">
-            <button type="submit">
+
+          <div className="form-actions">
+            <button type="submit" className="save-btn">
               {editId ? "Update Cinema" : "Add Cinema"}
             </button>
             {editId && (
               <button
                 type="button"
-                onClick={() => {
-                  setForm({
-                    name: "",
-                    location: "",
-                    theaters: [
-                      {
-                        theaterNo: "",
-                        seatingRows: "",
-                        seatingColumns: "",
-                        seatTypes: [{ name: "", price: "", number: "" }],
-                      },
-                    ],
-                  });
-                  setEditId(null);
-                }}
+                className="cancel-btn"
+                onClick={() => setEditId(null)}
               >
                 Cancel
               </button>
             )}
-          </section>
+          </div>
         </form>
+
         <ul className="editcinemas-list">
-          {cinemas.map((cinema) => (
-            <li className="editcinemas-list-item" key={cinema.id}>
-              <section className="cinema-info">
-                <strong>{cinema.name}</strong>
-                <p>{cinema.location}</p>
-              </section>
-              <section className="cinema-actions">
-                <button
-                  className="edit"
-                  type="button"
-                  onClick={() => handleEdit(cinema)}
-                >
+          {cinemas.map((c) => (
+            <li key={c.id} className="editcinemas-item">
+              <div>
+                <strong>{c.name}</strong>
+                <p>{c.location}</p>
+              </div>
+              <div className="item-actions">
+                <button onClick={() => handleEdit(c)} className="edit-btn">
                   Edit
                 </button>
                 <button
-                  className="delete"
-                  type="button"
-                  onClick={() => handleDelete(cinema.id)}
+                  onClick={() => handleDelete(c.id)}
+                  className="delete-btn"
                 >
                   Delete
                 </button>
-              </section>
+              </div>
             </li>
           ))}
         </ul>
       </main>
-    </section>
+    </div>
   );
-};
-
-export default EditCinemasPage;
+}

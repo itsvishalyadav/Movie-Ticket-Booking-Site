@@ -6,7 +6,7 @@ import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 
-export const socket = io("https://getmyseatbackend.onrender.com");
+export const socket = io(" http://localhost:8080");
 export default function SeatMatrix({
   showId,
   selectedSeats,
@@ -22,7 +22,7 @@ export default function SeatMatrix({
     const fetchShowDetails = async () => {
       try {
         const response = await fetch(
-          `https://getmyseatbackend.onrender.com/api/shows/${showId}`
+          ` http://localhost:8080/api/shows/${showId}`
         );
         const data = await response.json();
         setShowDetails(data);

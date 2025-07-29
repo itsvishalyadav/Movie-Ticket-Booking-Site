@@ -18,7 +18,7 @@ export default function BookingPage() {
     const fetchMovieData = async () => {
       try {
         const movieData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+          ` http://localhost:8080/api/movies/${title}`
         );
         const detailedMovie = await movieData.json();
         setMovieInfo(detailedMovie[0]);

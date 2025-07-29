@@ -22,9 +22,7 @@ function SearchResults({ parameter, onClose }) {
   });
   useEffect(() => {
     const dataSet = async () => {
-      const moviesData = await fetch(
-        "https://getmyseatbackend.onrender.com/api/movies"
-      );
+      const moviesData = await fetch(" http://localhost:8080/api/movies");
       setDemoMovies(await moviesData.json());
       setLoading(false);
     };

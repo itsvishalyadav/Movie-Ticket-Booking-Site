@@ -51,7 +51,7 @@ export default function Bookings() {
     if (loading) return;
     const func = async () => {
       const data = await fetch(
-        `https://getmyseatbackend.onrender.com/api/bookings/${user._id}`
+        ` http://localhost:8080/api/bookings/${user._id}`
       );
       const bookingData = await data.json();
       setBookings(bookingData);

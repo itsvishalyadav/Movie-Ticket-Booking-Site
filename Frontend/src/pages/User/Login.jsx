@@ -27,7 +27,7 @@ function Login() {
         password: formState.password === "",
       });
     }
-    const res = await fetch("https://getmyseatbackend.onrender.com/api/login", {
+    const res = await fetch(" http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -44,7 +44,7 @@ function Login() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/home");
+      navigate("/");
     }
   }
   return (

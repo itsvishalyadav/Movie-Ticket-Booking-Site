@@ -25,18 +25,15 @@ function Verify() {
     if (formState.verificationCode === "") {
       return setIsEmpty({ verificationCode: true });
     }
-    const res = await fetch(
-      "https://getmyseatbackend.onrender.com/api/verify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: await JSON.stringify({
-          email: location.state.email,
-          verificationCode: formState.verificationCode,
-        }),
-      }
-    );
+    const res = await fetch(" http://localhost:8080/api/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: await JSON.stringify({
+        email: location.state.email,
+        verificationCode: formState.verificationCode,
+      }),
+    });
 
     setFormState({ verificationCode: "" });
     const data = await res.json();
@@ -44,7 +41,7 @@ function Verify() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/home");
+      navigate("/");
     }
   }
   return (

@@ -7,12 +7,9 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState();
   useEffect(() => {
     const getUser = async () => {
-      const res = await fetch(
-        "https://getmyseatbackend.onrender.com/api/isLoggedIn",
-        {
-          credentials: "include",
-        }
-      );
+      const res = await fetch(" http://localhost:8080/api/isLoggedIn", {
+        credentials: "include",
+      });
       const data = await res.json();
       setUser(data.user);
       setLoading(false);

@@ -13,7 +13,7 @@ function MoviePage() {
     const fetchAllMovies = async () => {
       try {
         const movieData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+          ` http://localhost:8080/api/movies/${title}`
         );
         const detailedMovies = await movieData.json();
         setMovies(detailedMovies);

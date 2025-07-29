@@ -40,7 +40,7 @@ const AddItemPage = () => {
       },
     };
 
-    await fetch("https://getmyseatbackend.onrender.com/api/shows", {
+    await fetch(" http://localhost:8080/api/shows", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -55,14 +55,14 @@ const AddItemPage = () => {
       showTime: "",
       showDate: "",
       theatre: "",
+      language: "",
+      format: "",
     });
   };
 
   useEffect(() => {
     const getTheatres = async () => {
-      const data = await fetch(
-        `https://getmyseatbackend.onrender.com/api/theatres/${city}`
-      );
+      const data = await fetch(` http://localhost:8080/api/theatres/${city}`);
       setTheatres(await data.json());
     };
     city && getTheatres();
@@ -70,9 +70,7 @@ const AddItemPage = () => {
 
   useEffect(() => {
     const getMovies = async () => {
-      const data = await fetch(
-        "https://getmyseatbackend.onrender.com/api/movies"
-      );
+      const data = await fetch(" http://localhost:8080/api/movies");
       setMovies(await data.json());
     };
     getMovies();
@@ -95,7 +93,7 @@ const AddItemPage = () => {
     <div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link to="/home">
+          <Link to="/">
             <div className="flix-logo">
               GetMySeat<span className="tv">TV</span>
             </div>
@@ -119,7 +117,7 @@ const AddItemPage = () => {
             <li>
               <Link to="/admin/dashboard">Dashboard</Link>
             </li>
-            <li>
+            <li className="active">
               <Link to="/admin/add-item">Add Shows</Link>
             </li>
             <li>
@@ -298,6 +296,46 @@ const AddItemPage = () => {
                       ))}
                   </ul>
                 )}
+              </div>
+              {/* … your existing Theatre input & suggestions … */}
+
+              {/* ─── Language & Format Selectors ─── */}
+              <div
+                className="language-format-row"
+                style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="language">Language</label>
+                  <select
+                    name="language"
+                    id="language"
+                    value={form.language}
+                    onChange={handleChange}
+                    className="input"
+                    required
+                  >
+                    <option value="">Select Language</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English">English</option>
+                  </select>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="format">Format</label>
+                  <select
+                    name="format"
+                    id="format"
+                    value={form.format}
+                    onChange={handleChange}
+                    className="input"
+                    required
+                  >
+                    <option value="">Select Format</option>
+                    <option value="2D">2D</option>
+                    <option value="3D">3D</option>
+                    <option value="4K">4K</option>
+                  </select>
+                </div>
               </div>
 
               <div className="show-timings">
