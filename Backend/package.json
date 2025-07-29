@@ -15,6 +15,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "http-status-code": "^2.1.0",
+    "joi": "^17.13.3",
     "mongoose": "^8.16.1",
     "nodemailer": "^7.0.5",
     "passport": "^0.7.0",

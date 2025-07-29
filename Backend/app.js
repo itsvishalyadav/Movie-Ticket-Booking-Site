@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -10,18 +9,39 @@ const Theatre = require("./models/theatre.js");
 const Screen = require("./models/screens.js");
 const Show = require("./models/shows.js");
 const User = require("./models/user.js");
+const Review = require("./models/review.js");
 const Booking = require("./models/booking.js");
 const Movie = require("./models/movie.js");
+const joi  = require("joi");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const mongoUrl = process.env.MONGO_URL;
 const cors = require("cors");
 const http = require("http");
+class expressError extends Error{
+    constructor(status , message){
+        super();
+        this.status = status;
+        this.message = message;
+    }
+}
+
+const wrapAsync = (fn) => {
+    return (req , res , next) => {
+        fn(req , res , next).catch(
+            (err) => {
+                next(err);
+            }
+        );
+    }
+}
+
+
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://getmyseat.onrender.com",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -72,7 +92,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["https://getmyseat.onrender.com"],
+    origin: "http://localhost:5173",
     credentials: true, // allow cookies to be sent
   })
 );
@@ -157,20 +177,48 @@ setInterval(() => {
   }
 }, 60000);
 
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  throw new expressError(401, "You must be logged in to do that");
+}
+
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.role === "admin") {
+    return next();
+  }
+  throw new expressError(403, "You must be an admin to do that");
+}
+
+const verificationSchema = joi.object({
+    verificationCode : joi.number().required(),
+    email : joi.string().required(),
+});
+const userSchema = joi.object({
+    name : joi.string().required(),
+    email : joi.string().email().required(),
+    username : joi.string().required(),
+    password : joi.string().required(),
+});
+
 io.on("connection", (socket) => {
-  console.log("a user connected");
   socket.on("joinShow", async (showId) => {
-    socket.join(showId);
+    try{socket.join(showId);
     let show = shows[showId];
     if (!show) {
       show = await loadShow(showId);
     }
     console.log(show);
-    socket.emit("seatData", { bookedSeats: show.bookedSeats });
+    socket.emit("seatData", { bookedSeats: show.bookedSeats });}
+    catch(err){
+      console.log(err);
+      socket.emit("error", {message : err.message});
+    }
   });
 
   socket.on("lockSeat", ({ showId, seatNumber }) => {
-    const locker = socket.id;
+    try{const locker = socket.id;
     const show = shows[showId];
 
     if (show.bookedSeats.includes(seatNumber)) {
@@ -192,10 +240,15 @@ io.on("connection", (socket) => {
     show.locks[seatNumber] = { locker, expiresAt: Date.now() + 5 * 60 * 1000 };
     show.userLocks[locker].push(seatNumber);
     socket.emit("lockSuccess", seatNumber);
-  });
+  }
+  catch(err){
+      console.log(err);
+      socket.emit("error", {message : err.message});
+  }
+});
 
   socket.on("unlockSeat", ({ showId, seatNumber }) => {
-    const locker = socket.id;
+    try{const locker = socket.id;
     const show = shows[showId];
 
     if (show.locks[seatNumber].locker === locker) {
@@ -204,10 +257,14 @@ io.on("connection", (socket) => {
         (s) => s !== seatNumber
       );
     }
-  });
+  }
+  catch(err){
+      console.log(err);
+      socket.emit("error", {message : err.message});
+  }});
 
   socket.on("confirmSeats", async ({ showId, seatNumbers, userId }) => {
-    const locker = socket.id;
+    try{const locker = socket.id;
     const show = shows[showId];
     const heldSeats = show.userLocks[locker] || [];
     if (!seatNumbers.every((s) => heldSeats.includes(s))) {
@@ -231,9 +288,14 @@ io.on("connection", (socket) => {
     });
     await newBooking.save();
     io.to(showId).emit("seatsBooked", seatNumbers);
-  });
+  }
+  catch(err){
+        console.log(err);
+        socket.emit("error", {message : err.message});
+  }});
 
-  socket.on("cancelSeats", async ({ seats, booking }) => {
+  socket.on("cancelSeats",async ({ seats, booking }) => {
+    try{
     const currShow = await Show.findById(booking.show._id);
     if (!currShow) return;
 
@@ -265,18 +327,21 @@ io.on("connection", (socket) => {
       populate: { path: "theatre" },
     });
     socket.emit("bookingSeatsCancelled", newBookings.reverse());
-  });
+  }
+catch(err){
+      console.log(err);
+      socket.emit("error", {message : err.message});
+    }});
 });
 
-app.get("/api/movies", async (req, res) => {
+app.get("/api/movies", wrapAsync(async (req, res) => {
   const movies = await Movie.find({}, "_id title");
   res.json(movies);
-});
+}));
 
 // { title, poster, ratings, genres, length }
 
-app.get("/api/movies/upcoming", async (req, res) => {
-  try {
+app.get("/api/movies/upcoming", wrapAsync(async (req, res) => {
     const currentDate = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
 
     const movies = await Movie.find(
@@ -285,13 +350,9 @@ app.get("/api/movies/upcoming", async (req, res) => {
     );
 
     res.json(movies);
-  } catch (err) {
-    console.error("Error fetching upcoming movies:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+}));
 
-app.get("/api/movies/:city/nowplaying", async (req, res) => {
+app.get("/api/movies/:city/nowplaying", wrapAsync(async (req, res) => {
   const currentUnix = Math.floor(Date.now() / 1000); // current UNIX time
   const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
   const targetCity = req.params.city; // <-- change as needed
@@ -367,10 +428,10 @@ app.get("/api/movies/:city/nowplaying", async (req, res) => {
   ]);
 
   res.json(movies);
-});
+}));
 
-// ✅ POPULAR SHOWS
-app.get("/api/movies/:city/popular", async (req, res) => {
+
+app.get("/api/movies/:city/popular", wrapAsync(async (req, res) => {
   const city = req.params.city;
   const currentUnix = Math.floor(Date.now() / 1000);
   const todayDate = new Date();
@@ -378,7 +439,6 @@ app.get("/api/movies/:city/popular", async (req, res) => {
   const tenDaysAgo = new Date(todayDate.getTime() - 10 * 24 * 60 * 60 * 1000);
   const startDate = tenDaysAgo.toISOString().split("T")[0];
 
-  try {
     const popular = await Show.aggregate([
       {
         $lookup: {
@@ -445,18 +505,13 @@ app.get("/api/movies/:city/popular", async (req, res) => {
     ]);
 
     res.json(popular);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error fetching popular shows" });
-  }
-});
+}));
 
-app.get("/api/movies/:city/toprated", async (req, res) => {
+app.get("/api/movies/:city/toprated", wrapAsync(async (req, res) => {
   const city = req.params.city;
   const currentUnix = Math.floor(Date.now() / 1000);
   const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
 
-  try {
     const topRated = await Show.aggregate([
       {
         $lookup: {
@@ -518,26 +573,22 @@ app.get("/api/movies/:city/toprated", async (req, res) => {
     ]);
 
     res.json(topRated);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error fetching top rated shows" });
-  }
-});
+}));
 
-app.get("/api/movies/:title", async (req, res) => {
+app.get("/api/movies/:title", wrapAsync(async (req, res) => {
   const { title } = req.params;
   const movie = await Movie.find({ title });
   res.json(movie);
-});
+}));
 
-app.get("/api/theatres/:city", async (req, res) => {
+app.get("/api/theatres/:city", wrapAsync(async (req, res) => {
   const { city } = req.params;
   let theatres = await Theatre.find({ city });
   theatres = theatres.map((theatre) => theatre.name);
   res.json(theatres);
-});
+}));
 
-app.get("/api/shows/:city/:title/:date", async (req, res) => {
+app.get("/api/shows/:city/:title/:date", wrapAsync(async (req, res) => {
   const { city, title, date } = req.params;
   const range = getISTDayRangeFromFormattedDate(date, 2025);
 
@@ -576,19 +627,22 @@ app.get("/api/shows/:city/:title/:date", async (req, res) => {
   }
 
   res.json(groupShowsByTheatre(validShows));
-});
+}));
 
-app.post("/api/shows", async (req, res) => {
+app.post("/api/shows", isLoggedIn , isAdmin , wrapAsync(async (req, res) => {
   let { city, title, theatre, showTime, showDate } = req.body;
   const currTheatre = await Theatre.findOne({ city, name: theatre });
   let startTime = convertToUnix(showDate, showTime);
   let newShow = new Show({ movie: title._id, theatre: currTheatre, startTime });
   await newShow.save();
   res.json("show saved");
-});
+}));
 
-app.get("/api/bookings/:user", async (req, res) => {
+app.get("/api/bookings/:user", isLoggedIn , wrapAsync(async (req, res) => {
   let { user } = req.params;
+  if (user !== req.user._id.toString()) {
+    throw new expressError(403, "You are not allowed to view this user's bookings");
+  }
   const bookings = await Booking.find({ user }).populate({
     path: "show",
     populate: [
@@ -597,27 +651,53 @@ app.get("/api/bookings/:user", async (req, res) => {
     ],
   });
   res.json(bookings.reverse());
-});
+}));
 
-app.post("/api/verify", async (req, res) => {
+app.get("/api/reviews/:movieId", wrapAsync(async (req, res) => {
+  const { movieId } = req.params;
+  const reviews = await Review.find({ movie: movieId })
+    .populate("user", "name username");
+  res.json(reviews);
+}))
+
+app.post("/api/reviews", isLoggedIn , wrapAsync(async (req, res) => {
+  let { user, movie, rating, comment } = req.body;
+  const newReview = new Review({ user, movie, rating, comment });
+  await newReview.save();
+  const detailedReview = await Review.findById(newReview._id).populate("user", "name username");
+  res.json(detailedReview);
+}))
+
+app.post("/api/verify", wrapAsync(async (req, res) => {
+  const { error } = verificationSchema.validate(req.body);
+  if (error) {
+    throw new expressError(400 , error.details[0].message );
+  }
   const { email, verificationCode } = req.body;
   console.log(req.body);
   const user = await User.findOne({ email: email });
+  if (!user) {
+    return res.status(404).json({ message: "user not found" });
+  }
   if (user.verificationCode == verificationCode) {
     user.isVerified = true;
     await user.save();
     req.login(user, (err) => {
       if (err) {
-        return res.status(409).json({ message: err.message });
+        throw new expressError(500 , err.message);
       }
       res.status(200).json({ message: "registered successfully", user });
     });
   } else {
-    res.status(409).json({ message: "wrong verification code" });
+    throw new expressError(401 , "wrong verification code");
   }
-});
+}));
 
-app.post("/api/signup", async (req, res) => {
+app.post("/api/signup", wrapAsync(async (req, res) => {
+  const { error } = userSchema.validate(req.body);
+  if (error) {
+    throw new expressError(400 , error.details[0].message );
+  }
   let { name, email, username, password } = req.body;
   let verificationCode = Math.floor(100000 + Math.random() * 900000);
   let user = await User.findOne({ email: email });
@@ -625,7 +705,6 @@ app.post("/api/signup", async (req, res) => {
     sendVerificationCode(user.email, user.verificationCode);
     res.status(200).json({ message: "verification code sent" });
   } else {
-    try {
       const newUser = new User({ name, username, email, verificationCode });
       let registeredUser = await User.register(newUser, password);
       sendVerificationCode(
@@ -633,46 +712,54 @@ app.post("/api/signup", async (req, res) => {
         registeredUser.verificationCode
       );
       res.status(200).json({ message: "verification code sent" });
-    } catch (e) {
-      res.status(409).json({ message: e.message });
     }
   }
-});
+));
 
-app.post("/api/login", async (req, res, next) => {
+app.post("/api/login", wrapAsync(async (req, res, next) => {
   let currUser = await User.findOne({ email: req.body.email });
   if (currUser) req.body.username = currUser.username;
   if (currUser && !currUser.isVerified) {
-    return res.status(500).json({ message: "Invalid email or password" });
+    throw new expressError(401 , "Invalid email or password");
   }
   passport.authenticate("local", (err, user, info) => {
-    if (err) return res.status(500).json({ message: "Server error" });
+    if (err) throw new expressError(500 , "server error");
     if (!user)
-      return res.status(401).json({ message: "Invalid email or password" });
+      throw new expressError(401 , "Invalid email or password");
 
     req.login(user, (err) => {
-      if (err) return res.status(500).json({ message: "Login failed" });
+      if (err) throw new expressError(500 , "Login failed");
       res.status(200).json({ message: "Logged in successfully", user });
     });
   })(req, res, next);
-});
+}));
 
 app.get("/api/isLoggedIn", (req, res) => {
-  console.log(req.user);
   if (req.isAuthenticated()) {
     return res.status(200).json({ message: "authenticated", user: req.user });
   }
-  res.status(400).json({ message: "not authenticated" });
+  throw new expressError(401 , "not authenticated");
 });
 
 app.get("/api/signout", (req, res) => {
   req.logout((err) => {
     if (err) {
-      return res.status(400).json({ message: "logout failed" });
+      throw new expressError(500 , "Logout failed");
     }
     res.status(200).json({ message: "logged out" });
   });
 });
+
+
+app.use((err , req , res , next) => {
+    let {status = 500, message = "something went wrong"} = err;
+    res.status(status).json({message});
+});
+
+app.use((req , res) => {
+  next(new expressError(404 , "not found"));
+})
+
 
 server.listen(8080, () => {
   console.log("server started");
