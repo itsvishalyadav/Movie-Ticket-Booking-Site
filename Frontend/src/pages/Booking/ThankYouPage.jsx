@@ -64,7 +64,7 @@ const ThankYouPage = () => {
           </button>
         </div>
       ) : (
-        <p style={{height:"100vh"}}>Fuck You</p>
+        <p style={{flex:1 }}>Fuck You</p>
       )}
       <Footer />
     </div>
