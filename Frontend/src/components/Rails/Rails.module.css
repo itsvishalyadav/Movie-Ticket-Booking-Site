@@ -17,11 +17,13 @@
 /* ------------ Scroll row ------------ */
 .row {
   display: flex;
-  gap: 1rem;
+  gap: clamp(0.5rem, 2vw, 1rem);
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding-bottom: 0.5rem; /* breathing space under cards */
+  align-items: stretch; /* ensures all cards have same height */
+  transition: all 0.3s ease;
 }
 .row::-webkit-scrollbar {
   display: none;

@@ -4,6 +4,7 @@ import Header from "../../components/Layout/Header";
 import "./Bookings.css";
 import { socket } from "../../components/Booking/SeatMatrix";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 function formatShowDate(unix) {
   const d = new Date(unix * 1000);
   const day = d.toLocaleDateString("en-US", { weekday: "short" });
@@ -32,6 +33,7 @@ export default function Bookings() {
   const [cancel, setCancel] = useState(false);
   const [cancelBooking, setCancelBooking] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     socket.on("bookingSeatsCancelled", (newBookings) => {
@@ -53,6 +55,7 @@ export default function Bookings() {
       );
       const bookingData = await data.json();
       setBookings(bookingData);
+      setLoader(false);
     };
     func();
   }, [user]);
@@ -66,80 +69,94 @@ export default function Bookings() {
     <>
       <div className={`booking-div ${cancel ? "bgBlur" : ""}`}>
         <Header></Header>
-        <h3>Upcoming</h3>
-        <div className="booking-container-upcoming">
-          {bookings.map(
-            (booking, index) =>
-              booking.show.startTime - Math.floor(Date.now() / 1000) > 0 && (
-                <div className="booking-item">
-                  <p>Movie : {booking.show.movie.title}</p>
-                  <p>Theatre : {booking.show.theatre.name}</p>
-                  <p>Location : {booking.show.theatre.location}</p>
-                  <p>
-                    Start Time : {formatShowDate(booking.show.startTime)} ,{" "}
-                    {formatTime(booking.show.startTime)}
-                  </p>
-                  <p>Seats : </p>
-                  <div className="booking-seat-container">
-                    {booking.seats.map((seat) => (
-                      <div className="booking-seat">{seat}</div>
-                    ))}
-                  </div>
-                  {booking.show.startTime - Math.floor(Date.now() / 1000) >
-                    3600 && (
-                    <button
-                      className="cancel-button"
-                      id={`${index}`}
-                      onClick={handleCancel}
-                    >
-                      Cancel Seat
-                    </button>
-                  )}
-                  <p>
-                    Booking Time : {formatShowDate(booking.time)} ,{" "}
-                    {formatTime(booking.time)}
-                  </p>
-                </div>
-              )
-          )}
-        </div>
-        <h3>Ended</h3>
-        <div className="booking-container-ended">
-          {bookings.map(
-            (booking, index) =>
-              booking.show.startTime - Math.floor(Date.now() / 1000) < 0 && (
-                <div className="booking-item">
-                  <p>Movie : {booking.show.movie}</p>
-                  <p>Theatre : {booking.show.theatre.name}</p>
-                  <p>Location : {booking.show.theatre.location}</p>
-                  <p>
-                    Start Time : {formatShowDate(booking.show.startTime)} ,{" "}
-                    {formatTime(booking.show.startTime)}
-                  </p>
-                  <p>Seats : </p>
-                  <div className="booking-seat-container">
-                    {booking.seats.map((seat) => (
-                      <div className="booking-seat">{seat}</div>
-                    ))}
-                  </div>
-                  {booking.show.startTime - Math.floor(Date.now() / 1000) >
-                    3600 && (
-                    <button
-                      className="cancel-button"
-                      id={`${index}`}
-                      onClick={handleCancel}
-                    >
-                      Cancel Seat
-                    </button>
-                  )}
-                  <p>
-                    Booking Time : {formatShowDate(booking.time)} ,{" "}
-                    {formatTime(booking.time)}
-                  </p>
-                </div>
-              )
-          )}
-        </div>
+        {loader ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="upcoming-big-container">
+              <h3 style={{ marginLeft: "3rem", fontSize: "2rem" }}>Upcoming</h3>
+              <div className="booking-container-upcoming">
+                {bookings.map(
+                  (booking, index) =>
+                    booking.show.startTime - Math.floor(Date.now() / 1000) >
+                      0 && (
+                      <div className="booking-item">
+                        <p>Movie : {booking.show.movie.title}</p>
+                        <p>Theatre : {booking.show.theatre.name}</p>
+                        <p>Location : {booking.show.theatre.location}</p>
+                        <p>
+                          Start Time : {formatShowDate(booking.show.startTime)}{" "}
+                          , {formatTime(booking.show.startTime)}
+                        </p>
+                        <p>Seats : </p>
+                        <div className="booking-seat-container">
+                          {booking.seats.map((seat) => (
+                            <div className="booking-seat">{seat}</div>
+                          ))}
+                        </div>
+                        {booking.show.startTime -
+                          Math.floor(Date.now() / 1000) >
+                          3600 && (
+                          <button
+                            className="cancel-button"
+                            id={`${index}`}
+                            onClick={handleCancel}
+                          >
+                            Cancel Seat
+                          </button>
+                        )}
+                        <p>
+                          Booking Time : {formatShowDate(booking.time)} ,{" "}
+                          {formatTime(booking.time)}
+                        </p>
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
+            <div className="ended-big-container">
+              <h3 style={{ marginLeft: "3rem", fontSize: "2rem" }}>Ended</h3>
+              <div className="booking-container-ended">
+                {bookings.map(
+                  (booking, index) =>
+                    booking.show.startTime - Math.floor(Date.now() / 1000) <
+                      0 && (
+                      <div className="booking-item">
+                        <p>Movie : {booking.show.movie.title}</p>
+                        <p>Theatre : {booking.show.theatre.name}</p>
+                        <p>Location : {booking.show.theatre.location}</p>
+                        <p>
+                          Start Time : {formatShowDate(booking.show.startTime)}{" "}
+                          , {formatTime(booking.show.startTime)}
+                        </p>
+                        <p>Seats : </p>
+                        <div className="booking-seat-container">
+                          {booking.seats.map((seat) => (
+                            <div className="booking-seat">{seat}</div>
+                          ))}
+                        </div>
+                        {booking.show.startTime -
+                          Math.floor(Date.now() / 1000) >
+                          3600 && (
+                          <button
+                            className="cancel-button"
+                            id={`${index}`}
+                            onClick={handleCancel}
+                          >
+                            Cancel Seat
+                          </button>
+                        )}
+                        <p>
+                          Booking Time : {formatShowDate(booking.time)} ,{" "}
+                          {formatTime(booking.time)}
+                        </p>
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
       {cancel && (
         <div className="cancel-seat-outer-div">

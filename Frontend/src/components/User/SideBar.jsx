@@ -7,7 +7,9 @@ function SideBar({ username, name }) {
   async function handleSignout() {
     const res = await fetch(
       "https://getmyseatbackend.onrender.com/api/signout",
-      { credentials: "include" }
+      {
+        credentials: "include",
+      }
     );
     setUser();
     navigate("/home");

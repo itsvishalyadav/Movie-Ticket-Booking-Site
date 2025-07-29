@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
+import { FaGithub } from "react-icons/fa";
+
 
 function Footer() {
   return (
@@ -29,7 +31,7 @@ function Footer() {
           <div className={styles.underline}></div>
           <div className={styles.socialLinks}>
             <a href="https://github.com/itsvishalyadav/Movie-Ticket-Booking-Site">
-              <i className="fab fa-github"></i>
+              <FaGithub size={24} />
             </a>
           </div>
         </div>

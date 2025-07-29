@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddItemPage.css";
+import "./AdminShared.css";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
 import { useUser } from "../../contexts/userContext";
@@ -92,11 +92,13 @@ const AddItemPage = () => {
   }, []);
 
   return (
-    <div className="additem-root">
+    <div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link to="/home">
-            <div className="flix-logo">GetMySeat</div>
+            <div className="flix-logo">
+              GetMySeat<span className="tv">TV</span>
+            </div>
           </Link>
 
           <div className="user-info">
@@ -131,11 +133,11 @@ const AddItemPage = () => {
         <div className="sidebar-footer">© Movie Book, 2025.</div>
       </aside>
       <main className="additem-main">
-        <h1 className="addshow-title">Add ShowTime</h1>
-        <form className="additem-form" onSubmit={handleSubmit}>
-          <div className="form-content">
-            <div className="form-fields">
-              <h3 className="section-title">Movie Details</h3>
+        <h1 className="admin-title">Add ShowTime</h1>
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-section">
+            <div className="form-row">
+              <h3>Movie Details</h3>
 
               <div style={{ position: "relative" }}>
                 <input

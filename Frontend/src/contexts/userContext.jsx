@@ -9,7 +9,9 @@ export function UserProvider({ children }) {
     const getUser = async () => {
       const res = await fetch(
         "https://getmyseatbackend.onrender.com/api/isLoggedIn",
-        { credentials: "include" }
+        {
+          credentials: "include",
+        }
       );
       const data = await res.json();
       setUser(data.user);

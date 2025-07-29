@@ -1,15 +1,31 @@
 .container {
   margin-top: 2rem;
   width: 100%;
+  max-height: calc(100vh - 40vh);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #f9ab00;
+  border-radius: 4px;
 }
 
 .inputSection {
   margin-top: 1rem;
   background: #222;
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1rem);
   border-radius: 8px;
 }
-
 
 .textarea {
   width: 100%;
@@ -41,8 +57,8 @@
   margin-top: 0.5rem;
   font-weight: 800;
 }
-.submitButton:hover{
-    box-shadow: 0 0 0.9375rem #f9ab00;
+.submitButton:hover {
+  box-shadow: 0 0 0.9375rem #f9ab00;
 }
 
 .commentSection {
@@ -51,20 +67,26 @@
 
 .commentCard {
   background: #111;
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1rem);
   border-radius: 8px;
-  margin-top: 1rem;
+  margin-top: clamp(0.75rem, 2vw, 1rem);
 }
 
 .commentStars {
   color: #ffc107;
   margin-bottom: 0.3rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 .commentText {
   color: #ccc;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  line-height: 1.5;
 }
 
 .noComments {
   color: #888;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  text-align: center;
+  padding: 1rem;
 }

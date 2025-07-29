@@ -1,23 +1,45 @@
 .card {
   position: relative;
-  width: 160px;
+  width: clamp(120px, calc(12vw + 40px), 160px);
   flex: 0 0 auto;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.3s ease;
   border-radius: 6px;
   overflow: hidden;
 }
 
-.card:hover {
-  transform: scale(1.05);
+@media (hover: hover) {
+  .row:hover .card {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+
+  .row .card:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.movieCard {
+  width: clamp(120px, calc(12vw + 40px), 160px);
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  scroll-snap-align: start;
+  transition: all 0.3s ease;
+  flex: 0 0 auto;
 }
 
 .poster {
   width: 100%;
-  height: 240px;
+  aspect-ratio: 2/3;
+  border-radius: 12px;
   object-fit: cover;
-  border-radius: 6px;
-  display: block;
+  position: relative;
+  background-color: #1a191f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.25s, transform 0.3s ease;
 }
 
 /* ─── Overlay (title + rating) ─────────────────────────────── */
@@ -25,10 +47,10 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  padding: 0.4rem;
+  padding: clamp(0.3rem, 1vw, 0.4rem);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
   color: #fff;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
   line-height: 1.2;
   pointer-events: none;
 }
@@ -36,22 +58,22 @@
 .title {
   font-weight: 600;
   margin-bottom: 0.2rem;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.8vw, 0.8rem);
 }
 
 .rating {
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 1.6vw, 0.75rem);
   color: #f9ab00;
   margin-bottom: 0.2rem;
 }
 
 .genre {
-  font-size: 0.7rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
   color: #ccc;
   margin-bottom: 0.1rem;
 }
 
 .duration {
-  font-size: 0.7rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
   color: #aaa;
 }

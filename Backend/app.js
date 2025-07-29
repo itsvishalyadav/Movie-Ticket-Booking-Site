@@ -137,7 +137,6 @@ async function loadShow(showId) {
     locks: {},
     userLocks: {},
   };
-
   return shows[showId];
 }
 
@@ -269,7 +268,10 @@ io.on("connection", (socket) => {
 });
 
 app.get("/api/movies", async (req, res) => {
-  const movies = await Movie.find({}, "_id title");
+  const movies = await Movie.find(
+    {},
+    "_id title poster genres year ratings length"
+  );
   res.json(movies);
 });
 

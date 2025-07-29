@@ -40,7 +40,6 @@ function HomePage() {
         const detailedUpcoming = await upcomingData.json();
         setUpcomingMovies(detailedUpcoming);
 
-        
         setLoading(false);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -64,7 +63,6 @@ function HomePage() {
           topRatedMovies={topRatedMovies}
           nowPlayingMovies={nowPlayingMovies}
           upcomingMovies={upcomingMovies}
-          
         />
       )}
       <Footer />

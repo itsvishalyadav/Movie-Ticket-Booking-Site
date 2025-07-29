@@ -5,40 +5,38 @@ import BigBTN from "../Buttons/BigBTN";
 import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
+
 export const socket = io("https://getmyseatbackend.onrender.com");
-function formatTime(unix) {
-  const date = new Date(unix * 1000);
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "pm" : "am";
-
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-
-  return `${hours}.${minutes} ${ampm}`;
-}
-
 export default function SeatMatrix({
+  showId,
   selectedSeats,
   setSelectedSeats,
-  liveInfo,
-  title,
+  movieInfo,
 }) {
   const { user } = useUser();
   const seats = Array.from({ length: 100 }, (_, index) => index);
   const [bookedSeats, setBookedSeats] = useState([]);
-  const [showId, setShowId] = useState("");
+  const [showDetails, setShowDetails] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!liveInfo.theatres || liveInfo.theatres.length === 0) return;
-    let currShowId = liveInfo.theatres
-      .filter((theatre) => theatre.name === liveInfo.theatre)[0]
-      .timings.filter(
-        (time) => formatTime(time.time) === liveInfo.time
-      )[0].showId;
-    setShowId(currShowId);
+    const fetchShowDetails = async () => {
+      try {
+        const response = await fetch(
+          `https://getmyseatbackend.onrender.com/api/shows/${showId}`
+        );
+        const data = await response.json();
+        setShowDetails(data);
+      } catch (error) {
+        console.error("Error fetching show details:", error);
+      }
+    };
+
+    fetchShowDetails();
+  }, [showId]);
+
+  useEffect(() => {
     setSelectedSeats([]);
-    socket.emit("joinShow", currShowId);
+    socket.emit("joinShow", showId);
 
     socket.on("seatData", ({ bookedSeats }) => setBookedSeats(bookedSeats));
     socket.on("seatsBooked", (seats) => {
@@ -61,7 +59,7 @@ export default function SeatMatrix({
       socket.off("lockFailed");
       socket.off("seatsCancelled");
     };
-  }, [liveInfo]);
+  }, [showId]);
 
   return (
     <div className={styles["outer-div"]}>
@@ -155,14 +153,15 @@ export default function SeatMatrix({
                 seatNumbers: selectedSeats,
                 userId: user._id,
               });
+              const seats = selectedSeats;
               setSelectedSeats([]);
-              navigate("/thank-you", {
+              navigate(`/movie/${movieInfo.title}/booking/thank-you`, {
                 state: {
-                  movieName: title,
-                  cinemaName: liveInfo.theatre,
-                  // location: city,
-                  timing: `${liveInfo.date} ${liveInfo.time}`,
-                  screenNumber: liveInfo.screenNumber || "N/A",
+                  movieName: movieInfo.title,
+                  cinemaName: showDetails?.theatre?.name || "N/A",
+                  timing: showDetails?.startTime,
+                  seats: seats,
+                  totalPrice: selectedSeats.length * 250,
                 },
               });
             }}

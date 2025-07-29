@@ -1,4 +1,3 @@
-
 .movie-info-container {
   position: relative;
   width: 100%;
@@ -40,11 +39,21 @@
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .movie-info-container {
+    gap: 4rem;
+    padding: 3rem 1rem;
+  }
+  .movie-tile:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 480px) {
   .movie-info-container {
     flex-direction: column;
     gap: 2rem;
-    padding: 1.5rem 0;
+    padding: 1.5rem 0.8rem;
   }
   .movie-info-details {
     gap: 1rem;
@@ -53,5 +62,20 @@
   }
   .movie-info-meta {
     justify-content: center;
+  }
+  .movie-tile:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 300px) {
+  .movie-info-container {
+    padding: 1rem 0.6rem;
+  }
+  .movie-info-details {
+    gap: 0.8rem;
+  }
+  .imdb-logo {
+    height: 1rem;
   }
 }
