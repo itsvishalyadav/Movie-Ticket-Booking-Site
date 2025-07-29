@@ -5,8 +5,13 @@ import BigBTN from "../Buttons/BigBTN";
 import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 
 export const socket = io(" http://localhost:8080");
+=======
+import RazorpayButton from "../Buttons/RazorBtn";
+export const socket = io("https://getmyseatbackend.onrender.com");
+>>>>>>> 5fd2ed1901d9a1ee90fdc38837537d8cf6ff6b9f
 export default function SeatMatrix({
   showId,
   selectedSeats,
@@ -143,6 +148,8 @@ export default function SeatMatrix({
             otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
             TextForButton={"+ Add Food Items"}
           />
+          <RazorpayButton/>
+    
           <BigBTN
             otherStyles={{ height: "2.2rem" }}
             TextForButton={"Purchase Seats"}
@@ -155,7 +162,7 @@ export default function SeatMatrix({
               });
               const seats = selectedSeats;
               setSelectedSeats([]);
-              navigate(`/movie/${movieInfo.title}/booking/thank-you`, {
+              navigate("/thank-you", {
                 state: {
                   movieName: movieInfo.title,
                   cinemaName: showDetails?.theatre?.name || "N/A",
