@@ -5,7 +5,13 @@ import BigBTN from "../Buttons/BigBTN";
 import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
-export const socket = io("https://getmyseatbackend.onrender.com");
+export const socket = io("http://localhost:8080" , {
+  withCredentials: true,
+});
+
+socket.on("connect_error", (err) => {
+  alert("Failed to connect to server. Please check your network or login again.");
+});
 function formatTime(unix) {
   const date = new Date(unix * 1000);
   let hours = date.getHours();
@@ -40,6 +46,10 @@ export default function SeatMatrix({
     setSelectedSeats([]);
     socket.emit("joinShow", currShowId);
 
+    socket.on("error", (err) => {
+      alert("Error: " + err.message);
+    });
+
     socket.on("seatData", ({ bookedSeats }) => setBookedSeats(bookedSeats));
     socket.on("seatsBooked", (seats) => {
       console.log(seats);
@@ -55,6 +65,7 @@ export default function SeatMatrix({
     socket.on("lockFailed", (msg) => alert(msg));
 
     return () => {
+      socket.off("error");
       socket.off("seatData");
       socket.off("seatsBooked");
       socket.off("lockSuccess");

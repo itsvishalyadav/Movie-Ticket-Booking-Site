@@ -1,22 +1,44 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import styles from "./ReviewsAndRatingsSection.module.css";
+import { useUser } from "../../contexts/userContext";
+import { useLocation , useNavigate} from "react-router-dom";
 
-export default function ReviewsAndRatingsSection({ info }) {
-  const [comments, setComments] = useState([]);
+export default function ReviewsAndRatingsSection({ info , reviews , setReviews}) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useUser();
   const [newComment, setNewComment] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if(!user) {
+      return navigate("/login", { state: { from: location }, replace: true });
+    }
     if (newComment.trim() !== "") {
-      const newEntry = {
-        text: newComment,
-        stars: rating || 0,
-      };
-      setComments([newEntry, ...comments]);
-      setNewComment("");
-      setRating(0);
+      try{
+        const newEntry = {
+          comment: newComment,
+          rating: rating || 0,
+          user : user._id,
+          movie : info._id,
+        };
+        const newReviewData = await fetch("http://localhost:8080/api/reviews", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newEntry),
+        });
+        const newReview = await newReviewData.json();
+        setReviews((prevReviews) => [...prevReviews, newReview]);
+        setNewComment("");
+        setRating(0);
+      }
+      catch (error) {
+        alert("Failed to submit review. Please try again later.");
+      }
     }
   };
 
@@ -61,15 +83,17 @@ export default function ReviewsAndRatingsSection({ info }) {
 
       <div className={styles.commentSection}>
         <h3>User Comments</h3>
-        {comments.length === 0 && <p className={styles.noComments}>No comments yet.</p>}
-        {comments.map((comment, idx) => (
+        {reviews.length === 0 && <p className={styles.noComments}>No comments yet.</p>}
+        {reviews.map((review, idx) => (
           <div key={idx} className={styles.commentCard}>
+            <p className={styles.name}>{review.user.name}</p>
+            <p className={styles.username}>@{review.user.username}</p>
             <div className={styles.commentStars}>
-              {[...Array(comment.stars)].map((_, i) => (
+              {[...Array(review.rating)].map((_, i) => (
                 <FaStar key={i} size={16} color="#f9ab00" />
               ))}
             </div>
-            <p className={styles.commentText}>{comment.text}</p>
+            <p className={styles.commentText}>{review.comment}</p>
           </div>
         ))}
       </div>

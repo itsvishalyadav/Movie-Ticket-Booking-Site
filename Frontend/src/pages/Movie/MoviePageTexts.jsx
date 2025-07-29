@@ -8,7 +8,7 @@ import Rating from "../../components/MovieInfo/Rating";
 import TrailerBookBtn from "../../components/Buttons/Trailer+Book-BTN";
 import DetailedInfoReviews from "./DetailedInfo&Reviews";
 
-export default function MoviePageTexts({ info }) {
+export default function MoviePageTexts({ info , reviews , setReviews}) {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function MoviePageTexts({ info }) {
           onMoreInfo={() => setShowDetails(true)}
         />
       </div>
-      <DetailedInfoReviews info={info} onClose={() => setShowDetails(false)} />
+      <DetailedInfoReviews info={info} reviews = {reviews} setReviews = {setReviews} onClose={() => setShowDetails(false)} />
     </div>
   );
 }

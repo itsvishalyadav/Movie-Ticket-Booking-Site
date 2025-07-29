@@ -68,3 +68,15 @@
 .noComments {
   color: #888;
 }
+
+.name {
+  font-weight: bold;
+  color: #f9ab00;
+}
+
+.username {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}

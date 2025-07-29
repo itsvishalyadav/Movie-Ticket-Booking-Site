@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate , useLocation} from "react-router-dom";
 // const navigate = useNavigate();
 import "./Signup.css";
 
 function Signup() {
+  const location = useLocation();
   const navigate = useNavigate();
   let [formState, setFormState] = new useState({
     name: "",
@@ -43,7 +44,7 @@ function Signup() {
       });
     }
     const res = await fetch(
-      "https://getmyseatbackend.onrender.com/api/signup",
+      "http://localhost:8080/api/signup",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,7 +63,7 @@ function Signup() {
     if (!res.ok) {
       setError(data.message);
     } else {
-      navigate("/verify", { state: { email: formState.email } });
+      navigate("/verify", { state: { email: formState.email , from : location.state?.from} });
     }
   }
   return (

@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate , useLocation} from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 import "./Signup.css";
 
 function Login() {
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/home";
   const navigate = useNavigate();
   let { setUser } = useUser();
   let [formState, setFormState] = new useState({ email: "", password: "" });
@@ -27,7 +29,7 @@ function Login() {
         password: formState.password === "",
       });
     }
-    const res = await fetch("https://getmyseatbackend.onrender.com/api/login", {
+    const res = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -44,7 +46,7 @@ function Login() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/home");
+      navigate(from , { replace: true });
     }
   }
   return (
@@ -85,7 +87,7 @@ function Login() {
           <br></br>
         </form>
         <p>
-          Do not have an account? <Link to="/signup">Signup!</Link>
+          Do not have an account? <Link to="/signup" state={{ from: location.state?.from}}>Signup!</Link>
         </p>
       </div>
     </div>

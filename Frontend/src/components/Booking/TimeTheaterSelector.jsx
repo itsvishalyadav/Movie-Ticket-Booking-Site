@@ -1,23 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TimeTheaterSelector.module.css";
-function formatCurrentDate() {
-  const now = new Date();
 
-  const day = now.toLocaleDateString("en-US", { weekday: "short" });
-  const monthDay = now.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-  });
-
-  return `${day}, ${monthDay}`;
-}
-
-function formatShowDate(unix) {
-  const d = new Date(unix * 1000);
-  const day = d.toLocaleDateString("en-US", { weekday: "short" });
-  const monthDay = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-  return `${day}, ${monthDay}`;
-}
 function formatTime(unix) {
   const date = new Date(unix * 1000);
   

@@ -4,8 +4,7 @@ import SideBar from "../User/SideBar";
 import { useCity } from "../../contexts/CityContext";
 import { useUser } from "../../contexts/userContext";
 import {Link} from "react-router-dom";
-import Login from "../../pages/User/Login";
-import Signup from "../../pages/User/Signup";
+import { useLocation } from "react-router-dom";
 import {
   MapPin,
   ChevronDown,
@@ -22,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import CitySelector from "../CitySelector";
 
 export default function Header({ nonSticky = false}) {
+  const location = useLocation();
   const {city , setCity} = useCity();
   const {user} = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -161,8 +161,8 @@ export default function Header({ nonSticky = false}) {
       </button>
       </>) : (
       <div className={styles.authButtons}>
-        <Link to="/login"><div className={styles.navLoginBtn}>Login</div></Link>
-        <Link to="/signup"><div className={styles.navSignupBtn}>Signup</div></Link>
+        <Link to="/login" state={{ from: location }} replace><div className={styles.navLoginBtn}>Login</div></Link>
+        <Link to="/signup" state={{ from: location }} replace><div className={styles.navSignupBtn}>Signup</div></Link>
       </div>
       )}
       

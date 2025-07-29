@@ -7,6 +7,7 @@ function Verify() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, setUser } = useUser();
+  const from = location.state?.from?.pathname || "/home";
   let [formState, setFormState] = new useState({ verificationCode: "" });
   let [error, setError] = new useState("");
   let [isEmpty, setIsEmpty] = new useState({ verificationCode: false });
@@ -26,7 +27,7 @@ function Verify() {
       return setIsEmpty({ verificationCode: true });
     }
     const res = await fetch(
-      "https://getmyseatbackend.onrender.com/api/verify",
+      "http://localhost:8080/api/verify",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,7 +45,7 @@ function Verify() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/home");
+      navigate(from , { replace: true });
     }
   }
   return (

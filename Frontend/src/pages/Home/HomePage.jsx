@@ -17,25 +17,25 @@ function HomePage() {
     const fetchAllMovies = async () => {
       try {
         const popularMoviesData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${city}/popular`
+          `http://localhost:8080/api/movies/${city}/popular`
         );
         const detailedPopularMovies = await popularMoviesData.json();
         setPopularMovies(detailedPopularMovies);
 
         const topRatedData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${city}/toprated`
+          `http://localhost:8080/api/movies/${city}/toprated`
         );
         const detailedTopRated = await topRatedData.json();
         setTopRatedMovies(detailedTopRated);
 
         const nowPlayingData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${city}/nowplaying`
+          `http://localhost:8080/api/movies/${city}/nowplaying`
         );
         const detailedNowPlaying = await nowPlayingData.json();
         setNowPlayingMovies(detailedNowPlaying);
 
         const upcomingData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/upcoming`
+          `http://localhost:8080/api/movies/upcoming`
         );
         const detailedUpcoming = await upcomingData.json();
         setUpcomingMovies(detailedUpcoming);

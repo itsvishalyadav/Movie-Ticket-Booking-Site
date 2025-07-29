@@ -48,9 +48,10 @@ export default function BookingPage() {
   });
 
   useEffect(() => {
+    
     const fetchShowData = async () => {
       const theatreData = await fetch(
-        `https://getmyseatbackend.onrender.com/api/shows/${city}/${title}/${liveInfo.date}`
+        `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
       );
       const theatres = await theatreData.json();
       console.log(city);
@@ -79,15 +80,15 @@ export default function BookingPage() {
     const fetchMovieData = async () => {
       try {
         const movieData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+          `http://localhost:8080/api/movies/${title}`
         );
         const detailedMovie = await movieData.json();
         console.log(detailedMovie);
         setMovieInfo(detailedMovie[0]);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching movie:", error);
         setLoading(false);
+        alert(error.message);
       }
     };
     fetchMovieData();

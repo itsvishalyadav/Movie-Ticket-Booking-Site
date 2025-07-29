@@ -6,16 +6,20 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState();
   useEffect(() => {
-    const getUser = async () => {
-      const res = await fetch(
-        "https://getmyseatbackend.onrender.com/api/isLoggedIn",
-        { credentials: "include" }
-      );
-      const data = await res.json();
-      setUser(data.user);
+    try{
+      const getUser = async () => {
+        const res = await fetch(
+          "http://localhost:8080/api/isLoggedIn",
+          { credentials: "include" }
+        );
+        const data = await res.json();
+        setUser(data.user);
+        setLoading(false);
+      };
+      getUser();
+    } catch (error) {
       setLoading(false);
-    };
-    getUser();
+    }
   }, []);
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>

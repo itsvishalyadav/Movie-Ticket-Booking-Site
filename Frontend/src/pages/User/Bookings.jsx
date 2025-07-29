@@ -49,7 +49,7 @@ export default function Bookings() {
     if (loading) return;
     const func = async () => {
       const data = await fetch(
-        `https://getmyseatbackend.onrender.com/api/bookings/${user._id}`
+        `http://localhost:8080/api/bookings/${user._id}`
       );
       const bookingData = await data.json();
       setBookings(bookingData);
@@ -109,7 +109,7 @@ export default function Bookings() {
             (booking, index) =>
               booking.show.startTime - Math.floor(Date.now() / 1000) < 0 && (
                 <div className="booking-item">
-                  <p>Movie : {booking.show.movie}</p>
+                  <p>Movie : {booking.show.movie.title}</p>
                   <p>Theatre : {booking.show.theatre.name}</p>
                   <p>Location : {booking.show.theatre.location}</p>
                   <p>

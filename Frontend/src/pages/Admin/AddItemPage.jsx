@@ -40,7 +40,7 @@ const AddItemPage = () => {
       },
     };
 
-    await fetch("https://getmyseatbackend.onrender.com/api/shows", {
+    await fetch("http://localhost:8080/api/shows", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -61,7 +61,7 @@ const AddItemPage = () => {
   useEffect(() => {
     const getTheatres = async () => {
       const data = await fetch(
-        `https://getmyseatbackend.onrender.com/api/theatres/${city}`
+        `http://localhost:8080/api/theatres/${city}`
       );
       setTheatres(await data.json());
     };
@@ -71,7 +71,7 @@ const AddItemPage = () => {
   useEffect(() => {
     const getMovies = async () => {
       const data = await fetch(
-        "https://getmyseatbackend.onrender.com/api/movies"
+        "http://localhost:8080/api/movies"
       );
       setMovies(await data.json());
     };

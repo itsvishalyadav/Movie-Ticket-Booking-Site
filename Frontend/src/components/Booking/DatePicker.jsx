@@ -1,35 +1,5 @@
 import { useState, useRef } from "react";
 import styles from "./DatePicker.module.css";
-function formatCurrentDate() {
-  const now = new Date();
-
-  const day = now.toLocaleDateString("en-US", { weekday: "short" });
-  const monthDay = now.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-  });
-
-  return `${day}, ${monthDay}`;
-}
-
-function formatShowDate(unix) {
-  const d = new Date(unix * 1000);
-  const day = d.toLocaleDateString("en-US", { weekday: "short" });
-  const monthDay = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-  return `${day}, ${monthDay}`;
-}
-function formatTime(unix) {
-  const date = new Date(unix * 1000);
-  
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-  
-  return `${hours}.${minutes} ${ampm}`;
-}
 
 function generateDates(numDays) {
   const dates = [];

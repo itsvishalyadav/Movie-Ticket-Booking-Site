@@ -20,14 +20,15 @@ import Terms from "./pages/footer/Terms";
 import FAQ from "./pages/footer/FAQ";
 import Contact from "./pages/footer/Contact";
 import { UserProvider, useUser } from "./contexts/userContext.jsx";
-
+import { useLocation } from "react-router-dom";
 function ProtectedRoute({ children }) {
+  const location = useLocation();
   const { user , loading} = useUser();
   if(loading){
     return <p>loading...</p>
   }
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace/>;
   }
   return children;
 }

@@ -9,13 +9,19 @@ function MoviePage() {
   const { title } = useParams();
   let [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(true);
+  let [reviews, setReviews] = useState([]);
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
         const movieData = await fetch(
-          `https://getmyseatbackend.onrender.com/api/movies/${title}`
+          `http://localhost:8080/api/movies/${title}`
         );
         const detailedMovies = await movieData.json();
+        const reviewsData = await fetch(
+          `http://localhost:8080/api/reviews/${detailedMovies[0]._id}`)
+        
+        const detailedReviews = await reviewsData.json();
+        setReviews(detailedReviews);
         setMovies(detailedMovies);
         setLoading(false);
       } catch (error) {
@@ -62,7 +68,7 @@ function MoviePage() {
       ) : (
         <div style={buildBackgroundStyle(movies[0])}>
           <Header nonSticky />
-          <MoviePageTexts info={movies[0]} />
+          <MoviePageTexts info={movies[0]} reviews = {reviews} setReviews = {setReviews}/>
         </div>
       )}
     </div>

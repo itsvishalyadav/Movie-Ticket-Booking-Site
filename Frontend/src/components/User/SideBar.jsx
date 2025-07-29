@@ -5,12 +5,17 @@ function SideBar({ username, name }) {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
   async function handleSignout() {
-    const res = await fetch(
-      "https://getmyseatbackend.onrender.com/api/signout",
-      { credentials: "include" }
-    );
-    setUser();
-    navigate("/home");
+    try{
+      const res = await fetch(
+        "http://localhost:8080/api/signout",
+        { credentials: "include" }
+      );
+      setUser();
+      navigate("/home");
+    }
+    catch (error) {
+      alert("Failed to sign out. Please try again.");
+    }
   }
   return (
     <div className={styles["sidebar-container"]}>
