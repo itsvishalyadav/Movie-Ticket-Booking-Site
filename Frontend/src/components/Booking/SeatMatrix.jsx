@@ -5,7 +5,7 @@ import BigBTN from "../Buttons/BigBTN";
 import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
-
+import RazorpayButton from "../Buttons/RazorBtn";
 export const socket = io("https://getmyseatbackend.onrender.com");
 export default function SeatMatrix({
   showId,
@@ -143,6 +143,8 @@ export default function SeatMatrix({
             otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
             TextForButton={"+ Add Food Items"}
           />
+          <RazorpayButton/>
+    
           <BigBTN
             otherStyles={{ height: "2.2rem" }}
             TextForButton={"Purchase Seats"}
