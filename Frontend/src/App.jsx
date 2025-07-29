@@ -22,14 +22,6 @@ import FAQ from "./pages/footer/FAQ";
 import Contact from "./pages/footer/Contact";
 import ShowTimePage from "./pages/Booking/ShowTimePage.jsx";
 import { UserProvider, useUser } from "./contexts/userContext.jsx";
-<<<<<<< HEAD
-import { useLocation } from "react-router-dom";
-function ProtectedRoute({ children }) {
-  const location = useLocation();
-  const { user , loading} = useUser();
-  if(loading){
-    return <p>loading...</p>
-=======
 import ShippingPolicy from "./pages/footer/ShippingPolicy";
 import RefundPolicy from "./pages/footer/RefundPolicy";
 
@@ -37,7 +29,6 @@ function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
     return <p>loading...</p>;
->>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
   }
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace/>;
