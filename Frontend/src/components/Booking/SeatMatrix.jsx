@@ -155,7 +155,7 @@ export default function SeatMatrix({
               });
               const seats = selectedSeats;
               setSelectedSeats([]);
-              navigate(`/movie/${movieInfo.title}/booking/thank-you`, {
+              navigate(`/thank-you`, {
                 state: {
                   movieName: movieInfo.title,
                   cinemaName: showDetails?.theatre?.name || "N/A",

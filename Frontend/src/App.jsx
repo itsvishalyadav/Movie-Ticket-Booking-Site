@@ -67,7 +67,7 @@ function App() {
           ></Route>
           <Route path="/bookings" element={<Bookings></Bookings>}></Route>
           <Route
-            path="/movie/:title/booking/thank-you"
+            path="/thank-you"
             element={<ThankYouPage />}
           ></Route>
           <Route path="/about" element={<About />}></Route>

@@ -1,4 +1,4 @@
-import React from "react";
+import './RefundPolicy.css';
 
 const RefundPolicy = () => {
   return (
@@ -11,7 +11,7 @@ const RefundPolicy = () => {
         Under this policy:
       </p>
 
-      <ul>
+      <ul className="policy-list">
         <li>
           Cancellations will be considered only if the request is made within 1-2 days of placing the order. However,
           the cancellation request may not be entertained if the orders have been communicated to the vendors/
