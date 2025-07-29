@@ -17,30 +17,45 @@ function HomePage() {
     const fetchAllMovies = async () => {
       try {
         const popularMoviesData = await fetch(
+<<<<<<< HEAD
           `http://localhost:8080/api/movies/${city}/popular`
+=======
+          ` http://localhost:8080/api/movies/${city}/popular`
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
         );
         const detailedPopularMovies = await popularMoviesData.json();
         setPopularMovies(detailedPopularMovies);
 
         const topRatedData = await fetch(
+<<<<<<< HEAD
           `http://localhost:8080/api/movies/${city}/toprated`
+=======
+          ` http://localhost:8080/api/movies/${city}/toprated`
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
         );
         const detailedTopRated = await topRatedData.json();
         setTopRatedMovies(detailedTopRated);
 
         const nowPlayingData = await fetch(
+<<<<<<< HEAD
           `http://localhost:8080/api/movies/${city}/nowplaying`
+=======
+          ` http://localhost:8080/api/movies/${city}/nowplaying`
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
         );
         const detailedNowPlaying = await nowPlayingData.json();
         setNowPlayingMovies(detailedNowPlaying);
 
         const upcomingData = await fetch(
+<<<<<<< HEAD
           `http://localhost:8080/api/movies/upcoming`
+=======
+          ` http://localhost:8080/api/movies/upcoming`
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
         );
         const detailedUpcoming = await upcomingData.json();
         setUpcomingMovies(detailedUpcoming);
 
-        
         setLoading(false);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -64,7 +79,6 @@ function HomePage() {
           topRatedMovies={topRatedMovies}
           nowPlayingMovies={nowPlayingMovies}
           upcomingMovies={upcomingMovies}
-          
         />
       )}
       <Footer />

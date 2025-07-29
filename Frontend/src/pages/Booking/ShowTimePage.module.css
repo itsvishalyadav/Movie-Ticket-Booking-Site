@@ -1,0 +1,192 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a191f;
+  color: #ffffff;
+}
+
+
+.movieSection {
+  padding: 48px 24px;
+}
+
+.showsSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movieHeader h1 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: 16px;
+  background-color: rgba(249, 171, 0, 0.2);
+  color: #f9ab00;
+  font-size: 0.9rem;
+}
+
+.filters {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.dateStrip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.dateButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 80px;
+}
+
+.dateButton:hover {
+  border-color: #f9ab00;
+}
+
+.dateButton.selected {
+  background-color: #f9ab00;
+  border-color: #f9ab00;
+}
+
+.day {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.date {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 4px 0;
+}
+
+.month {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.additionalFilters {
+  display: flex;
+  gap: 16px;
+}
+
+.filterSelect {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.filterSelect:hover {
+  border-color: #f9ab00;
+}
+
+.theaterList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theaterCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theaterInfo {
+  margin-bottom: 16px;
+}
+
+.theaterInfo h2 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.amenities {
+  display: flex;
+  gap: 12px;
+}
+
+.amenity {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.amenity::before {
+  content: "•";
+  color: #f9ab00;
+}
+
+.showtimes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.showtimeButton {
+  padding: 8px 16px;
+  border: 1px solid #f9ab00;
+  border-radius: 4px;
+  background: transparent;
+  color: #f9ab00;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.showtimeButton:hover {
+  background: #f9ab00;
+  color: #0a1929;
+}
+
+@media (max-width: 768px) {
+  .movieSection {
+    padding: 24px 16px;
+  }
+
+  .showsSection {
+    padding: 16px;
+    margin: 0 16px;
+  }
+
+  .dateButton {
+    min-width: 70px;
+    padding: 6px 12px;
+  }
+}

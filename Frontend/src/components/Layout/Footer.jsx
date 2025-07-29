@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
+import { FaGithub } from "react-icons/fa";
+
 
 function Footer() {
   return (
@@ -14,6 +16,8 @@ function Footer() {
             <li><Link to="/services">Our Services</Link></li>
             <li><Link to="/privacy">Privacy Policy</Link></li>
             <li><Link to="/terms">Terms Of Service</Link></li>
+            <li><Link to="/shipping-policy">Shipping Policy</Link></li>
+            <li><Link to="/refund-policy">Refund Policy</Link></li>
           </ul>
         </div>
         <div className={styles.footerCol}>
@@ -29,7 +33,7 @@ function Footer() {
           <div className={styles.underline}></div>
           <div className={styles.socialLinks}>
             <a href="https://github.com/itsvishalyadav/Movie-Ticket-Booking-Site">
-              <i className="fab fa-github"></i>
+              <FaGithub size={24} />
             </a>
           </div>
         </div>

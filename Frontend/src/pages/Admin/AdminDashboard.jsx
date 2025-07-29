@@ -22,16 +22,14 @@ const mockShows = [
 const AdminDashboard = () => {
   const [city, setCity] = useState("");
   const [showCitySelector, setShowCitySelector] = useState(false);
-  const {user} = useUser();
+  const { user } = useUser();
   return (
     <>
       <section className="admindashboard-root">
         <aside className="sidebar">
           <div className="sidebar-header">
-            <Link to="/home">
-              <div className="flix-logo">
-                GetMySeat
-              </div>
+            <Link to="/">
+              <div className="flix-logo">GetMySeat</div>
             </Link>
             <div className="user-info">
               <div className="user-avatar">
@@ -68,7 +66,17 @@ const AdminDashboard = () => {
           <div className="city-selector" style={{ position: "relative" }}>
             <button
               className="city-btn"
-              style={{ minWidth: 120, padding: '8px 16px', borderRadius: 6, border: '1px solid #ccc', background: '#1E1E1E', color: '#fff', marginBottom: 8, cursor: 'pointer', fontWeight: 600 }}
+              style={{
+                minWidth: 120,
+                padding: "8px 16px",
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                background: "#1E1E1E",
+                color: "#fff",
+                marginBottom: 8,
+                cursor: "pointer",
+                fontWeight: 600,
+              }}
               onClick={() => setShowCitySelector((v) => !v)}
             >
               {city ? city : "Select City"}

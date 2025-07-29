@@ -157,7 +157,6 @@ async function loadShow(showId) {
     locks: {},
     userLocks: {},
   };
-
   return shows[showId];
 }
 
@@ -335,7 +334,7 @@ catch(err){
 });
 
 app.get("/api/movies", wrapAsync(async (req, res) => {
-  const movies = await Movie.find({}, "_id title");
+  const movies = await Movie.find({}, "_id title poster genres year ratings length");
   res.json(movies);
 }));
 

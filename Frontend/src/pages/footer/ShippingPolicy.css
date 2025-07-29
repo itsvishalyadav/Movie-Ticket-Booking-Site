@@ -1,0 +1,31 @@
+.policy-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: #121118;
+  color: #f1f1f1;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.policy-page h1 {
+  font-size: 2rem;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.policy-page p {
+  margin-bottom: 1rem;
+  color: #ddd;
+}
+
+.policy-page a {
+  color: #fbbf24;
+  text-decoration: underline;
+}
+
+.disclaimer {
+  font-style: italic;
+  margin-top: 2rem;
+  color: #aaa;
+}

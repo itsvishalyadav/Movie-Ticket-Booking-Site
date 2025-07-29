@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../../components/Layout/Header";
 import Footer from "../../components/Layout/Footer";
 import aboutStyles from "./About.module.css";
-
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 const team = [
   { name: "Piyush Agrawal", role: "Full stack Developer", img: "" },
   { name: "Vishal Yadav", role: "Full stack Developer", img: "" },
@@ -43,10 +43,10 @@ export default function About() {
               <p className={aboutStyles.teamRole}>{member.role}</p>
               <div className={aboutStyles.socialLinks}>
                 <a href="#">
-                  <i className="fab fa-github"></i>
+                  <FaGithub size={24} />
                 </a>
                 <a href="#">
-                  <i className="fab fa-linkedin"></i>
+                  <FaLinkedin size={24} />
                 </a>
               </div>
             </div>

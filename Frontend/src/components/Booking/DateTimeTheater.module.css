@@ -1,3 +1,5 @@
+/* src/components/Booking/DateTimeTheater.module.css */
+
 .date-time-theater {
   display: flex;
   flex-direction: column;
@@ -5,10 +7,35 @@
   gap: 1.5rem;
 }
 
+/* New: horizontal row for date + language/format dropdowns */
+.picker-row {
+  display: flex;
+  align-items: center; /* vertical centering */
+  gap: 1rem; /* space between DatePicker & selectors */
+  width: 100%; /* take full width so the dropdowns stay to the right */
+}
+
+/* If you want the date bar to flex-grow and push dropdowns rightward */
+.picker-row > :first-child {
+  flex: 1; /* DatePicker will stretch, dropdowns stay their natural size */
+}
+
 @media (max-width: 600px) {
   .date-time-theater {
     gap: 1rem;
     padding: 0.75rem 0;
     align-items: center;
+  }
+
+  .picker-row {
+    flex-wrap: wrap; /* wrap into multiple lines on narrow screens */
+    justify-content: center;
+  }
+
+  /* ensure dropdowns and date-bar don’t get too cramped */
+  .picker-row > :first-child {
+    flex: none;
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 }

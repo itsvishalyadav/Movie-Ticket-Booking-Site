@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddItemPage.css";
+import "./AdminShared.css";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
 import { useUser } from "../../contexts/userContext";
@@ -40,7 +40,11 @@ const AddItemPage = () => {
       },
     };
 
+<<<<<<< HEAD
     await fetch("http://localhost:8080/api/shows", {
+=======
+    await fetch(" http://localhost:8080/api/shows", {
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       method: "POST",
       credentials: "include",
       headers: {
@@ -55,14 +59,20 @@ const AddItemPage = () => {
       showTime: "",
       showDate: "",
       theatre: "",
+      language: "",
+      format: "",
     });
   };
 
   useEffect(() => {
     const getTheatres = async () => {
+<<<<<<< HEAD
       const data = await fetch(
         `http://localhost:8080/api/theatres/${city}`
       );
+=======
+      const data = await fetch(` http://localhost:8080/api/theatres/${city}`);
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       setTheatres(await data.json());
     };
     city && getTheatres();
@@ -70,9 +80,13 @@ const AddItemPage = () => {
 
   useEffect(() => {
     const getMovies = async () => {
+<<<<<<< HEAD
       const data = await fetch(
         "http://localhost:8080/api/movies"
       );
+=======
+      const data = await fetch(" http://localhost:8080/api/movies");
+>>>>>>> 4bc47d42b5045274af0499fb0c58e79a1092b561
       setMovies(await data.json());
     };
     getMovies();
@@ -92,11 +106,13 @@ const AddItemPage = () => {
   }, []);
 
   return (
-    <div className="additem-root">
+    <div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Link to="/home">
-            <div className="flix-logo">GetMySeat</div>
+          <Link to="/">
+            <div className="flix-logo">
+              GetMySeat<span className="tv">TV</span>
+            </div>
           </Link>
 
           <div className="user-info">
@@ -117,7 +133,7 @@ const AddItemPage = () => {
             <li>
               <Link to="/admin/dashboard">Dashboard</Link>
             </li>
-            <li>
+            <li className="active">
               <Link to="/admin/add-item">Add Shows</Link>
             </li>
             <li>
@@ -131,11 +147,11 @@ const AddItemPage = () => {
         <div className="sidebar-footer">© Movie Book, 2025.</div>
       </aside>
       <main className="additem-main">
-        <h1 className="addshow-title">Add ShowTime</h1>
-        <form className="additem-form" onSubmit={handleSubmit}>
-          <div className="form-content">
-            <div className="form-fields">
-              <h3 className="section-title">Movie Details</h3>
+        <h1 className="admin-title">Add ShowTime</h1>
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-section">
+            <div className="form-row">
+              <h3>Movie Details</h3>
 
               <div style={{ position: "relative" }}>
                 <input
@@ -296,6 +312,46 @@ const AddItemPage = () => {
                       ))}
                   </ul>
                 )}
+              </div>
+              {/* … your existing Theatre input & suggestions … */}
+
+              {/* ─── Language & Format Selectors ─── */}
+              <div
+                className="language-format-row"
+                style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="language">Language</label>
+                  <select
+                    name="language"
+                    id="language"
+                    value={form.language}
+                    onChange={handleChange}
+                    className="input"
+                    required
+                  >
+                    <option value="">Select Language</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English">English</option>
+                  </select>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="format">Format</label>
+                  <select
+                    name="format"
+                    id="format"
+                    value={form.format}
+                    onChange={handleChange}
+                    className="input"
+                    required
+                  >
+                    <option value="">Select Format</option>
+                    <option value="2D">2D</option>
+                    <option value="3D">3D</option>
+                    <option value="4K">4K</option>
+                  </select>
+                </div>
               </div>
 
               <div className="show-timings">

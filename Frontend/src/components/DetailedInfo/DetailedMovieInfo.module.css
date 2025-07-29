@@ -65,13 +65,40 @@
   transform: scale(1.1);
 }
 
-@media (max-width: 600px) {
-
+@media (max-width: 768px) {
   .detailed-info-section {
     width: 100%;
-  }
-  .detailed-info-section {
+    padding: 1rem;
+    max-height: 50vh;
+    overflow-y: auto;
     border-right: none;
     border-bottom: 3px solid #f9ab00;
+  }
+
+  .detailed-info-section::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .detailed-info-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .detailed-info-section::-webkit-scrollbar-thumb {
+    background: #f9ab00;
+    border-radius: 4px;
+  }
+
+  .detailed-info-section h2 {
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+  }
+
+  .detailed-info-list {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    gap: 1rem;
+  }
+
+  .infoHead {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
   }
 }

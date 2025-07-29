@@ -1,37 +1,198 @@
-.select {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #f9ab00;
-  font-size: 1rem;
-  background-color: #1a191f;
-}
-
-.select:focus {
-  outline: none;
-  border-color: #5441FA;
-}
-
 .time-theater-selector {
   display: flex;
-  gap: 1.25rem;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.time-selector, .theater-selector {
+.theaterCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theaterHeader {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.headerShowtimes {
+  display: flex;
+  align-items: center;
+}
+
+.theaterLogo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.theaterHeader h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+}
+
+.amenities {
+  display: flex;
+  gap: 1rem;
+}
+
+.amenity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #f9ab00;
+}
+
+.icon {
+  font-size: 1.1rem;
+}
+
+.showTimes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+  margin-left: 2rem;
+}
+
+.timeButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: #f9ab00;
+  color: #1a191f;
+  border: none;
+  font-weight: 700;
+}
+
+.timeButton:hover {
+  background: rgba(249, 170, 0, 0.458);
+  color: white;
+}
+
+.cancellationInfo {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 1rem;
+}
+
+.time-selector,
+.theater-selector {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.time-selector label, .theater-selector label {
+.time-selector label,
+.theater-selector label {
   font-weight: bold;
   margin-bottom: 0.25rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .time-theater-selector {
+    gap: 1.25rem;
+  }
+  .theaterCard {
+    padding: 1.2rem;
+  }
+  .theaterHeader {
     gap: 0.75rem;
-    align-items: center;
+  }
+  .theaterLogo {
+    width: 42px;
+    height: 42px;
+  }
+  .showTimes {
+    gap: 0.75rem;
+    margin-left: 1.5rem;
+  }
+  .timeButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+  .amenities {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .time-theater-selector {
+    gap: 1rem;
+  }
+  .theaterCard {
+    padding: 1rem;
+  }
+  .theaterHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .theaterHeader h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+  .theaterLogo {
+    width: 36px;
+    height: 36px;
+  }
+  .amenity {
+    font-size: 0.85rem;
+  }
+  .showTimes {
+    justify-content: flex-start;
+    margin-left: 0;
+    gap: 0.6rem;
+  }
+  .timeButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .cancellationInfo {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .time-theater-selector {
+    gap: 0.8rem;
+  }
+  .theaterCard {
+    padding: 0.8rem;
+  }
+  .theaterLogo {
+    width: 32px;
+    height: 32px;
+  }
+  .theaterHeader h3 {
+    font-size: 0.95rem;
+  }
+  .amenity {
+    font-size: 0.8rem;
+  }
+  .showTimes {
+    gap: 0.5rem;
+  }
+  .timeButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .cancellationInfo {
+    font-size: 0.75rem;
   }
 }
