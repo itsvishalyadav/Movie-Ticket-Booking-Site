@@ -1,13 +1,9 @@
 // src/components/Booking/LanguageFormatSelector.jsx
 import React from "react";
 import styles from "./LanguageFormatSelector.module.css";
+import { useState , useEffect} from "react";
 
-const languages = ["Hindi", "English"];
-const formats = ["2D", "3D", "4K"];
-
-export default function LanguageFormatSelector({ liveInfo, setLiveInfo }) {
-  const updateField = (field) => (e) =>
-    setLiveInfo((prev) => ({ ...prev, [field]: e.target.value }));
+export default function LanguageFormatSelector({ liveInfo, setLiveInfo}) {
 
   return (
     <div className={styles.selectorContainer}>
@@ -15,10 +11,23 @@ export default function LanguageFormatSelector({ liveInfo, setLiveInfo }) {
         <label className={styles.label}>Language</label>
         <select
           value={liveInfo.language || ""}
-          onChange={updateField("language")}
+          onChange={
+            (e) => 
+              {
+                const formats = [];
+                for (const theater of liveInfo.theatres) {
+                  for (const timing of theater.timings) {
+                    if (timing.language === e.target.value && !formats.includes(timing.format)) {
+                      formats.push(timing.format);
+                    }
+                  }
+                }
+                setLiveInfo((curr) => ({ ...curr, language: e.target.value , formats: formats, format: formats[0] }));
+              }
+          }
           className={styles.dropdown}
         >
-          {languages.map((lang) => (
+          {liveInfo.languages.map((lang) => (
             <option className={styles.opt} key={lang} value={lang}>
               {lang}
             </option>
@@ -30,10 +39,13 @@ export default function LanguageFormatSelector({ liveInfo, setLiveInfo }) {
         <label className={styles.label}>Format</label>
         <select
           value={liveInfo.format || ""}
-          onChange={updateField("format")}
+          onChange={
+            (e) => 
+              setLiveInfo((curr) => ({ ...curr, format: e.target.value }))
+          }
           className={styles.dropdown}
         >
-          {formats.map((fmt) => (
+          {liveInfo.formats.map((fmt) => (
             <option className={styles.opt} key={fmt} value={fmt}>
               {fmt}
             </option>

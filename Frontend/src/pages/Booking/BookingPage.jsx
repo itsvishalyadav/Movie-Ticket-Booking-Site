@@ -18,7 +18,8 @@ export default function BookingPage() {
     const fetchMovieData = async () => {
       try {
         const movieData = await fetch(
-          ` http://localhost:8080/api/movies/${title}`
+          `http://localhost:8080/api/movies/${title}`,
+          { credentials: "include" }
         );
         const detailedMovie = await movieData.json();
         setMovieInfo(detailedMovie[0]);

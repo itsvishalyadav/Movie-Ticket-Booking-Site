@@ -5,13 +5,10 @@ const screenSchema = new Schema({
     audi : {
         type : Number
     },
-    capacity : {
-        type : Number,
-        default : 100
-    },
-    // SeatMatrix : {
-
-    // }
+    seatTypes : [{
+        name : String,
+        price : Number
+    }]
 })
 
 let Screen = new mongoose.model("Screen" , screenSchema);

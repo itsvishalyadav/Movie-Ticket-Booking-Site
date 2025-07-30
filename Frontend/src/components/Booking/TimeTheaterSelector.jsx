@@ -16,15 +16,39 @@ function formatTime(unix) {
   return `${hours}.${minutes} ${ampm}`;
 }
 
-function TimeTheaterSelector({ liveInfo, setLiveInfo, title }) {
+function TimeTheaterSelector({ liveInfo , title }) {
+  const [filteredTheaters, setFilteredTheaters] = useState([]);
   const navigate = useNavigate();
   const handleTimeSelection = (showId) => {
     navigate(`/movie/${title}/booking/${showId}`);
   };
 
+  useEffect(() => {
+    if (liveInfo.theatres.length > 0 ) {
+      const filtered = liveInfo.theatres
+        .map((theater) => {
+          const filteredTimings = theater.timings.filter(
+            (timing) =>
+              timing.language === liveInfo.language &&
+              timing.format === liveInfo.format
+          );
+
+          if (filteredTimings.length === 0) return null;
+
+          return {
+            ...theater,
+            timings: filteredTimings,
+          };
+        })
+        .filter((t) => t !== null); // Remove theaters without valid timings
+
+      setFilteredTheaters(filtered);
+    }
+  }, [liveInfo]);
+
   return (
     <div className={styles["time-theater-selector"]}>
-      {liveInfo.theatres.map((theater, index) => (
+      {filteredTheaters.map((theater, index) => (
         <div key={index} className={styles.theaterCard}>
           <div className={styles.headerShowtimes}>
             <div className={styles.theaterHeader}>

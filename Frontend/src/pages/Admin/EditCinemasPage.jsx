@@ -3,18 +3,22 @@ import "./AdminShared.css";
 import "./EditCinemasPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
+import CitySelector from "../../components/CitySelector";
 
 const mockCinemas = [
-  { id: 1, name: "PVR Cinemas", location: "Connaught Place, Delhi" },
-  { id: 2, name: "INOX", location: "Phoenix Mall, Mumbai" },
+  { id: 1, name: "PVR Cinemas", location: "Connaught Place, Delhi", city: "Delhi" },
+  { id: 2, name: "INOX", location: "Phoenix Mall, Mumbai", city: "Mumbai" },
 ];
 
 export default function EditCinemasPage() {
   const { user } = useUser();
   const [cinemas, setCinemas] = useState(mockCinemas);
+  const [showCitySelector, setShowCitySelector] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     location: "",
+    city: "",
     theaters: [
       { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
     ],
@@ -90,8 +94,10 @@ export default function EditCinemasPage() {
       ),
     }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    console.log(form);
     e.preventDefault();
+    
     if (editId) {
       setCinemas((prev) =>
         prev.map((c) => (c.id === editId ? { ...c, ...form } : c))
@@ -99,9 +105,19 @@ export default function EditCinemasPage() {
     } else {
       setCinemas((prev) => [...prev, { ...form, id: Date.now() }]);
     }
+
+    await fetch("http://localhost:8080/api/theatres", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },  
+      body: JSON.stringify(form),
+    })
     setForm({
       name: "",
       location: "",
+      city: "",
       theaters: [
         { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
       ],
@@ -113,6 +129,7 @@ export default function EditCinemasPage() {
     setForm({
       name: cinema.name,
       location: cinema.location,
+      city: cinema.city || "",
       theaters: cinema.theaters,
     });
     setEditId(cinema.id);
@@ -124,6 +141,7 @@ export default function EditCinemasPage() {
       setForm({
         name: "",
         location: "",
+        city: "",
         theaters: [
           { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
         ],
@@ -141,9 +159,7 @@ export default function EditCinemasPage() {
           </Link>
           <div className="user-info">
             <div className="user-avatar">
-              <span role="img" aria-label="avatar">
-                👤
-              </span>
+              <span role="img" aria-label="avatar">👤</span>
             </div>
             <div>
               <div className="user-role">Admin</div>
@@ -153,18 +169,10 @@ export default function EditCinemasPage() {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li>
-              <Link to="/admin/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/admin/add-item">Add Shows</Link>
-            </li>
-            <li>
-              <Link to="/admin/edit-movies">Edit Movies</Link>
-            </li>
-            <li className="active">
-              <Link to="/admin/edit-cinemas">Edit Cinemas</Link>
-            </li>
+            <li><Link to="/admin/dashboard">Dashboard</Link></li>
+            <li><Link to="/admin/add-item">Add Shows</Link></li>
+            <li><Link to="/admin/edit-movies">Edit Movies</Link></li>
+            <li className="active"><Link to="/admin/edit-cinemas">Edit Cinemas</Link></li>
           </ul>
         </nav>
         <footer className="sidebar-footer">© Movie Book, 2025.</footer>
@@ -198,9 +206,39 @@ export default function EditCinemasPage() {
                 className="input"
               />
             </div>
+            <div className="form-col">
+              <label>City</label>
+              <button
+                type="button"
+                className="city-btn"
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  background: "#1E1E1E",
+                  color: "#fff",
+                  fontWeight: 600,
+                }}
+                onClick={() => setShowCitySelector((v) => !v)}
+              >
+                {form.city || "Select City"}
+              </button>
+              {showCitySelector && (
+                <div style={{ position: "relative", zIndex: 100 }}>
+                  <CitySelector
+                    onSelect={(selected) => {
+                      setForm((prev) => ({ ...prev, city: selected.name }));
+                      setShowCitySelector(false);
+                    }}
+                    selectedCityId={null}
+                    placeholder="Search city..."
+                    style={{ width: 260 }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Theaters & Seat Types */}
           <div className="form-section">
             {form.theaters.map((theater, tIdx) => (
               <div key={tIdx} className="form-row theater-row">
@@ -249,7 +287,6 @@ export default function EditCinemasPage() {
                         min="0"
                         required
                       />
-
                       {theater.seatTypes.length > 1 && (
                         <button
                           type="button"
@@ -261,7 +298,6 @@ export default function EditCinemasPage() {
                       )}
                     </div>
                   ))}
-
                   <button
                     type="button"
                     className="add-btn"
@@ -272,7 +308,6 @@ export default function EditCinemasPage() {
                 </div>
               </div>
             ))}
-
             <button type="button" className="add-btn" onClick={addTheater}>
               Add Another Theater
             </button>
@@ -299,18 +334,11 @@ export default function EditCinemasPage() {
             <li key={c.id} className="editcinemas-item">
               <div>
                 <strong>{c.name}</strong>
-                <p>{c.location}</p>
+                <p>{c.location} - {c.city}</p>
               </div>
               <div className="item-actions">
-                <button onClick={() => handleEdit(c)} className="edit-btn">
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(c.id)}
-                  className="delete-btn"
-                >
-                  Delete
-                </button>
+                <button onClick={() => handleEdit(c)} className="edit-btn">Edit</button>
+                <button onClick={() => handleDelete(c.id)} className="delete-btn">Delete</button>
               </div>
             </li>
           ))}

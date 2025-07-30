@@ -17,25 +17,29 @@ function HomePage() {
     const fetchAllMovies = async () => {
       try {
         const popularMoviesData = await fetch(
-          ` http://localhost:8080/api/movies/${city}/popular`
+          ` http://localhost:8080/api/movies/${city}/popular`,
+          { credentials: "include" }
         );
         const detailedPopularMovies = await popularMoviesData.json();
         setPopularMovies(detailedPopularMovies);
 
         const topRatedData = await fetch(
-          ` http://localhost:8080/api/movies/${city}/toprated`
+          ` http://localhost:8080/api/movies/${city}/toprated`,
+          { credentials: "include" }
         );
         const detailedTopRated = await topRatedData.json();
         setTopRatedMovies(detailedTopRated);
 
         const nowPlayingData = await fetch(
-          ` http://localhost:8080/api/movies/${city}/nowplaying`
+          ` http://localhost:8080/api/movies/${city}/nowplaying`,
+          { credentials: "include" }
         );
         const detailedNowPlaying = await nowPlayingData.json();
         setNowPlayingMovies(detailedNowPlaying);
 
         const upcomingData = await fetch(
-          ` http://localhost:8080/api/movies/upcoming`
+          ` http://localhost:8080/api/movies/upcoming`,
+          { credentials: "include" }
         );
         const detailedUpcoming = await upcomingData.json();
         setUpcomingMovies(detailedUpcoming);

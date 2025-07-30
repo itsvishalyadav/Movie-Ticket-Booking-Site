@@ -37,26 +37,62 @@ function ShowTimePage() {
   const [liveInfo, setLiveInfo] = useState({
     theatres: [],
     date: formatCurrentDate(),
+    formats : [],
+    languages: [],
+    format: "",
+    language: "",
   });
 
   useEffect(() => {
     const fetchShowData = async () => {
       const theatreData = await fetch(
-        ` http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
+        `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
       );
       const theatres = await theatreData.json();
-      theatres.length > 0
-        ? setLiveInfo((curr) => ({
-            ...curr,
-            theatres: theatres,
-          }))
-        : setLiveInfo({
-            theatres: [],
-            date: formatCurrentDate(),
-          });
+
+      if (theatres.length > 0) {
+        const langs = [];
+        for (const theatre of theatres) {
+          for (const timing of theatre.timings) {
+            if (!langs.includes(timing.language)) {
+              langs.push(timing.language);
+            }
+          }
+        }
+
+        const lang = langs[0];
+
+        const formats = [];
+        for (const theatre of theatres) {
+          for (const timing of theatre.timings) {
+            if (timing.language === lang && !formats.includes(timing.format)) {
+              formats.push(timing.format);
+            }
+          }
+        }
+
+        const format = formats[0];
+
+        setLiveInfo((curr) => ({
+          ...curr,
+          theatres: theatres,
+          formats: formats,
+          languages: langs,
+          language: lang,
+          format: format,
+        }));
+      } else {
+        setLiveInfo((curr) => ({
+          ...curr,
+          theatres: [],
+          date: formatCurrentDate(),
+        }));
+      }
     };
+
     fetchShowData();
   }, [title, city, liveInfo.date]);
+
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -86,6 +122,9 @@ function ShowTimePage() {
   return (
     <div className={styles.container}>
       <Header />
+      {loading ? (
+        <Loader />
+      ) : (
       <div
         style={{
           background: `
@@ -104,7 +143,9 @@ function ShowTimePage() {
             setLiveInfo={setLiveInfo}
           />
         </section>
+      
       </div>
+      )}
       <Footer />
     </div>
   );

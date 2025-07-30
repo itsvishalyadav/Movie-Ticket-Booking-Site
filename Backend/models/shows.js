@@ -21,6 +21,12 @@ const showSchema = new Schema({
         type : [Number],
         default : []
     },
+    format : {
+        type: String,
+    },
+    language : {
+        type: String,
+    }
 })
 
 let Show = new mongoose.model("Show" , showSchema);

@@ -52,6 +52,7 @@ export default function Bookings() {
     const func = async () => {
       const data = await fetch(
         ` http://localhost:8080/api/bookings/${user._id}`
+        , { credentials: "include" }
       );
       const bookingData = await data.json();
       setBookings(bookingData);

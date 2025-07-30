@@ -184,6 +184,7 @@ const isLoggedIn = (req, res, next) => {
 }
 
 const isAdmin = (req, res, next) => {
+
   if (req.isAuthenticated() && req.user.role === "admin") {
     return next();
   }
@@ -580,10 +581,45 @@ app.get("/api/movies/:title", wrapAsync(async (req, res) => {
   res.json(movie);
 }));
 
+app.post("/api/theatres", isLoggedIn, isAdmin, wrapAsync(async (req, res) => {
+  const { city, name, location, theaters } = req.body;
+  const screens = [];
+
+  for (const theatre of theaters) {
+    const newScreen = new Screen({
+      audi: theatre.theaterNo,
+      seatTypes: theatre.seatTypes.map((type) => ({
+        name: type.name,
+        price: type.price
+      }))
+    });
+    await newScreen.save();
+    screens.push(newScreen._id);
+  }
+
+  const newTheatre = new Theatre({
+    name,
+    city,
+    location,
+    screens
+  });
+
+  await newTheatre.save();
+  res.json("theatre added");
+}));
+
+
 app.get("/api/theatres/:city", wrapAsync(async (req, res) => {
   const { city } = req.params;
-  let theatres = await Theatre.find({ city });
-  theatres = theatres.map((theatre) => theatre.name);
+  let theatres = await Theatre.find({ city }).populate("screens");
+  theatres = theatres.map((theatre) => ({
+    name: theatre.name,
+    screens: theatre.screens.map((screen) => ({
+      audi: screen.audi,
+      id: screen._id
+    }))
+  }));
+
   res.json(theatres);
 }));
 
@@ -616,6 +652,8 @@ app.get("/api/shows/:city/:title/:date", wrapAsync(async (req, res) => {
       theatreMap.get(name).push({
         time: show.startTime,
         showId: show._id,
+        language: show.language,
+        format: show.format,
       });
     }
 
@@ -629,13 +667,20 @@ app.get("/api/shows/:city/:title/:date", wrapAsync(async (req, res) => {
 }));
 
 app.post("/api/shows", isLoggedIn , isAdmin , wrapAsync(async (req, res) => {
-  let { city, title, theatre, showTime, showDate } = req.body;
+  let { city, title, theatre, showTime, showDate , format , language} = req.body;
   const currTheatre = await Theatre.findOne({ city, name: theatre });
   let startTime = convertToUnix(showDate, showTime);
-  let newShow = new Show({ movie: title._id, theatre: currTheatre, startTime });
+  let newShow = new Show({ movie: title._id, theatre: currTheatre, startTime , format , language });
   await newShow.save();
   res.json("show saved");
 }));
+
+app.get("/api/shows/:showId", wrapAsync(async (req, res) => {
+  const showId = req.params.showId;
+  const show = await Show.findById(showId).populate("theatre").populate("movie").populate("screen");
+  res.json(show);
+}));
+
 
 app.get("/api/bookings/:user", isLoggedIn , wrapAsync(async (req, res) => {
   let { user } = req.params;

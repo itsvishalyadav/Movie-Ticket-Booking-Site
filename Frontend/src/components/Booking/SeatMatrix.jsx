@@ -42,7 +42,8 @@ export default function SeatMatrix({
     const fetchShowDetails = async () => {
       try {
         const response = await fetch(
-          ` http://localhost:8080/api/shows/${showId}`
+          `http://localhost:8080/api/shows/${showId}`
+          , { credentials: "include" }
         );
         const data = await response.json();
         setShowDetails(data);

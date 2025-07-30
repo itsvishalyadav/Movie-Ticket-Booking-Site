@@ -1,24 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminShared.css";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
 import { useUser } from "../../contexts/userContext";
 import CitySelector from "../../components/CitySelector";
-import { useEffect } from "react";
 
 const AddItemPage = () => {
   const { user } = useUser();
   const [city, setCity] = useState();
   const [showCitySelector, setShowCitySelector] = useState(false);
   const [theatres, setTheatres] = useState([]);
+  const [selectedTheatre, setSelectedTheatre] = useState(null); // ← new
   const [showTheatreSuggestions, setShowTheatreSuggestions] = useState(false);
   const [movies, setMovies] = useState([]);
   const [showMovieSuggestions, setShowMovieSuggestions] = useState(false);
+
   const [form, setForm] = useState({
     title: "",
     showTime: "",
     showDate: "",
     theatre: "",
+    screenId: "",
+    language: "",
+    format: "",
   });
 
   const handleChange = (e) => {
@@ -38,9 +42,10 @@ const AddItemPage = () => {
         _id: form.title._id,
         title: form.title.title,
       },
+      screen: form.screenId,
     };
 
-    await fetch(" http://localhost:8080/api/shows", {
+    await fetch("http://localhost:8080/api/shows", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -49,29 +54,32 @@ const AddItemPage = () => {
       body: JSON.stringify(payload),
     });
 
-    // reset
     setForm({
       title: "",
       showTime: "",
       showDate: "",
       theatre: "",
+      screenId: "",
       language: "",
       format: "",
     });
+    setSelectedTheatre(null);
   };
 
   useEffect(() => {
     const getTheatres = async () => {
-      const data = await fetch(` http://localhost:8080/api/theatres/${city}`);
-      setTheatres(await data.json());
+      const res = await fetch(`http://localhost:8080/api/theatres/${city}`);
+      const data = await res.json();
+      setTheatres(data);
     };
     city && getTheatres();
   }, [city]);
 
   useEffect(() => {
     const getMovies = async () => {
-      const data = await fetch(" http://localhost:8080/api/movies");
-      setMovies(await data.json());
+      const res = await fetch("http://localhost:8080/api/movies");
+      const data = await res.json();
+      setMovies(data);
     };
     getMovies();
   }, []);
@@ -98,14 +106,8 @@ const AddItemPage = () => {
               GetMySeat<span className="tv">TV</span>
             </div>
           </Link>
-
           <div className="user-info">
-            <div className="user-avatar">
-              {" "}
-              <span role="img" aria-label="avatar">
-                👤
-              </span>{" "}
-            </div>
+            <div className="user-avatar">👤</div>
             <div>
               <div className="user-role">Admin</div>
               <div className="user-name">{user.name}</div>
@@ -114,22 +116,15 @@ const AddItemPage = () => {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li>
-              <Link to="/admin/dashboard">Dashboard</Link>
-            </li>
-            <li className="active">
-              <Link to="/admin/add-item">Add Shows</Link>
-            </li>
-            <li>
-              <Link to="/admin/edit-movies">Edit Movies</Link>
-            </li>
-            <li>
-              <Link to="/admin/edit-cinemas">Edit Cinemas</Link>
-            </li>
+            <li><Link to="/admin/dashboard">Dashboard</Link></li>
+            <li className="active"><Link to="/admin/add-item">Add Shows</Link></li>
+            <li><Link to="/admin/edit-movies">Edit Movies</Link></li>
+            <li><Link to="/admin/edit-cinemas">Edit Cinemas</Link></li>
           </ul>
         </nav>
         <div className="sidebar-footer">© Movie Book, 2025.</div>
       </aside>
+
       <main className="additem-main">
         <h1 className="admin-title">Add ShowTime</h1>
         <form className="admin-form" onSubmit={handleSubmit}>
@@ -156,24 +151,10 @@ const AddItemPage = () => {
                   autoComplete="off"
                   required
                 />
-
                 {showMovieSuggestions &&
                   typeof form.title === "string" &&
                   form.title.trim() && (
-                    <ul
-                      className="movie-suggestion-box"
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        left: 0,
-                        right: 0,
-                        backgroundColor: "#fff",
-                        border: "1px solid #ccc",
-                        zIndex: 10,
-                        maxHeight: "150px",
-                        overflowY: "auto",
-                      }}
-                    >
+                    <ul className="movie-suggestion-box" style={suggestionBoxStyle}>
                       {movies.length > 0 ? (
                         movies
                           .filter((movie) =>
@@ -188,12 +169,7 @@ const AddItemPage = () => {
                                 setForm((prev) => ({ ...prev, title: movie }));
                                 setShowMovieSuggestions(false);
                               }}
-                              style={{
-                                padding: "8px",
-                                cursor: "pointer",
-                                backgroundColor: "#fff",
-                                color: "#000",
-                              }}
+                              style={suggestionItemStyle}
                             >
                               {movie.title}
                             </li>
@@ -210,29 +186,19 @@ const AddItemPage = () => {
               <div className="city-selector" style={{ position: "relative" }}>
                 <button
                   className="city-btn"
-                  style={{
-                    minWidth: 120,
-                    padding: "8px 16px",
-                    borderRadius: 6,
-                    border: "1px solid #ccc",
-                    background: "#1E1E1E",
-                    color: "#fff",
-                    marginBottom: 8,
-                    cursor: "pointer",
-                    fontWeight: 600,
+                  style={cityButtonStyle}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowCitySelector((v) => !v);
                   }}
-                  onClick={() => setShowCitySelector((v) => !v)}
                 >
                   {city ? city : "Select City"}
                 </button>
                 {showCitySelector && (
-                  <div
-                    style={{ position: "absolute", zIndex: 100, top: "110%" }}
-                  >
+                  <div style={{ position: "absolute", zIndex: 100, top: "110%" }}>
                     <CitySelector
                       onSelect={(c) => {
                         setCity(c.name);
-                        console.log(c.name);
                         setShowCitySelector(false);
                       }}
                       selectedCityId={null}
@@ -252,58 +218,61 @@ const AddItemPage = () => {
                   value={form.theatre}
                   onChange={(e) => {
                     handleChange(e);
-                    setShowTheatreSuggestions(true); // Show suggestions while typing
+                    setShowTheatreSuggestions(true);
                   }}
                   className="input title-input"
                   autoComplete="off"
                   required
                 />
                 {form.theatre && showTheatreSuggestions && (
-                  <ul
-                    className="theatre-suggestion-box"
-                    style={{
-                      position: "absolute",
-                      top: "100%",
-                      left: 0,
-                      right: 0,
-                      backgroundColor: "#fff",
-                      border: "1px solid #ccc",
-                      zIndex: 10,
-                      maxHeight: "150px",
-                      overflowY: "auto",
-                    }}
-                  >
+                  <ul className="theatre-suggestion-box" style={suggestionBoxStyle}>
                     {theatres
                       .filter((t) =>
-                        t.toLowerCase().includes(form.theatre.toLowerCase())
+                        t.name.toLowerCase().includes(form.theatre.toLowerCase())
                       )
                       .map((t, index) => (
                         <li
                           key={index}
                           onClick={() => {
-                            setForm((prev) => ({ ...prev, theatre: t }));
+                            setForm((prev) => ({
+                              ...prev,
+                              theatre: t.name,
+                              screenId: "",
+                            }));
+                            setSelectedTheatre(t);
                             setShowTheatreSuggestions(false);
                           }}
-                          style={{
-                            padding: "8px",
-                            cursor: "pointer",
-                            backgroundColor: "#fff",
-                            color: "#000",
-                          }}
+                          style={suggestionItemStyle}
                         >
-                          {t}
+                          {t.name}
                         </li>
                       ))}
                   </ul>
                 )}
               </div>
-              {/* … your existing Theatre input & suggestions … */}
 
-              {/* ─── Language & Format Selectors ─── */}
-              <div
-                className="language-format-row"
-                style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}
-              >
+              {selectedTheatre && selectedTheatre.screens?.length > 0 && (
+                <div style={{ marginTop: "1rem" }}>
+                  <label htmlFor="screenId">Audi (Screen)</label>
+                  <select
+                    name="screenId"
+                    id="screenId"
+                    className="input"
+                    value={form.screenId}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Audi</option>
+                    {selectedTheatre.screens.map((screen) => (
+                      <option key={screen._id} value={screen._id}>
+                        Audi {screen.audi}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="language-format-row" style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="language">Language</label>
                   <select
@@ -319,7 +288,6 @@ const AddItemPage = () => {
                     <option value="English">English</option>
                   </select>
                 </div>
-
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="format">Format</label>
                   <select
@@ -333,7 +301,7 @@ const AddItemPage = () => {
                     <option value="">Select Format</option>
                     <option value="2D">2D</option>
                     <option value="3D">3D</option>
-                    <option value="4K">4K</option>
+                    <option value="IMAX">IMAX</option>
                   </select>
                 </div>
               </div>
@@ -341,7 +309,7 @@ const AddItemPage = () => {
               <div className="show-timings">
                 <div className="show-date">
                   <label htmlFor="showDate">Show Date</label>
-                  <br></br>
+                  <br />
                   <input
                     type="date"
                     id="showDate"
@@ -354,7 +322,7 @@ const AddItemPage = () => {
                 </div>
                 <div className="show-time">
                   <label htmlFor="showTiming">Show Time</label>
-                  <br></br>
+                  <br />
                   <input
                     type="time"
                     id="showTiming"
@@ -376,6 +344,38 @@ const AddItemPage = () => {
       </main>
     </div>
   );
+};
+
+// Styles used inline for clarity
+const cityButtonStyle = {
+  minWidth: 120,
+  padding: "8px 16px",
+  borderRadius: 6,
+  border: "1px solid #ccc",
+  background: "#1E1E1E",
+  color: "#fff",
+  marginBottom: 8,
+  cursor: "pointer",
+  fontWeight: 600,
+};
+
+const suggestionBoxStyle = {
+  position: "absolute",
+  top: "100%",
+  left: 0,
+  right: 0,
+  backgroundColor: "#fff",
+  border: "1px solid #ccc",
+  zIndex: 10,
+  maxHeight: "150px",
+  overflowY: "auto",
+};
+
+const suggestionItemStyle = {
+  padding: "8px",
+  cursor: "pointer",
+  backgroundColor: "#fff",
+  color: "#000",
 };
 
 export default AddItemPage;

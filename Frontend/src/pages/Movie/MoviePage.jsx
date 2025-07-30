@@ -14,11 +14,13 @@ function MoviePage() {
     const fetchAllMovies = async () => {
       try {
         const movieData = await fetch(
-          ` http://localhost:8080/api/movies/${title}`
+          ` http://localhost:8080/api/movies/${title}`,
+          { credentials: "include" }
         );
         const detailedMovies = await movieData.json();
         const reviewsData = await fetch(
-          `http://localhost:8080/api/reviews/${detailedMovies[0]._id}`)
+          `http://localhost:8080/api/reviews/${detailedMovies[0]._id}`,
+          { credentials: "include" })
         
         const detailedReviews = await reviewsData.json();
         setReviews(detailedReviews);

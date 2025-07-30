@@ -11,10 +11,10 @@ const theatreSchema = new Schema({
     location : {
         type : String
     },
-    screens : {
+    screens : [{
         type : Schema.Types.ObjectId,
         ref : "Screen"
-    }
+    }]
 })
 
 const Theatre = new mongoose.model("Theatre" , theatreSchema);
