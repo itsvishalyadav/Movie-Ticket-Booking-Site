@@ -1,6 +1,7 @@
 import Header from "../Layout/Header";
 import Footer from "../Layout/Footer";
 const ErrorMessage = ({message }) => {
+  console.error("Error:", message);
   return (
     <>
     <Header/>
