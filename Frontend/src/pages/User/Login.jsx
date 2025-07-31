@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate , useLocation} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 import "./Signup.css";
 
@@ -53,7 +53,7 @@ function Login() {
     <div className="container">
       <div className="form-container">
         <h1 className="heading">
-          Movie<span>Book</span>
+          GetMy<span>Seat</span>
         </h1>
         <form>
           <div className="input-div">
@@ -84,10 +84,12 @@ function Login() {
           <button onClick={handleFormSubmit} className="form-button">
             LOGIN
           </button>
-          <br></br>
         </form>
         <p>
-          Do not have an account? <Link to="/signup" state={{ from: location.state?.from}}>Signup!</Link>
+          Do not have an account?{" "}
+          <Link to="/signup" state={{ from: location.state?.from }}>
+            Signup!
+          </Link>
         </p>
       </div>
     </div>

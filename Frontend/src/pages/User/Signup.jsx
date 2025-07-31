@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate , useLocation} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 // const navigate = useNavigate();
 import "./Signup.css";
 
@@ -60,7 +60,9 @@ function Signup() {
     if (!res.ok) {
       setError(data.message);
     } else {
-      navigate("/verify", { state: { email: formState.email , from : location.state?.from} });
+      navigate("/verify", {
+        state: { email: formState.email, from: location.state?.from },
+      });
     }
   }
   return (
@@ -118,7 +120,6 @@ function Signup() {
           <button onClick={handleFormSubmit} className="form-button">
             SIGN UP
           </button>
-          <br></br>
         </form>
         <p>
           Already have an account? <Link to="/login">login!</Link>

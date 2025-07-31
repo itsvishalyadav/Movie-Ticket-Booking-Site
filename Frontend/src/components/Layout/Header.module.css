@@ -30,17 +30,13 @@
 .logo {
   font-size: 1.5rem;
   font-weight: 800;
-  background: #f9ab00;
-  -webkit-background-clip: text; /* For Chrome, Safari */
-  background-clip: text; /* Standard (fixes warning) */
-  -webkit-text-fill-color: transparent;
-  color: transparent; /* For compatibility */
+  -webkit-background-clip: text; 
+  background-clip: text; 
+  color: #f9ab00; 
   letter-spacing: -0.5px;
 }
 
-.logo span {
-  color: var(--accent);
-}
+
 
 /* ---------- City Select (Radix UI) ---------- */
 .cityTrigger {
