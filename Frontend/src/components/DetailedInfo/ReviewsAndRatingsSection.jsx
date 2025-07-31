@@ -26,6 +26,7 @@ export default function ReviewsAndRatingsSection({ info , reviews , setReviews})
         };
         const newReviewData = await fetch("http://localhost:8080/api/reviews", {
           method: "POST",
+          credentials:"include",
           headers: {
             "Content-Type": "application/json",
           },

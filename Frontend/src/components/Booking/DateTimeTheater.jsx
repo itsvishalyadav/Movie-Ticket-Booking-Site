@@ -4,13 +4,17 @@ import TimeTheaterSelector from "./TimeTheaterSelector";
 import LanguageFormatSelector from "./LanguageFormatSelector";
 import { useState } from "react";
 
-export default function DateTimeTheater({ liveInfo, setLiveInfo, title }) {
-  
+export default function DateTimeTheater({ title, liveInfo, setLiveInfo }) {
   return (
     <div className={styles["date-time-theater"]}>
       <div className={styles["picker-row"]}>
         <DatePicker liveInfo={liveInfo} setLiveInfo={setLiveInfo} />{" "}
-        <LanguageFormatSelector liveInfo={liveInfo} setLiveInfo={setLiveInfo}/>{" "}
+        {liveInfo.formats.length>0 && liveInfo.languages.length>0 && (
+          <LanguageFormatSelector
+            liveInfo={liveInfo}
+            setLiveInfo={setLiveInfo}
+          />
+        )}
       </div>
       <TimeTheaterSelector
         liveInfo={liveInfo}

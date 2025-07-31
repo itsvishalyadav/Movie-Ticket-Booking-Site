@@ -5,6 +5,7 @@ import Footer from "../../components/Layout/Footer";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ThankYouPage.module.css";
 import QRCode from "react-qr-code";
+import ErrorMessage from "../../components/Error/ErrorMessage";
 
 const ThankYouPage = () => {
   const navigate = useNavigate();
@@ -16,11 +17,10 @@ const ThankYouPage = () => {
     navigate("/");
   };
 
-  
+   if(!booking) return <ErrorMessage message={"Not Found"}/>
   return (
     <div className={styles.container}>
       <Header nonSticky />
-      {booking ? (
         <div className={styles.content}>
           <h1>Thank You for Booking!</h1>
           <p>Your booking was successful. Enjoy your show!</p>
@@ -28,7 +28,7 @@ const ThankYouPage = () => {
             <h2 className={styles.ticketTitle}>🎟️ Digital Ticket</h2>
             <QRCode
               className={styles.qrCode}
-              value={ticketId}
+              value={booking.bookingId}
               size={128}
               bgColor="#232323"
               fgColor="#f9ab00"
@@ -63,9 +63,6 @@ const ThankYouPage = () => {
             Explore more shows
           </button>
         </div>
-      ) : (
-        <p style={{flex:1 }}>Fuck You</p>
-      )}
       <Footer />
     </div>
   );

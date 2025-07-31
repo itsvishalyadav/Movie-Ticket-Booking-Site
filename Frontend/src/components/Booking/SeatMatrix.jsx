@@ -60,7 +60,7 @@ export default function SeatMatrix({
           `http://localhost:8080/api/shows/${showId}`,
           { credentials: "include" }
         );
-        if(!response.ok){
+        if (!response.ok) {
           const data = await response.json();
           throw new Error(data.message || "Failed to fetch show details");
         }
@@ -93,6 +93,21 @@ export default function SeatMatrix({
       setSelectedSeats((prev) => [...prev, seat])
     );
     socket.on("lockFailed", (msg) => alert(msg));
+    socket.on("bookingConfirmed", ({ bookingId, showDetails, seat }) => {
+      const totalPrice = calculateTotalPrice();
+      setSelectedSeats([]);
+      console.log(totalPrice);
+      navigate("/thank-you", {
+        state: {
+          movieName: showDetails.movie.title,
+          cinemaName: showDetails?.theatre?.name,
+          timing: showDetails?.startTime,
+          seats: seat,
+          totalPrice: totalPrice,
+          bookingId: bookingId,
+        },
+      });
+    });
 
     return () => {
       socket.off("error");
@@ -101,15 +116,17 @@ export default function SeatMatrix({
       socket.off("lockSuccess");
       socket.off("lockFailed");
       socket.off("seatsCancelled");
+      socket.off("bookingConfirmed");
     };
   }, [showId, setSelectedSeats]);
 
   const calculateTotalPrice = () => {
-    return selectedSeats.reduce((total, seatNumber) => {
-      const type = getSeatType(seatNumber);
-      return total + SEAT_PRICES[type];
-    }, 0);
-  };
+  if (selectedSeats.length === 0) return 0;
+  return selectedSeats.reduce((total, seatNumber) => {
+    const type = getSeatType(seatNumber);
+    return total + SEAT_PRICES[type];
+  }, 0);
+};
 
   const renderSeats = () => {
     const seatElements = [];
@@ -156,87 +173,77 @@ export default function SeatMatrix({
 
   return (
     !error && (
-    <div className={styles["outer-div"]}>
-      <div className={styles.wholeDiv}>
-        <hr />
-        <h2>Screen This Way</h2>
+      <div className={styles["outer-div"]}>
+        <div className={styles.wholeDiv}>
+          <hr />
+          <h2>Screen This Way</h2>
 
-        <div className={styles["seat-grid"]}>{renderSeats()}</div>
-        <div className={styles["seat-info"]}>
-          <div className={styles["seat-info-item"]}>
-            <div className={`${styles["seat-color-box"]} ${styles.gold}`}></div>
-            <span>Gold - ₹{SEAT_PRICES.gold}</span>
-          </div>
-          <div className={styles["seat-info-item"]}>
-            <div
-              className={`${styles["seat-color-box"]} ${styles.silver}`}
-            ></div>
-            <span>Silver - ₹{SEAT_PRICES.silver}</span>
-          </div>
-          <div className={styles["seat-info-item"]}>
-            <div
-              className={`${styles["seat-color-box"]} ${styles.bronze}`}
-            ></div>
-            <span>Bronze - ₹{SEAT_PRICES.bronze}</span>
-          </div>
-          <div className={styles["seat-info-item"]}>
-            <img src="/selectedchair.png" alt="Selected Seat" />
-            <span>Selected</span>
-          </div>
-          <div className={styles["seat-info-item"]}>
-            <img src="/bookedchair.png" alt="" />
-            <span>Booked</span>
-          </div>
-          <div className={styles["seat-info-item"]}>
-            <img src="/emptychair.png" alt="" />
-            <span>Empty</span>
+          <div className={styles["seat-grid"]}>{renderSeats()}</div>
+          <div className={styles["seat-info"]}>
+            <div className={styles["seat-info-item"]}>
+              <div
+                className={`${styles["seat-color-box"]} ${styles.gold}`}
+              ></div>
+              <span>Gold - ₹{SEAT_PRICES.gold}</span>
+            </div>
+            <div className={styles["seat-info-item"]}>
+              <div
+                className={`${styles["seat-color-box"]} ${styles.silver}`}
+              ></div>
+              <span>Silver - ₹{SEAT_PRICES.silver}</span>
+            </div>
+            <div className={styles["seat-info-item"]}>
+              <div
+                className={`${styles["seat-color-box"]} ${styles.bronze}`}
+              ></div>
+              <span>Bronze - ₹{SEAT_PRICES.bronze}</span>
+            </div>
+            <div className={styles["seat-info-item"]}>
+              <img src="/selectedchair.png" alt="Selected Seat" />
+              <span>Selected</span>
+            </div>
+            <div className={styles["seat-info-item"]}>
+              <img src="/bookedchair.png" alt="" />
+              <span>Booked</span>
+            </div>
+            <div className={styles["seat-info-item"]}>
+              <img src="/emptychair.png" alt="" />
+              <span>Empty</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={seatPricingStyles["selected-seat-info"]}>
-        <h2>Selected Seats</h2>
-        <hr className={seatPricingStyles["dashed-line"]} />
-        {selectedSeats.length > 0 ? (
-          <div className={seatPricingStyles.selectedSeatBoxOuterDiv}>
-            {selectedSeats.map((seat, index) => (
-              <div className={seatPricingStyles.selectedSeatBox} key={index}>
-                {seat}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No seats selected</p>
-        )}
-        <h3>Total Price: ₹{calculateTotalPrice()}</h3>
-        <div className={seatPricingStyles["action-buttons"]}>
-          <RazorpayButton
-            amount={selectedSeats.length * 250}
-            selectedSeats={selectedSeats}
-            onSuccess={(response) => {
-              // Confirm seats after successful payment
-              socket.emit("confirmSeats", {
-                showId,
-                seatNumbers: selectedSeats,
-                userId: user._id,
-                paymentId: response.razorpay_payment_id,
-              });
-
-              const seats = selectedSeats;
-              setSelectedSeats([]);
-              navigate("/thank-you", {
-                state: {
-                  movieName: movieInfo.title,
-                  cinemaName: showDetails?.theatre?.name || "N/A",
-                  timing: showDetails?.startTime,
-                  seats: seats,
-                  totalPrice: selectedSeats.length * 250,
+        <div className={seatPricingStyles["selected-seat-info"]}>
+          <h2>Selected Seats</h2>
+          <hr className={seatPricingStyles["dashed-line"]} />
+          {selectedSeats.length > 0 ? (
+            <div className={seatPricingStyles.selectedSeatBoxOuterDiv}>
+              {selectedSeats.map((seat, index) => (
+                <div className={seatPricingStyles.selectedSeatBox} key={index}>
+                  {seat}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No seats selected</p>
+          )}
+          <h3>Total Price: ₹{calculateTotalPrice()}</h3>
+          <div className={seatPricingStyles["action-buttons"]}>
+            <RazorpayButton
+              amount={calculateTotalPrice()}
+              selectedSeats={selectedSeats}
+              onSuccess={(response) => {
+                // Confirm seats after successful payment
+                socket.emit("confirmSeats", {
+                  showId,
+                  seatNumbers: selectedSeats,
+                  userId: user._id,
                   paymentId: response.razorpay_payment_id,
-                },
-              });
-            }}
-          />
+                });
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>)
-  )
+    )
+  );
 }

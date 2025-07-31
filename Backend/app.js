@@ -12,30 +12,27 @@ const User = require("./models/user.js");
 const Review = require("./models/review.js");
 const Booking = require("./models/booking.js");
 const Movie = require("./models/movie.js");
-const joi  = require("joi");
+const joi = require("joi");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const mongoUrl = process.env.MONGO_URL;
 const cors = require("cors");
 const http = require("http");
-class expressError extends Error{
-    constructor(status , message){
-        super();
-        this.status = status;
-        this.message = message;
-    }
+class expressError extends Error {
+  constructor(status, message) {
+    super();
+    this.status = status;
+    this.message = message;
+  }
 }
 
 const wrapAsync = (fn) => {
-    return (req , res , next) => {
-        fn(req , res , next).catch(
-            (err) => {
-                next(err);
-            }
-        );
-    }
-}
-
+  return (req, res, next) => {
+    fn(req, res, next).catch((err) => {
+      next(err);
+    });
+  };
+};
 
 const { Server } = require("socket.io");
 const server = http.createServer(app);
@@ -181,167 +178,188 @@ const isLoggedIn = (req, res, next) => {
     return next();
   }
   throw new expressError(401, "You must be logged in to do that");
-}
+};
 
 const isAdmin = (req, res, next) => {
-
   if (req.isAuthenticated() && req.user.role === "admin") {
     return next();
   }
   throw new expressError(403, "You must be an admin to do that");
-}
+};
 
 const verificationSchema = joi.object({
-    verificationCode : joi.number().required(),
-    email : joi.string().required(),
+  verificationCode: joi.number().required(),
+  email: joi.string().required(),
 });
 const userSchema = joi.object({
-    name : joi.string().required(),
-    email : joi.string().email().required(),
-    username : joi.string().required(),
-    password : joi.string().required(),
+  name: joi.string().required(),
+  email: joi.string().email().required(),
+  username: joi.string().required(),
+  password: joi.string().required(),
 });
 
 io.on("connection", (socket) => {
   socket.on("joinShow", async (showId) => {
-    try{socket.join(showId);
-    let show = shows[showId];
-    if (!show) {
-      show = await loadShow(showId);
-    }
-    console.log(show);
-    socket.emit("seatData", { bookedSeats: show.bookedSeats });}
-    catch(err){
+    try {
+      socket.join(showId);
+      let show = shows[showId];
+      if (!show) {
+        show = await loadShow(showId);
+      }
+      console.log(show);
+      socket.emit("seatData", { bookedSeats: show.bookedSeats });
+    } catch (err) {
       console.log(err);
-      socket.emit("error", {message : err.message});
+      socket.emit("error", { message: err.message });
     }
   });
 
   socket.on("lockSeat", ({ showId, seatNumber }) => {
-    try{const locker = socket.id;
-    const show = shows[showId];
+    try {
+      const locker = socket.id;
+      const show = shows[showId];
 
-    if (show.bookedSeats.includes(seatNumber)) {
-      return socket.emit("lockFailed", "seat is already booked");
-    }
+      if (show.bookedSeats.includes(seatNumber)) {
+        return socket.emit("lockFailed", "seat is already booked");
+      }
 
-    if (show.locks[seatNumber]) {
-      return socket.emit("lockFailed", "seat is held by someone");
-    }
+      if (show.locks[seatNumber]) {
+        return socket.emit("lockFailed", "seat is held by someone");
+      }
 
-    if (!show.userLocks[locker]) {
-      show.userLocks[locker] = [];
-    }
+      if (!show.userLocks[locker]) {
+        show.userLocks[locker] = [];
+      }
 
-    if (show.userLocks[locker].length >= 5) {
-      return socket.emit("lockFailed", "max 5 seats can be locked at a time");
-    }
+      if (show.userLocks[locker].length >= 5) {
+        return socket.emit("lockFailed", "max 5 seats can be locked at a time");
+      }
 
-    show.locks[seatNumber] = { locker, expiresAt: Date.now() + 5 * 60 * 1000 };
-    show.userLocks[locker].push(seatNumber);
-    socket.emit("lockSuccess", seatNumber);
-  }
-  catch(err){
+      show.locks[seatNumber] = {
+        locker,
+        expiresAt: Date.now() + 5 * 60 * 1000,
+      };
+      show.userLocks[locker].push(seatNumber);
+      socket.emit("lockSuccess", seatNumber);
+    } catch (err) {
       console.log(err);
-      socket.emit("error", {message : err.message});
-  }
-});
+      socket.emit("error", { message: err.message });
+    }
+  });
 
   socket.on("unlockSeat", ({ showId, seatNumber }) => {
-    try{const locker = socket.id;
-    const show = shows[showId];
+    try {
+      const locker = socket.id;
+      const show = shows[showId];
 
-    if (show.locks[seatNumber].locker === locker) {
-      delete show.locks[seatNumber];
-      show.userLocks[locker] = show.userLocks[locker].filter(
-        (s) => s !== seatNumber
-      );
-    }
-  }
-  catch(err){
-      console.log(err);
-      socket.emit("error", {message : err.message});
-  }});
-
-  socket.on("confirmSeats", async ({ showId, seatNumbers, userId }) => {
-    try{const locker = socket.id;
-    const show = shows[showId];
-    const heldSeats = show.userLocks[locker] || [];
-    if (!seatNumbers.every((s) => heldSeats.includes(s))) {
-      return socket.emit("confirmFailed", "seats are not locked by you");
-    }
-
-    seatNumbers.forEach((seat) => {
-      show.bookedSeats.push(seat);
-      delete show.locks[seat];
-    });
-    show.userLocks[locker] = [];
-
-    let currShow = await Show.findById(showId);
-    currShow.bookedSeats = [...currShow.bookedSeats, ...seatNumbers];
-    await currShow.save();
-    let newBooking = new Booking({
-      show: showId,
-      user: userId,
-      seats: seatNumbers,
-      time: Math.floor(Date.now() / 1000),
-    });
-    await newBooking.save();
-    io.to(showId).emit("seatsBooked", seatNumbers);
-  }
-  catch(err){
-        console.log(err);
-        socket.emit("error", {message : err.message});
-  }});
-
-  socket.on("cancelSeats",async ({ seats, booking }) => {
-    try{
-    const currShow = await Show.findById(booking.show._id);
-    if (!currShow) return;
-
-    const updatedBookedSeats = currShow.bookedSeats.filter(
-      (seat) => !seats.includes(seat)
-    );
-    currShow.bookedSeats = updatedBookedSeats;
-    await currShow.save();
-
-    const currBooking = await Booking.findById(booking._id);
-    if (currBooking) {
-      if (currBooking.seats.length === seats.length) {
-        await Booking.findByIdAndDelete(booking._id);
-      } else {
-        currBooking.seats = currBooking.seats.filter(
-          (seat) => !seats.includes(seat)
+      if (show.locks[seatNumber].locker === locker) {
+        delete show.locks[seatNumber];
+        show.userLocks[locker] = show.userLocks[locker].filter(
+          (s) => s !== seatNumber
         );
-        await currBooking.save();
       }
-    }
-
-    if (shows[booking.show._id]) {
-      shows[booking.show._id].bookedSeats = updatedBookedSeats;
-    }
-
-    io.to(booking.show._id).emit("seatsCancelled", seats);
-    const newBookings = await Booking.find({ user: booking.user }).populate({
-      path: "show",
-      populate: { path: "theatre" },
-    });
-    socket.emit("bookingSeatsCancelled", newBookings.reverse());
-  }
-catch(err){
+    } catch (err) {
       console.log(err);
-      socket.emit("error", {message : err.message});
-    }});
+      socket.emit("error", { message: err.message });
+    }
+  });
+
+  socket.on("confirmSeats", async ({ showId, seatNumbers, userId,paymentId }) => {
+    try {
+      const locker = socket.id;
+      const show = shows[showId];
+      const heldSeats = show.userLocks[locker] || [];
+      if (!seatNumbers.every((s) => heldSeats.includes(s))) {
+        return socket.emit("confirmFailed", "seats are not locked by you");
+      }
+
+      seatNumbers.forEach((seat) => {
+        show.bookedSeats.push(seat);
+        delete show.locks[seat];
+      });
+      show.userLocks[locker] = [];
+
+      let currShow = await Show.findById(showId)
+        .populate("screen")
+        .populate("movie")
+        .populate("theatre");
+      currShow.bookedSeats = [...currShow.bookedSeats, ...seatNumbers];
+      await currShow.save();
+      let newBooking = new Booking({
+        show: showId,
+        user: userId,
+        seats: seatNumbers,
+        time: Math.floor(Date.now() / 1000),
+      });
+      await newBooking.save();
+      io.to(showId).emit("seatsBooked", seatNumbers);
+      socket.emit("bookingConfirmed", {
+        bookingId: newBooking._id,
+        showDetails: currShow,
+        seat:seatNumbers,
+      });
+    } catch (err) {
+      console.log(err);
+      socket.emit("error", { message: err.message });
+    }
+  });
+
+  socket.on("cancelSeats", async ({ seats, booking }) => {
+    try {
+      const currShow = await Show.findById(booking.show._id);
+      if (!currShow) return;
+
+      const updatedBookedSeats = currShow.bookedSeats.filter(
+        (seat) => !seats.includes(seat)
+      );
+      currShow.bookedSeats = updatedBookedSeats;
+      await currShow.save();
+
+      const currBooking = await Booking.findById(booking._id);
+      if (currBooking) {
+        if (currBooking.seats.length === seats.length) {
+          await Booking.findByIdAndDelete(booking._id);
+        } else {
+          currBooking.seats = currBooking.seats.filter(
+            (seat) => !seats.includes(seat)
+          );
+          await currBooking.save();
+        }
+      }
+
+      if (shows[booking.show._id]) {
+        shows[booking.show._id].bookedSeats = updatedBookedSeats;
+      }
+
+      io.to(booking.show._id).emit("seatsCancelled", seats);
+      const newBookings = await Booking.find({ user: booking.user }).populate({
+        path: "show",
+        populate: { path: "theatre" },
+      });
+      socket.emit("bookingSeatsCancelled", newBookings.reverse());
+    } catch (err) {
+      console.log(err);
+      socket.emit("error", { message: err.message });
+    }
+  });
 });
 
-app.get("/api/movies", wrapAsync(async (req, res) => {
-  const movies = await Movie.find({}, "_id title poster genres year ratings length");
-  res.json(movies);
-}));
+app.get(
+  "/api/movies",
+  wrapAsync(async (req, res) => {
+    const movies = await Movie.find(
+      {},
+      "_id title poster genres year ratings length"
+    );
+    res.json(movies);
+  })
+);
 
 // { title, poster, ratings, genres, length }
 
-app.get("/api/movies/upcoming", wrapAsync(async (req, res) => {
+app.get(
+  "/api/movies/upcoming",
+  wrapAsync(async (req, res) => {
     const currentDate = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
 
     const movies = await Movie.find(
@@ -350,94 +368,99 @@ app.get("/api/movies/upcoming", wrapAsync(async (req, res) => {
     );
 
     res.json(movies);
-}));
+  })
+);
 
-app.get("/api/movies/:city/nowplaying", wrapAsync(async (req, res) => {
-  const currentUnix = Math.floor(Date.now() / 1000); // current UNIX time
-  const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
-  const targetCity = req.params.city; // <-- change as needed
+app.get(
+  "/api/movies/:city/nowplaying",
+  wrapAsync(async (req, res) => {
+    const currentUnix = Math.floor(Date.now() / 1000); // current UNIX time
+    const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    const targetCity = req.params.city; // <-- change as needed
 
-  const movies = await Show.aggregate([
-    // Lookup theatre to check city
-    {
-      $lookup: {
-        from: "theatres",
-        localField: "theatre",
-        foreignField: "_id",
-        as: "theatreDetails",
+    const movies = await Show.aggregate([
+      // Lookup theatre to check city
+      {
+        $lookup: {
+          from: "theatres",
+          localField: "theatre",
+          foreignField: "_id",
+          as: "theatreDetails",
+        },
       },
-    },
-    { $unwind: "$theatreDetails" },
+      { $unwind: "$theatreDetails" },
 
-    // Filter by theatre city
-    {
-      $match: {
-        "theatreDetails.city": targetCity,
+      // Filter by theatre city
+      {
+        $match: {
+          "theatreDetails.city": targetCity,
+        },
       },
-    },
 
-    // Filter shows by startTime > now
-    {
-      $match: {
-        startTime: { $gt: currentUnix },
+      // Filter shows by startTime > now
+      {
+        $match: {
+          startTime: { $gt: currentUnix },
+        },
       },
-    },
 
-    // Lookup movie details
-    {
-      $lookup: {
-        from: "movies",
-        localField: "movie",
-        foreignField: "_id",
-        as: "movieDetails",
+      // Lookup movie details
+      {
+        $lookup: {
+          from: "movies",
+          localField: "movie",
+          foreignField: "_id",
+          as: "movieDetails",
+        },
       },
-    },
-    { $unwind: "$movieDetails" },
+      { $unwind: "$movieDetails" },
 
-    // Filter movie by releaseDate < today
-    {
-      $match: {
-        "movieDetails.releaseDate": { $lte: today },
+      // Filter movie by releaseDate < today
+      {
+        $match: {
+          "movieDetails.releaseDate": { $lte: today },
+        },
       },
-    },
 
-    // Group by movie to make them unique
-    {
-      $group: {
-        _id: "$movie",
-        show: { $first: "$$ROOT" },
+      // Group by movie to make them unique
+      {
+        $group: {
+          _id: "$movie",
+          show: { $first: "$$ROOT" },
+        },
       },
-    },
 
-    // Replace root to flatten the document
-    {
-      $replaceRoot: { newRoot: "$show" },
-    },
-
-    // Project only the fields you want
-    {
-      $project: {
-        _id: "$movieDetails._id",
-        title: "$movieDetails.title",
-        poster: "$movieDetails.poster",
-        genres: "$movieDetails.genres",
-        ratings: "$movieDetails.ratings",
-        length: "$movieDetails.length",
+      // Replace root to flatten the document
+      {
+        $replaceRoot: { newRoot: "$show" },
       },
-    },
-  ]);
 
-  res.json(movies);
-}));
+      // Project only the fields you want
+      {
+        $project: {
+          _id: "$movieDetails._id",
+          title: "$movieDetails.title",
+          poster: "$movieDetails.poster",
+          genres: "$movieDetails.genres",
+          ratings: "$movieDetails.ratings",
+          length: "$movieDetails.length",
+        },
+      },
+    ]);
 
+    res.json(movies);
+  })
+);
 
-app.get("/api/movies/:city/popular", wrapAsync(async (req, res) => {
-  const city = req.params.city;
-  const currentUnix = Math.floor(Date.now() / 1000);
-  const todayDate = new Date();
-  const today = todayDate.toISOString().split("T")[0];
-  const tenDaysAgo = new Date(todayDate.getTime() - 10 * 24 * 60 * 60 * 1000);
-  const startDate = tenDaysAgo.toISOString().split("T")[0];
+app.get(
+  "/api/movies/:city/popular",
+  wrapAsync(async (req, res) => {
+    const city = req.params.city;
+    const currentUnix = Math.floor(Date.now() / 1000);
+    const todayDate = new Date();
+    const today = todayDate.toISOString().split("T")[0];
+    const tenDaysAgo = new Date(todayDate.getTime() - 10 * 24 * 60 * 60 * 1000);
+    const startDate = tenDaysAgo.toISOString().split("T")[0];
 
     const popular = await Show.aggregate([
       {
@@ -505,12 +528,15 @@ app.get("/api/movies/:city/popular", wrapAsync(async (req, res) => {
     ]);
 
     res.json(popular);
-}));
+  })
+);
 
-app.get("/api/movies/:city/toprated", wrapAsync(async (req, res) => {
-  const city = req.params.city;
-  const currentUnix = Math.floor(Date.now() / 1000);
-  const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
+app.get(
+  "/api/movies/:city/toprated",
+  wrapAsync(async (req, res) => {
+    const city = req.params.city;
+    const currentUnix = Math.floor(Date.now() / 1000);
+    const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
 
     const topRated = await Show.aggregate([
       {
@@ -573,246 +599,302 @@ app.get("/api/movies/:city/toprated", wrapAsync(async (req, res) => {
     ]);
 
     res.json(topRated);
-}));
-
-app.get("/api/movies/:title", wrapAsync(async (req, res) => {
-  const { title } = req.params;
-  const movie = await Movie.find({ title });
-  res.json(movie);
-}));
-
-app.post("/api/theatres", isLoggedIn, isAdmin, wrapAsync(async (req, res) => {
-  const { city, name, location, theaters } = req.body;
-  const screens = [];
-
-  for (const theatre of theaters) {
-    const newScreen = new Screen({
-      audi: theatre.theaterNo,
-      seatTypes: theatre.seatTypes.map((type) => ({
-        name: type.name,
-        price: type.price
-      }))
-    });
-    await newScreen.save();
-    screens.push(newScreen._id);
-  }
-
-  const newTheatre = new Theatre({
-    name,
-    city,
-    location,
-    screens
-  });
-
-  await newTheatre.save();
-  res.json("theatre added");
-}));
-
-
-app.get("/api/theatres/:city", wrapAsync(async (req, res) => {
-  const { city } = req.params;
-  let theatres = await Theatre.find({ city }).populate("screens");
-  theatres = theatres.map((theatre) => ({
-    name: theatre.name,
-    screens: theatre.screens.map((screen) => ({
-      audi: screen.audi,
-      id: screen._id
-    }))
-  }));
-
-  res.json(theatres);
-}));
-
-app.get("/api/show/:city" , wrapAsync(async (req, res) => {
-  const { city } = req.params;
-  const currentUnixTime = Math.floor(Date.now() / 1000);
-
-  // const shows = await Show.aggregate([
-    
-  //   {
-  //     $lookup: {
-  //       from: "theatres",
-  //       localField: "theatreId",
-  //       foreignField: "_id",
-  //       as: "theatre"
-  //     }
-  //   },
-  //   { $unwind: "$theatre" },
-
-    
-  //   {
-  //     $lookup: {
-  //       from: "screens",
-  //       localField: "screenId",
-  //       foreignField: "_id",
-  //       as: "screen"
-  //     }
-  //   },
-  //   { $unwind: "$screen" },
-
-  
-  //   {
-  //     $lookup: {
-  //       from: "movies",
-  //       localField: "movieId",
-  //       foreignField: "_id",
-  //       as: "movie"
-  //     }
-  //   },
-  //   { $unwind: "$movie" },
-
-   
-  //   {
-  //     $match: {
-  //       "theatre.city": city , 
-  //       startTime: { $gt: currentUnixTime }
-  //     }
-  //   },
-
-    
-  //   {
-  //     $project: {
-  //       _id: 1,
-  //       startTime: 1,
-  //       "theatre.name": 1,
-  //       "screen.audi": 1,
-  //       "movie.title": 1,
-  //     }
-  //   }
-  // ]);
-
-  let shows = await Show.find({startTime : {$gt : currentUnixTime}}).populate({path: "theatre", match: { city }}).populate("movie").populate("screen");
-  shows = shows.filter((show) => show.theatre);
-  res.json(shows);
-
-}))
-
-app.get("/api/shows/:city/:title/:date", wrapAsync(async (req, res) => {
-  const { city, title, date } = req.params;
-  const range = getISTDayRangeFromFormattedDate(date, 2025);
-
-  const shows = await Show.find({
-    startTime: { $gte: range.startUnix, $lte: range.endUnix },
   })
-    .populate({
-      path: "theatre",
-      match: { city },
-    })
-    .populate({
-      path: "movie",
-      match: { title },
-    });
+);
 
-  const validShows = shows.filter((show) => show.theatre && show.movie);
+app.get(
+  "/api/movies/:title",
+  wrapAsync(async (req, res) => {
+    const { title } = req.params;
+    const movie = await Movie.find({ title });
+    res.json(movie);
+  })
+);
 
-  function groupShowsByTheatre(shows) {
-    const theatreMap = new Map();
+app.post(
+  "/api/theatres",
+  isLoggedIn,
+  isAdmin,
+  wrapAsync(async (req, res) => {
+    const { city, name, location, theaters } = req.body;
+    const screens = [];
 
-    for (const show of shows) {
-      const name = show.theatre.name;
-      if (!theatreMap.has(name)) {
-        theatreMap.set(name, []);
-      }
-      theatreMap.get(name).push({
-        time: show.startTime,
-        showId: show._id,
-        language: show.language,
-        format: show.format,
+    for (const theatre of theaters) {
+      const newScreen = new Screen({
+        audi: theatre.theaterNo,
+        seatTypes: theatre.seatTypes.map((type) => ({
+          name: type.name,
+          price: type.price,
+        })),
       });
+      await newScreen.save();
+      screens.push(newScreen._id);
     }
 
-    return Array.from(theatreMap, ([name, timings]) => ({
+    const newTheatre = new Theatre({
       name,
-      timings,
-    }));
-  }
-
-  res.json(groupShowsByTheatre(validShows));
-}));
-
-app.post("/api/shows", isLoggedIn , isAdmin , wrapAsync(async (req, res) => {
-  let { city, title, theatre, showTime, showDate , format , language} = req.body;
-  const currTheatre = await Theatre.findOne({ city, name: theatre });
-  let startTime = convertToUnix(showDate, showTime);
-  let newShow = new Show({ movie: title._id, theatre: currTheatre, startTime , format , language });
-  await newShow.save();
-  res.json("show saved");
-}));
-
-app.get("/api/shows/:showId", wrapAsync(async (req, res) => {
-  const showId = req.params.showId;
-  const show = await Show.findById(showId).populate("theatre").populate("movie").populate("screen");
-  res.json(show);
-}));
-
-
-app.get("/api/bookings/:user", isLoggedIn , wrapAsync(async (req, res) => {
-  let { user } = req.params;
-  if (user !== req.user._id.toString()) {
-    throw new expressError(403, "You are not allowed to view this user's bookings");
-  }
-  const bookings = await Booking.find({ user }).populate({
-    path: "show",
-    populate: [
-      { path: "theatre" }, // populate full theatre
-      { path: "movie", select: "title" }, // only select title from movie
-    ],
-  });
-  res.json(bookings.reverse());
-}));
-
-app.get("/api/reviews/:movieId", wrapAsync(async (req, res) => {
-  const { movieId } = req.params;
-  const reviews = await Review.find({ movie: movieId })
-    .populate("user", "name username");
-  res.json(reviews);
-}))
-
-app.post("/api/reviews", isLoggedIn , wrapAsync(async (req, res) => {
-  let { user, movie, rating, comment } = req.body;
-  const newReview = new Review({ user, movie, rating, comment });
-  await newReview.save();
-  const detailedReview = await Review.findById(newReview._id).populate("user", "name username");
-  res.json(detailedReview);
-}))
-
-app.post("/api/verify", wrapAsync(async (req, res) => {
-  const { error } = verificationSchema.validate(req.body);
-  if (error) {
-    throw new expressError(400 , error.details[0].message );
-  }
-  const { email, verificationCode } = req.body;
-  console.log(req.body);
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    return res.status(404).json({ message: "user not found" });
-  }
-  if (user.verificationCode == verificationCode) {
-    user.isVerified = true;
-    await user.save();
-    req.login(user, (err) => {
-      if (err) {
-        throw new expressError(500 , err.message);
-      }
-      res.status(200).json({ message: "registered successfully", user });
+      city,
+      location,
+      screens,
     });
-  } else {
-    throw new expressError(401 , "wrong verification code");
-  }
-}));
 
-app.post("/api/signup", wrapAsync(async (req, res) => {
-  const { error } = userSchema.validate(req.body);
-  if (error) {
-    throw new expressError(400 , error.details[0].message );
-  }
-  let { name, email, username, password } = req.body;
-  let verificationCode = Math.floor(100000 + Math.random() * 900000);
-  let user = await User.findOne({ email: email });
-  if (user && !user.isVerified) {
-    sendVerificationCode(user.email, user.verificationCode);
-    res.status(200).json({ message: "verification code sent" });
-  } else {
+    await newTheatre.save();
+    res.json("theatre added");
+  })
+);
+
+app.get(
+  "/api/theatres/:city",
+  wrapAsync(async (req, res) => {
+    const { city } = req.params;
+    let theatres = await Theatre.find({ city }).populate("screens");
+    theatres = theatres.map((theatre) => ({
+      name: theatre.name,
+      screens: theatre.screens.map((screen) => ({
+        audi: screen.audi,
+        id: screen._id,
+      })),
+    }));
+
+    res.json(theatres);
+  })
+);
+
+app.get(
+  "/api/show/:city",
+  wrapAsync(async (req, res) => {
+    const { city } = req.params;
+    const currentUnixTime = Math.floor(Date.now() / 1000);
+
+    // const shows = await Show.aggregate([
+
+    //   {
+    //     $lookup: {
+    //       from: "theatres",
+    //       localField: "theatreId",
+    //       foreignField: "_id",
+    //       as: "theatre"
+    //     }
+    //   },
+    //   { $unwind: "$theatre" },
+
+    //   {
+    //     $lookup: {
+    //       from: "screens",
+    //       localField: "screenId",
+    //       foreignField: "_id",
+    //       as: "screen"
+    //     }
+    //   },
+    //   { $unwind: "$screen" },
+
+    //   {
+    //     $lookup: {
+    //       from: "movies",
+    //       localField: "movieId",
+    //       foreignField: "_id",
+    //       as: "movie"
+    //     }
+    //   },
+    //   { $unwind: "$movie" },
+
+    //   {
+    //     $match: {
+    //       "theatre.city": city ,
+    //       startTime: { $gt: currentUnixTime }
+    //     }
+    //   },
+
+    //   {
+    //     $project: {
+    //       _id: 1,
+    //       startTime: 1,
+    //       "theatre.name": 1,
+    //       "screen.audi": 1,
+    //       "movie.title": 1,
+    //     }
+    //   }
+    // ]);
+
+    let shows = await Show.find({ startTime: { $gt: currentUnixTime } })
+      .populate({ path: "theatre", match: { city } })
+      .populate("movie")
+      .populate("screen");
+    shows = shows.filter((show) => show.theatre);
+    res.json(shows);
+  })
+);
+
+app.get(
+  "/api/shows/:city/:title/:date",
+  wrapAsync(async (req, res) => {
+    const { city, title, date } = req.params;
+    const range = getISTDayRangeFromFormattedDate(date, 2025);
+
+    const shows = await Show.find({
+      startTime: { $gte: range.startUnix, $lte: range.endUnix },
+    })
+      .populate({
+        path: "theatre",
+        match: { city },
+      })
+      .populate({
+        path: "movie",
+        match: { title },
+      });
+
+    const validShows = shows.filter((show) => show.theatre && show.movie);
+
+    function groupShowsByTheatre(shows) {
+      const theatreMap = new Map();
+
+      for (const show of shows) {
+        const name = show.theatre.name;
+        if (!theatreMap.has(name)) {
+          theatreMap.set(name, []);
+        }
+        theatreMap.get(name).push({
+          time: show.startTime,
+          showId: show._id,
+          language: show.language,
+          format: show.format,
+        });
+      }
+
+      return Array.from(theatreMap, ([name, timings]) => ({
+        name,
+        timings,
+      }));
+    }
+
+    res.json(groupShowsByTheatre(validShows));
+  })
+);
+
+app.post(
+  "/api/shows",
+  isLoggedIn,
+  isAdmin,
+  wrapAsync(async (req, res) => {
+    let { city, title, theatre, showTime, showDate, format, language } =
+      req.body;
+    const currTheatre = await Theatre.findOne({ city, name: theatre });
+    let startTime = convertToUnix(showDate, showTime);
+    let newShow = new Show({
+      movie: title._id,
+      theatre: currTheatre,
+      startTime,
+      format,
+      language,
+    });
+    await newShow.save();
+    res.json("show saved");
+  })
+);
+
+app.get(
+  "/api/shows/:showId",
+  wrapAsync(async (req, res) => {
+    const showId = req.params.showId;
+    const show = await Show.findById(showId)
+      .populate("theatre")
+      .populate("movie")
+      .populate("screen");
+    res.json(show);
+  })
+);
+
+app.get(
+  "/api/bookings/:user",
+  isLoggedIn,
+  wrapAsync(async (req, res) => {
+    let { user } = req.params;
+    if (user !== req.user._id.toString()) {
+      throw new expressError(
+        403,
+        "You are not allowed to view this user's bookings"
+      );
+    }
+    const bookings = await Booking.find({ user }).populate({
+      path: "show",
+      populate: [
+        { path: "theatre" }, // populate full theatre
+        { path: "movie", select: "title" }, // only select title from movie
+      ],
+    });
+    res.json(bookings.reverse());
+  })
+);
+
+app.get(
+  "/api/reviews/:movieId",
+  wrapAsync(async (req, res) => {
+    const { movieId } = req.params;
+    const reviews = await Review.find({ movie: movieId }).populate(
+      "user",
+      "name username"
+    );
+    res.json(reviews);
+  })
+);
+
+app.post(
+  "/api/reviews",
+  isLoggedIn,
+  wrapAsync(async (req, res) => {
+    let { user, movie, rating, comment } = req.body;
+    const newReview = new Review({ user, movie, rating, comment });
+    await newReview.save();
+    const detailedReview = await Review.findById(newReview._id).populate(
+      "user",
+      "name username"
+    );
+    res.json(detailedReview);
+  })
+);
+
+app.post(
+  "/api/verify",
+  wrapAsync(async (req, res) => {
+    const { error } = verificationSchema.validate(req.body);
+    if (error) {
+      throw new expressError(400, error.details[0].message);
+    }
+    const { email, verificationCode } = req.body;
+    console.log(req.body);
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    if (user.verificationCode == verificationCode) {
+      user.isVerified = true;
+      await user.save();
+      req.login(user, (err) => {
+        if (err) {
+          throw new expressError(500, err.message);
+        }
+        res.status(200).json({ message: "registered successfully", user });
+      });
+    } else {
+      throw new expressError(401, "wrong verification code");
+    }
+  })
+);
+
+app.post(
+  "/api/signup",
+  wrapAsync(async (req, res) => {
+    const { error } = userSchema.validate(req.body);
+    if (error) {
+      throw new expressError(400, error.details[0].message);
+    }
+    let { name, email, username, password } = req.body;
+    let verificationCode = Math.floor(100000 + Math.random() * 900000);
+    let user = await User.findOne({ email: email });
+    if (user && !user.isVerified) {
+      sendVerificationCode(user.email, user.verificationCode);
+      res.status(200).json({ message: "verification code sent" });
+    } else {
       const newUser = new User({ name, username, email, verificationCode });
       let registeredUser = await User.register(newUser, password);
       sendVerificationCode(
@@ -821,53 +903,53 @@ app.post("/api/signup", wrapAsync(async (req, res) => {
       );
       res.status(200).json({ message: "verification code sent" });
     }
-  }
-));
+  })
+);
 
-app.post("/api/login", wrapAsync(async (req, res, next) => {
-  let currUser = await User.findOne({ email: req.body.email });
-  if (currUser) req.body.username = currUser.username;
-  if (currUser && !currUser.isVerified) {
-    throw new expressError(401 , "Invalid email or password");
-  }
-  passport.authenticate("local", (err, user, info) => {
-    if (err) throw new expressError(500 , "server error");
-    if (!user)
-      throw new expressError(401 , "Invalid email or password");
+app.post(
+  "/api/login",
+  wrapAsync(async (req, res, next) => {
+    let currUser = await User.findOne({ email: req.body.email });
+    if (currUser) req.body.username = currUser.username;
+    if (currUser && !currUser.isVerified) {
+      throw new expressError(401, "Invalid email or password");
+    }
+    passport.authenticate("local", (err, user, info) => {
+      if (err) throw new expressError(500, "server error");
+      if (!user) throw new expressError(401, "Invalid email or password");
 
-    req.login(user, (err) => {
-      if (err) throw new expressError(500 , "Login failed");
-      res.status(200).json({ message: "Logged in successfully", user });
-    });
-  })(req, res, next);
-}));
+      req.login(user, (err) => {
+        if (err) throw new expressError(500, "Login failed");
+        res.status(200).json({ message: "Logged in successfully", user });
+      });
+    })(req, res, next);
+  })
+);
 
 app.get("/api/isLoggedIn", (req, res) => {
   if (req.isAuthenticated()) {
     return res.status(200).json({ message: "authenticated", user: req.user });
   }
-  throw new expressError(401 , "not authenticated");
+  throw new expressError(401, "not authenticated");
 });
 
 app.get("/api/signout", (req, res) => {
   req.logout((err) => {
     if (err) {
-      throw new expressError(500 , "Logout failed");
+      throw new expressError(500, "Logout failed");
     }
     res.status(200).json({ message: "logged out" });
   });
 });
 
-
-app.use((err , req , res , next) => {
-    let {status = 500, message = "something went wrong"} = err;
-    res.status(status).json({message});
+app.use((err, req, res, next) => {
+  let { status = 500, message = "something went wrong" } = err;
+  res.status(status).json({ message });
 });
 
-app.use((req , res , next) => {
-  next(new expressError(404 , "not found"));
-})
-
+app.use((req, res, next) => {
+  next(new expressError(404, "not found"));
+});
 
 server.listen(8080, () => {
   console.log("server started");

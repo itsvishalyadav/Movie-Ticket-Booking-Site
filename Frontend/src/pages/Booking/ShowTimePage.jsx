@@ -9,7 +9,6 @@ import { useCity } from "../../contexts/CityContext";
 import Loader from "../../components/Loader/Loader";
 import ErrorMessage from "../../components/Error/ErrorMessage";
 
-
 function formatCurrentDate() {
   const now = new Date();
   const day = now.toLocaleDateString("en-US", { weekday: "short" });
@@ -40,7 +39,7 @@ function ShowTimePage() {
   const [liveInfo, setLiveInfo] = useState({
     theatres: [],
     date: formatCurrentDate(),
-    formats : [],
+    formats: [],
     languages: [],
     format: "",
     language: "",
@@ -48,62 +47,66 @@ function ShowTimePage() {
 
   useEffect(() => {
     const fetchShowData = async () => {
-      try{
-      const theatreData = await fetch(
-        `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
-      );
-      const theatres = await theatreData.json();
-      if(!theatreData.ok) {
-        throw new Error(theatres.message || "Failed to fetch show data");
-      }
-
-      if (theatres.length > 0) {
-        const langs = [];
-        for (const theatre of theatres) {
-          for (const timing of theatre.timings) {
-            if (!langs.includes(timing.language)) {
-              langs.push(timing.language);
-            }
-          }
+      try {
+        const theatreData = await fetch(
+          `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
+        );
+        const theatres = await theatreData.json();
+        if (!theatreData.ok) {
+          throw new Error(theatres.message || "Failed to fetch show data");
         }
 
-        const lang = langs[0];
-
-        const formats = [];
-        for (const theatre of theatres) {
-          for (const timing of theatre.timings) {
-            if (timing.language === lang && !formats.includes(timing.format)) {
-              formats.push(timing.format);
+        if (theatres.length > 0) {
+          const langs = [];
+          for (const theatre of theatres) {
+            for (const timing of theatre.timings) {
+              if (!langs.includes(timing.language)) {
+                langs.push(timing.language);
+              }
             }
           }
+
+          const lang = langs[0];
+
+          const formats = [];
+          for (const theatre of theatres) {
+            for (const timing of theatre.timings) {
+              if (
+                timing.language === lang &&
+                !formats.includes(timing.format)
+              ) {
+                formats.push(timing.format);
+              }
+            }
+          }
+
+          const format = formats[0];
+
+          setLiveInfo((curr) => ({
+            ...curr,
+            theatres: theatres,
+            formats: formats,
+            languages: langs,
+            language: lang,
+            format: format,
+          }));
+        } else {
+          setLiveInfo((curr) => ({
+            date:curr.date,
+            theatres: [],
+            formats: [],
+            languages: [],
+            format: "",
+            language: "",
+          }));
         }
-
-        const format = formats[0];
-
-        setLiveInfo((curr) => ({
-          ...curr,
-          theatres: theatres,
-          formats: formats,
-          languages: langs,
-          language: lang,
-          format: format,
-        }));
-      } else {
-        setLiveInfo((curr) => ({
-          ...curr,
-          theatres: [],
-          date: formatCurrentDate(),
-        }));
+      } catch (error) {
+        setError(error.message || "Failed to fetch show data");
       }
-    }
-    catch (error) {
-      setError(error.message || "Failed to fetch show data");
-    }
-  } 
+    };
 
     fetchShowData();
   }, [title, city, liveInfo.date]);
-
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -113,7 +116,9 @@ function ShowTimePage() {
         );
         const detailedMovie = await movieData.json();
         if (!movieData.ok) {
-          throw new Error(detailedMovie.message || "Failed to fetch movie data");
+          throw new Error(
+            detailedMovie.message || "Failed to fetch movie data"
+          );
         }
         setMovieInfo(detailedMovie[0]);
         setLoading(false);
@@ -133,33 +138,31 @@ function ShowTimePage() {
     return <ErrorMessage message={error} />;
   }
 
-
   return (
     <div className={styles.container}>
       <Header />
       {loading ? (
         <Loader />
       ) : (
-      <div
-        style={{
-          background: `
+        <div
+          style={{
+            background: `
               radial-gradient(circle, rgba(0,0,0,0.7) 50%, rgba(0,0,0,1) 100%) no-repeat center/cover,
               url(${movieInfo.bgImage}) no-repeat center/cover
             `,
-        }}
-        className={styles.movieSection}
-      >
-        <MovieInfo info={movieInfo} />
+          }}
+          className={styles.movieSection}
+        >
+          <MovieInfo info={movieInfo} />
 
-        <section className={styles.showsSection}>
-          <DateTimeTheater
-            title={title}
-            liveInfo={liveInfo}
-            setLiveInfo={setLiveInfo}
-          />
-        </section>
-      
-      </div>
+          <section className={styles.showsSection}>
+            <DateTimeTheater
+              title={title}
+              liveInfo={liveInfo}
+              setLiveInfo={setLiveInfo}
+            />
+          </section>
+        </div>
       )}
       <Footer />
     </div>
