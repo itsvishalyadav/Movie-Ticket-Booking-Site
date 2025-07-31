@@ -59,7 +59,7 @@ const AdminDashboard = () => {
               </li>
             </ul>
           </nav>
-          <footer className="sidebar-footer">© Movie Book, 2025.</footer>
+          <footer className="sidebar-footer">© GetMySeat, 2025.</footer>
         </aside>
         <main className="admindashboard-main">
           <h2 className="admindashboard-title">Admin Dashboard</h2>

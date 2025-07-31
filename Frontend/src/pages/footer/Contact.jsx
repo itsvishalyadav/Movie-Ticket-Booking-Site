@@ -34,7 +34,9 @@ export default function Contact() {
           ) : (
             <form onSubmit={handleSubmit}>
               <div className={contactStyles.contactForm}>
-                <label className={contactStyles.contactLabel} htmlFor="name">Name</label>
+                <label className={contactStyles.contactLabel} htmlFor="name">
+                  Name
+                </label>
                 <input
                   className={contactStyles.contactInput}
                   type="text"
@@ -44,7 +46,9 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                 />
-                <label className={contactStyles.contactLabel} htmlFor="email">Email</label>
+                <label className={contactStyles.contactLabel} htmlFor="email">
+                  Email
+                </label>
                 <input
                   className={contactStyles.contactInput}
                   type="email"
@@ -54,7 +58,9 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                 />
-                <label className={contactStyles.contactLabel} htmlFor="message">Message</label>
+                <label className={contactStyles.contactLabel} htmlFor="message">
+                  Message
+                </label>
                 <textarea
                   className={contactStyles.contactTextarea}
                   id="message"
@@ -63,10 +69,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                 />
-                <button
-                  type="submit"
-                  className={contactStyles.contactButton}
-                >
+                <button type="submit" className={contactStyles.contactButton}>
                   Send Message
                 </button>
               </div>
@@ -74,11 +77,16 @@ export default function Contact() {
           )}
         </div>
         <div className={contactStyles.contactInfo}>
-          <div className={contactStyles.contactInfoRow}><b>Email:</b> <a href="mailto:moviebook@gmail.com">moviebook@gmail.com</a></div>
-          <div><b>Phone:</b> +91-9999999999</div>
+          <div className={contactStyles.contactInfoRow}>
+            <b>Email:</b>{" "}
+            <a href="mailto:ticktbooking@gmail.com">ticktbooking@gmail.com</a>
+          </div>
+          <div>
+            <b>Phone:</b> +91-9999999999
+          </div>
         </div>
       </section>
       <Footer className={contactStyles.contactFooter} />
     </div>
   );
-} 
+}

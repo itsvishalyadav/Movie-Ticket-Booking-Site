@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AdminShared.css";
+import "./AddItemPage.css";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
 import { useUser } from "../../contexts/userContext";
@@ -10,7 +10,7 @@ const AddItemPage = () => {
   const [city, setCity] = useState();
   const [showCitySelector, setShowCitySelector] = useState(false);
   const [theatres, setTheatres] = useState([]);
-  const [selectedTheatre, setSelectedTheatre] = useState(null); // ← new
+  const [selectedTheatre, setSelectedTheatre] = useState(null);
   const [showTheatreSuggestions, setShowTheatreSuggestions] = useState(false);
   const [movies, setMovies] = useState([]);
   const [showMovieSuggestions, setShowMovieSuggestions] = useState(false);
@@ -98,13 +98,11 @@ const AddItemPage = () => {
   }, []);
 
   return (
-    <div className="admin-root">
+    <div className="additem-root">
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link to="/">
-            <div className="flix-logo">
-              GetMySeat<span className="tv">TV</span>
-            </div>
+            <div className="flix-logo">GetMySeat</div>
           </Link>
           <div className="user-info">
             <div className="user-avatar">👤</div>
@@ -116,153 +114,189 @@ const AddItemPage = () => {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li><Link to="/admin/dashboard">Dashboard</Link></li>
-            <li className="active"><Link to="/admin/add-item">Add Shows</Link></li>
-            <li><Link to="/admin/edit-movies">Edit Movies</Link></li>
-            <li><Link to="/admin/edit-cinemas">Edit Cinemas</Link></li>
+            <li>
+              <Link to="/admin/dashboard">Dashboard</Link>
+            </li>
+            <li className="active">
+              <Link to="/admin/add-item">Add Shows</Link>
+            </li>
+            <li>
+              <Link to="/admin/edit-movies">Edit Movies</Link>
+            </li>
+            <li>
+              <Link to="/admin/edit-cinemas">Edit Cinemas</Link>
+            </li>
           </ul>
         </nav>
-        <div className="sidebar-footer">© Movie Book, 2025.</div>
+        <div className="sidebar-footer">© GetMySeat, 2025.</div>
       </aside>
 
       <main className="additem-main">
-        <h1 className="admin-title">Add ShowTime</h1>
-        <form className="admin-form" onSubmit={handleSubmit}>
+        <h1 className="additem-title">Add ShowTime</h1>
+        <form className="additem-form" onSubmit={handleSubmit}>
+          {/* Movie Details Section */}
           <div className="form-section">
+            <h3>Movie Details</h3>
             <div className="form-row">
-              <h3>Movie Details</h3>
+              <div className="form-col">
+                <label htmlFor="title">Movie Title</label>
+                <div className="input-wrapper">
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Search for a movie..."
+                    value={
+                      typeof form.title === "string"
+                        ? form.title
+                        : form.title.title || ""
+                    }
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      setForm((prev) => ({ ...prev, title: inputValue }));
+                      setShowMovieSuggestions(true);
+                    }}
+                    className="form-input title-input"
+                    autoComplete="off"
+                    required
+                  />
+                  {showMovieSuggestions &&
+                    typeof form.title === "string" &&
+                    form.title.trim() && (
+                      <ul className="suggestion-box movie-suggestion-box">
+                        {movies.length > 0 ? (
+                          movies
+                            .filter((movie) =>
+                              movie.title
+                                .toLowerCase()
+                                .includes(form.title.toLowerCase())
+                            )
+                            .map((movie, index) => (
+                              <li
+                                key={index}
+                                onClick={() => {
+                                  setForm((prev) => ({
+                                    ...prev,
+                                    title: movie,
+                                  }));
+                                  setShowMovieSuggestions(false);
+                                }}
+                                className="suggestion-item"
+                              >
+                                {movie.title}
+                              </li>
+                            ))
+                        ) : (
+                          <li className="suggestion-item no-results">
+                            No movies found
+                          </li>
+                        )}
+                      </ul>
+                    )}
+                </div>
+              </div>
+            </div>
+          </div>
 
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                  value={
-                    typeof form.title === "string"
-                      ? form.title
-                      : form.title.title || ""
-                  }
-                  onChange={(e) => {
-                    const inputValue = e.target.value;
-                    setForm((prev) => ({ ...prev, title: inputValue }));
-                    setShowMovieSuggestions(true);
-                  }}
-                  className="input title-input"
-                  autoComplete="off"
-                  required
-                />
-                {showMovieSuggestions &&
-                  typeof form.title === "string" &&
-                  form.title.trim() && (
-                    <ul className="movie-suggestion-box" style={suggestionBoxStyle}>
-                      {movies.length > 0 ? (
-                        movies
-                          .filter((movie) =>
-                            movie.title
-                              .toLowerCase()
-                              .includes(form.title.toLowerCase())
-                          )
-                          .map((movie, index) => (
-                            <li
-                              key={index}
-                              onClick={() => {
-                                setForm((prev) => ({ ...prev, title: movie }));
-                                setShowMovieSuggestions(false);
-                              }}
-                              style={suggestionItemStyle}
-                            >
-                              {movie.title}
-                            </li>
-                          ))
-                      ) : (
-                        <li style={{ padding: "8px", color: "#888" }}>
-                          No movies found
-                        </li>
-                      )}
+          {/* City Selection Section */}
+          <div className="form-section">
+            <h3>City Selection</h3>
+            <div className="form-row">
+              <div className="form-col">
+                <label>Select City</label>
+                <div className="input-wrapper">
+                  <button
+                    type="button"
+                    className="city-selector-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowCitySelector((v) => !v);
+                    }}
+                  >
+                    {city ? city : "Select City"}
+                  </button>
+                  {showCitySelector && (
+                    <div className="city-selector-dropdown">
+                      <CitySelector
+                        onSelect={(c) => {
+                          setCity(c.name);
+                          setShowCitySelector(false);
+                        }}
+                        selectedCityId={null}
+                        placeholder="Search city..."
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Theatre Details Section */}
+          <div className="form-section">
+            <h3>Theatre Details</h3>
+            <div className="form-row">
+              <div className="form-col">
+                <label htmlFor="theatre">Theatre Name</label>
+                <div className="input-wrapper">
+                  <input
+                    type="text"
+                    id="theatre"
+                    name="theatre"
+                    placeholder="Search for a theatre..."
+                    value={form.theatre}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setShowTheatreSuggestions(true);
+                    }}
+                    className="form-input theatre-input"
+                    autoComplete="off"
+                    required
+                  />
+                  {form.theatre && showTheatreSuggestions && (
+                    <ul className="suggestion-box theatre-suggestion-box">
+                      {theatres
+                        .filter((t) =>
+                          t.name
+                            .toLowerCase()
+                            .includes(form.theatre.toLowerCase())
+                        )
+                        .map((t, index) => (
+                          <li
+                            key={index}
+                            onClick={() => {
+                              setForm((prev) => ({
+                                ...prev,
+                                theatre: t.name,
+                                screenId: "",
+                              }));
+                              setSelectedTheatre(t);
+                              setShowTheatreSuggestions(false);
+                            }}
+                            className="suggestion-item"
+                          >
+                            {t.name}
+                          </li>
+                        ))}
                     </ul>
                   )}
+                </div>
               </div>
+            </div>
 
-              <div className="city-selector" style={{ position: "relative" }}>
-                <button
-                  className="city-btn"
-                  style={cityButtonStyle}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowCitySelector((v) => !v);
-                  }}
-                >
-                  {city ? city : "Select City"}
-                </button>
-                {showCitySelector && (
-                  <div style={{ position: "absolute", zIndex: 100, top: "110%" }}>
-                    <CitySelector
-                      onSelect={(c) => {
-                        setCity(c.name);
-                        setShowCitySelector(false);
-                      }}
-                      selectedCityId={null}
-                      placeholder="Search city..."
-                      style={{ width: 260 }}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <h3 className="section-title">Theatre</h3>
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  name="theatre"
-                  placeholder="Theatre"
-                  value={form.theatre}
-                  onChange={(e) => {
-                    handleChange(e);
-                    setShowTheatreSuggestions(true);
-                  }}
-                  className="input title-input"
-                  autoComplete="off"
-                  required
-                />
-                {form.theatre && showTheatreSuggestions && (
-                  <ul className="theatre-suggestion-box" style={suggestionBoxStyle}>
-                    {theatres
-                      .filter((t) =>
-                        t.name.toLowerCase().includes(form.theatre.toLowerCase())
-                      )
-                      .map((t, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            setForm((prev) => ({
-                              ...prev,
-                              theatre: t.name,
-                              screenId: "",
-                            }));
-                            setSelectedTheatre(t);
-                            setShowTheatreSuggestions(false);
-                          }}
-                          style={suggestionItemStyle}
-                        >
-                          {t.name}
-                        </li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-
-              {selectedTheatre && selectedTheatre.screens?.length > 0 && (
-                <div style={{ marginTop: "1rem" }}>
-                  <label htmlFor="screenId">Audi (Screen)</label>
+            {selectedTheatre && selectedTheatre.screens?.length > 0 && (
+              <div className="form-row">
+                <div className="form-col">
+                  <label htmlFor="screenId">Screen/Audi</label>
                   <select
                     name="screenId"
                     id="screenId"
-                    className="input"
+                    className="form-input"
                     value={form.screenId}
                     onChange={handleChange}
                     required
                   >
-                    <option value="">Select Audi</option>
+                    <option value="">Select Screen</option>
                     {selectedTheatre.screens.map((screen) => (
                       <option key={screen._id} value={screen._id}>
                         Audi {screen.audi}
@@ -270,112 +304,84 @@ const AddItemPage = () => {
                     ))}
                   </select>
                 </div>
-              )}
-
-              <div className="language-format-row" style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="language">Language</label>
-                  <select
-                    name="language"
-                    id="language"
-                    value={form.language}
-                    onChange={handleChange}
-                    className="input"
-                    required
-                  >
-                    <option value="">Select Language</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="English">English</option>
-                  </select>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="format">Format</label>
-                  <select
-                    name="format"
-                    id="format"
-                    value={form.format}
-                    onChange={handleChange}
-                    className="input"
-                    required
-                  >
-                    <option value="">Select Format</option>
-                    <option value="2D">2D</option>
-                    <option value="3D">3D</option>
-                    <option value="IMAX">IMAX</option>
-                  </select>
-                </div>
               </div>
+            )}
+          </div>
 
-              <div className="show-timings">
-                <div className="show-date">
-                  <label htmlFor="showDate">Show Date</label>
-                  <br />
-                  <input
-                    type="date"
-                    id="showDate"
-                    name="showDate"
-                    value={form.showDate}
-                    onChange={handleChange}
-                    className="input showDate"
-                    required
-                  />
-                </div>
-                <div className="show-time">
-                  <label htmlFor="showTiming">Show Time</label>
-                  <br />
-                  <input
-                    type="time"
-                    id="showTiming"
-                    name="showTime"
-                    value={form.showTime}
-                    onChange={handleChange}
-                    className="input showTiming"
-                    required
-                  />
-                </div>
+          {/* Show Details Section */}
+          <div className="form-section">
+            <h3>Show Details</h3>
+            <div className="form-row">
+              <div className="form-col">
+                <label htmlFor="language">Language</label>
+                <select
+                  name="language"
+                  id="language"
+                  value={form.language}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                >
+                  <option value="">Select Language</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="English">English</option>
+                </select>
               </div>
-
-              <button className="publish-btn" type="submit">
-                PUBLISH
-              </button>
+              <div className="form-col">
+                <label htmlFor="format">Format</label>
+                <select
+                  name="format"
+                  id="format"
+                  value={form.format}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                >
+                  <option value="">Select Format</option>
+                  <option value="2D">2D</option>
+                  <option value="3D">3D</option>
+                  <option value="IMAX">IMAX</option>
+                </select>
+              </div>
             </div>
+            <div className="form-row">
+              <div className="form-col">
+                <label htmlFor="showDate">Show Date</label>
+                <input
+                  type="date"
+                  id="showDate"
+                  name="showDate"
+                  value={form.showDate}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                />
+              </div>
+              <div className="form-col">
+                <label htmlFor="showTime">Show Time</label>
+                <input
+                  type="time"
+                  id="showTime"
+                  name="showTime"
+                  value={form.showTime}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="form-actions">
+            <button type="submit" className="submit-btn">
+              PUBLISH SHOW
+            </button>
           </div>
         </form>
       </main>
     </div>
   );
-};
-
-// Styles used inline for clarity
-const cityButtonStyle = {
-  minWidth: 120,
-  padding: "8px 16px",
-  borderRadius: 6,
-  border: "1px solid #ccc",
-  background: "#1E1E1E",
-  color: "#fff",
-  marginBottom: 8,
-  cursor: "pointer",
-  fontWeight: 600,
-};
-
-const suggestionBoxStyle = {
-  position: "absolute",
-  top: "100%",
-  left: 0,
-  right: 0,
-  backgroundColor: "#fff",
-  border: "1px solid #ccc",
-  zIndex: 10,
-  maxHeight: "150px",
-  overflowY: "auto",
-};
-
-const suggestionItemStyle = {
-  padding: "8px",
-  cursor: "pointer",
-  backgroundColor: "#fff",
-  color: "#000",
 };
 
 export default AddItemPage;

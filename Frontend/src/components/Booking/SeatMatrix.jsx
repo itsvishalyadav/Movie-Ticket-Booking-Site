@@ -7,25 +7,28 @@ import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import RazorpayButton from "../Buttons/RazorBtn";
 
-export const socket = io("http://localhost:8080" , {
+export const socket = io("http://localhost:8080", {
   withCredentials: true,
 });
 
 socket.on("connect_error", (err) => {
-  alert("Failed to connect to server. Please check your network or login again.");
+  alert(
+    "Failed to connect to server. Please check your network or login again."
+  );
 });
-function formatTime(unix) {
-  const date = new Date(unix * 1000);
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "pm" : "am";
 
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
+const SEAT_PRICES = {
+  gold: 400,
+  silver: 300,
+  bronze: 250,
+};
 
-  return `${hours}.${minutes} ${ampm}`;
+function getSeatType(seatNumber) {
+  const row = Math.floor((seatNumber - 1) / 10);
+  if (row < 2) return "gold";
+  if (row < 6) return "silver";
+  return "bronze";
 }
-
 
 export default function SeatMatrix({
   showId,
@@ -34,7 +37,7 @@ export default function SeatMatrix({
   movieInfo,
 }) {
   const { user } = useUser();
-  const seats = Array.from({ length: 100 }, (_, index) => index);
+  const seats = Array.from({ length: 100 }, (_, index) => index + 1);
   const [bookedSeats, setBookedSeats] = useState([]);
   const [showDetails, setShowDetails] = useState(null);
   const navigate = useNavigate();
@@ -42,8 +45,8 @@ export default function SeatMatrix({
     const fetchShowDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/shows/${showId}`
-          , { credentials: "include" }
+          `http://localhost:8080/api/shows/${showId}`,
+          { credentials: "include" }
         );
         const data = await response.json();
         setShowDetails(data);
@@ -65,11 +68,9 @@ export default function SeatMatrix({
 
     socket.on("seatData", ({ bookedSeats }) => setBookedSeats(bookedSeats));
     socket.on("seatsBooked", (seats) => {
-      console.log(seats);
       setBookedSeats((prev) => [...prev, ...seats]);
     });
     socket.on("seatsCancelled", (seats) => {
-      console.log(seats);
       setBookedSeats((prev) => prev.filter((seat) => !seats.includes(seat)));
     });
     socket.on("lockSuccess", (seat) =>
@@ -85,7 +86,57 @@ export default function SeatMatrix({
       socket.off("lockFailed");
       socket.off("seatsCancelled");
     };
-  }, [showId]);
+  }, [showId, setSelectedSeats]);
+
+  const calculateTotalPrice = () => {
+    return selectedSeats.reduce((total, seatNumber) => {
+      const type = getSeatType(seatNumber);
+      return total + SEAT_PRICES[type];
+    }, 0);
+  };
+
+  const renderSeats = () => {
+    const seatElements = [];
+    for (let i = 1; i <= 100; i++) {
+      const seatType = getSeatType(i);
+      seatElements.push(
+        <div
+          key={i}
+          className={`${styles.seat} ${
+            bookedSeats.includes(i)
+              ? styles.booked
+              : selectedSeats.includes(i)
+              ? styles.selected
+              : ""
+          } ${styles[seatType]}`}
+          onClick={() => {
+            if (bookedSeats.includes(i)) return;
+            if (selectedSeats.includes(i)) {
+              socket.emit("unlockSeat", { showId, seatNumber: i });
+              setSelectedSeats((prev) => prev.filter((s) => s !== i));
+            } else {
+              socket.emit("lockSeat", { showId, seatNumber: i });
+            }
+          }}
+        >
+          <img
+            src={
+              bookedSeats.includes(i)
+                ? "/bookedchair.png"
+                : selectedSeats.includes(i)
+                ? "/selectedchair.png"
+                : "/emptychair.png"
+            }
+            alt="Seat"
+          />
+        </div>
+      );
+      if (i === 20 || i === 60) {
+        seatElements.push(<hr key={`hr-${i}`} className={styles.separator} />);
+      }
+    }
+    return seatElements;
+  };
 
   return (
     <div className={styles["outer-div"]}>
@@ -93,59 +144,35 @@ export default function SeatMatrix({
         <hr />
         <h2>Screen This Way</h2>
 
-        <div className={styles["seat-grid"]}>
-          {seats.map((seat) => (
-            <div
-              key={seat + 1}
-              className={`${styles.seat} ${
-                bookedSeats.includes(seat + 1)
-                  ? styles.booked
-                  : selectedSeats.includes(seat + 1)
-                  ? styles.selected
-                  : ""
-              }`}
-              onClick={() => {
-                if (bookedSeats.includes(seat + 1)) return;
-                if (selectedSeats.includes(seat + 1)) {
-                  socket.emit("unlockSeat", { showId, seatNumber: seat + 1 });
-                  setSelectedSeats((prev) =>
-                    prev.filter((s) => s !== seat + 1)
-                  );
-                } else {
-                  socket.emit("lockSeat", { showId, seatNumber: seat + 1 });
-                }
-              }}
-            >
-              {bookedSeats.includes(seat + 1) ? (
-                <img src="/bookedchair.png" alt="" />
-              ) : selectedSeats.includes(seat + 1) ? (
-                <img
-                  className={styles["selected-chair"]}
-                  src="/selectedchair.png"
-                  alt="Seat"
-                />
-              ) : (
-                <img
-                  className={styles["empty-chair"]}
-                  src="/emptychair.png"
-                  alt="Seat"
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        <div className={styles["seat-grid"]}>{renderSeats()}</div>
         <div className={styles["seat-info"]}>
           <div className={styles["seat-info-item"]}>
-            <img src="/selectedchair.png" alt="Selected Seat" />
-            <span>Selected Seat</span>
+            <div className={`${styles["seat-color-box"]} ${styles.gold}`}></div>
+            <span>Gold - ₹{SEAT_PRICES.gold}</span>
           </div>
           <div className={styles["seat-info-item"]}>
-            <img src="/emptychair.png" alt="Empty Seat" />
-            <span>Empty Seat</span>
+            <div
+              className={`${styles["seat-color-box"]} ${styles.silver}`}
+            ></div>
+            <span>Silver - ₹{SEAT_PRICES.silver}</span>
+          </div>
+          <div className={styles["seat-info-item"]}>
+            <div
+              className={`${styles["seat-color-box"]} ${styles.bronze}`}
+            ></div>
+            <span>Bronze - ₹{SEAT_PRICES.bronze}</span>
+          </div>
+          <div className={styles["seat-info-item"]}>
+            <img src="/selectedchair.png" alt="Selected Seat" />
+            <span>Selected</span>
           </div>
           <div className={styles["seat-info-item"]}>
             <img src="/bookedchair.png" alt="" />
-            <span>Booked Seat</span>
+            <span>Booked</span>
+          </div>
+          <div className={styles["seat-info-item"]}>
+            <img src="/emptychair.png" alt="" />
+            <span>Empty</span>
           </div>
         </div>
       </div>
@@ -163,24 +190,20 @@ export default function SeatMatrix({
         ) : (
           <p>No seats selected</p>
         )}
-        <h3>Total Price: ₹{selectedSeats.length * 250}</h3>
+        <h3>Total Price: ₹{calculateTotalPrice()}</h3>
         <div className={seatPricingStyles["action-buttons"]}>
-          <BigBTN
-            otherStyles={{ backgroundColor: "#1a191f", height: "2.2rem" }}
-            TextForButton={"+ Add Food Items"}
-          />
-          <RazorpayButton/>
-    
-          <BigBTN
-            otherStyles={{ height: "2.2rem" }}
-            TextForButton={"Purchase Seats"}
-            onClick={() => {
-              if (selectedSeats.length === 0) return alert("No seats selected");
+          <RazorpayButton
+            amount={selectedSeats.length * 250}
+            selectedSeats={selectedSeats}
+            onSuccess={(response) => {
+              // Confirm seats after successful payment
               socket.emit("confirmSeats", {
                 showId,
                 seatNumbers: selectedSeats,
                 userId: user._id,
+                paymentId: response.razorpay_payment_id,
               });
+
               const seats = selectedSeats;
               setSelectedSeats([]);
               navigate("/thank-you", {
@@ -190,6 +213,7 @@ export default function SeatMatrix({
                   timing: showDetails?.startTime,
                   seats: seats,
                   totalPrice: selectedSeats.length * 250,
+                  paymentId: response.razorpay_payment_id,
                 },
               });
             }}

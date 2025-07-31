@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import "./AdminShared.css";
 import "./EditCinemasPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 import CitySelector from "../../components/CitySelector";
 
-const mockCinemas = [
-  { id: 1, name: "PVR Cinemas", location: "Connaught Place, Delhi", city: "Delhi" },
-  { id: 2, name: "INOX", location: "Phoenix Mall, Mumbai", city: "Mumbai" },
-];
-
 export default function EditCinemasPage() {
   const { user } = useUser();
-  const [cinemas, setCinemas] = useState(mockCinemas);
+  const [editId, setEditId] = useState(null);
   const [showCitySelector, setShowCitySelector] = useState(false);
 
   const [form, setForm] = useState({
@@ -23,7 +17,6 @@ export default function EditCinemasPage() {
       { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
     ],
   });
-  const [editId, setEditId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,49 +88,19 @@ export default function EditCinemasPage() {
     }));
 
   const handleSubmit = async (e) => {
-    console.log(form);
+    console.log("Form submitted:", form);
     e.preventDefault();
-    
-    if (editId) {
-      setCinemas((prev) =>
-        prev.map((c) => (c.id === editId ? { ...c, ...form } : c))
-      );
-    } else {
-      setCinemas((prev) => [...prev, { ...form, id: Date.now() }]);
-    }
 
-    await fetch("http://localhost:8080/api/theatres", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },  
-      body: JSON.stringify(form),
-    })
-    setForm({
-      name: "",
-      location: "",
-      city: "",
-      theaters: [
-        { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
-      ],
-    });
-    setEditId(null);
-  };
+    try {
+      await fetch("http://localhost:8080/api/theatres", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-  const handleEdit = (cinema) => {
-    setForm({
-      name: cinema.name,
-      location: cinema.location,
-      city: cinema.city || "",
-      theaters: cinema.theaters,
-    });
-    setEditId(cinema.id);
-  };
-
-  const handleDelete = (id) => {
-    setCinemas((prev) => prev.filter((c) => c.id !== id));
-    if (editId === id) {
       setForm({
         name: "",
         location: "",
@@ -146,12 +109,13 @@ export default function EditCinemasPage() {
           { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
         ],
       });
-      setEditId(null);
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
   };
 
   return (
-    <div className="admin-root">
+    <div className="editcinemas-root">
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link to="/admin/dashboard">
@@ -159,7 +123,9 @@ export default function EditCinemasPage() {
           </Link>
           <div className="user-info">
             <div className="user-avatar">
-              <span role="img" aria-label="avatar">👤</span>
+              <span role="img" aria-label="avatar">
+                👤
+              </span>
             </div>
             <div>
               <div className="user-role">Admin</div>
@@ -169,17 +135,25 @@ export default function EditCinemasPage() {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li><Link to="/admin/dashboard">Dashboard</Link></li>
-            <li><Link to="/admin/add-item">Add Shows</Link></li>
-            <li><Link to="/admin/edit-movies">Edit Movies</Link></li>
-            <li className="active"><Link to="/admin/edit-cinemas">Edit Cinemas</Link></li>
+            <li>
+              <Link to="/admin/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/admin/add-item">Add Shows</Link>
+            </li>
+            <li>
+              <Link to="/admin/edit-movies">Edit Movies</Link>
+            </li>
+            <li className="active">
+              <Link to="/admin/edit-cinemas">Edit Cinemas</Link>
+            </li>
           </ul>
         </nav>
-        <footer className="sidebar-footer">© Movie Book, 2025.</footer>
+        <footer className="sidebar-footer">© GetMySeat, 2025.</footer>
       </aside>
 
       <main className="editcinemas-main">
-        <h2 className="section-title">Edit Cinemas</h2>
+        <h2 className="editcinemas-title">Edit Cinemas</h2>
         <form className="editcinemas-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-col">
@@ -328,21 +302,6 @@ export default function EditCinemasPage() {
             )}
           </div>
         </form>
-
-        <ul className="editcinemas-list">
-          {cinemas.map((c) => (
-            <li key={c.id} className="editcinemas-item">
-              <div>
-                <strong>{c.name}</strong>
-                <p>{c.location} - {c.city}</p>
-              </div>
-              <div className="item-actions">
-                <button onClick={() => handleEdit(c)} className="edit-btn">Edit</button>
-                <button onClick={() => handleDelete(c.id)} className="delete-btn">Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
       </main>
     </div>
   );

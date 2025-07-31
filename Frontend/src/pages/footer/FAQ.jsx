@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "I didn’t receive my ticket. What should I do?",
-    a: "Check your spam folder first. If you still can't find your ticket, contact our support team at support@moviebook.com.",
+    a: "Check your spam folder first. If you still can't find your ticket, contact our support team at support@ticktbooking.com.",
   },
   {
     q: "Is my payment information secure?",
@@ -38,7 +38,7 @@ export default function FAQ() {
       <section className={faqStyles.faqHero}>
         <h1 className={faqStyles.faqTitle}>FAQ</h1>
         <p className={faqStyles.faqDesc}>
-          Find answers to the most common questions about MovieBook.
+          Find answers to the most common questions about GetMySeat.
         </p>
       </section>
       <section className={faqStyles.faqSection}>
@@ -49,15 +49,15 @@ export default function FAQ() {
               className={faqStyles.faqQuestion}
             >
               {faq.q}
-              <span className={faqStyles.faqToggle}>{open === idx ? '−' : '+'}</span>
+              <span className={faqStyles.faqToggle}>
+                {open === idx ? "−" : "+"}
+              </span>
             </div>
-            {open === idx && (
-              <div className={faqStyles.faqAnswer}>{faq.a}</div>
-            )}
+            {open === idx && <div className={faqStyles.faqAnswer}>{faq.a}</div>}
           </div>
         ))}
       </section>
       <Footer className={faqStyles.faqFooter} />
     </div>
   );
-} 
+}

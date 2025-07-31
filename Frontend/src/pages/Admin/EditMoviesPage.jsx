@@ -3,24 +3,9 @@ import "./EditMoviesPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 
-const mockMovies = [
-  {
-    id: 1,
-    title: "Inception",
-    description: "A mind-bending thriller.",
-    poster: "https://via.placeholder.com/60x90",
-  },
-  {
-    id: 2,
-    title: "Interstellar",
-    description: "A journey through space and time.",
-    poster: "https://via.placeholder.com/60x90",
-  },
-];
-
 const EditMoviesPage = () => {
   const { user } = useUser();
-  const [movies, setMovies] = useState(mockMovies);
+  const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -38,7 +23,6 @@ const EditMoviesPage = () => {
     },
     trailer: "",
   });
-  const [editId, setEditId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -93,23 +77,6 @@ const EditMoviesPage = () => {
     setEditId(null);
   };
 
-  const handleEdit = (movie) => {
-    setForm({
-      title: movie.title,
-      description: movie.description,
-      poster: movie.poster,
-    });
-    setEditId(movie.id);
-  };
-
-  const handleDelete = (id) => {
-    setMovies((prev) => prev.filter((m) => m.id !== id));
-    if (editId === id) {
-      setForm({ title: "", description: "", poster: "" });
-      setEditId(null);
-    }
-  };
-
   return (
     <section className="editmovies-root">
       <aside className="sidebar">
@@ -145,49 +112,43 @@ const EditMoviesPage = () => {
             </li>
           </ul>
         </nav>
-        <footer className="sidebar-footer">© Movie Book, 2025.</footer>
+        <footer className="sidebar-footer">© GetMySeat, 2025.</footer>
       </aside>
-      <main className="admin-main">
-        <h1 className="admin-title">Edit Movies</h1>
-        <form className="admin-form" onSubmit={handleSubmit}>
+      <main className="editmovies-main">
+        <h1 className="editmovies-title">Edit Movies</h1>
+        <form className="editmovies-form" onSubmit={handleSubmit}>
           <div className="form-section">
             <h3>Basic Information</h3>
-            <div className="form-col">
-              <label htmlFor="movie-title">Title</label>
-              <input
-                id="movie-title"
-                name="title"
-                value={form.title}
-                onChange={handleChange}
-                required
-                placeholder="Enter movie title"
-              />
-            </div>
+            <label htmlFor="movie-title">Title</label>
+            <input
+              id="movie-title"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              required
+              placeholder="Enter movie title"
+            />
 
-            <div className="form-col">
-              <label htmlFor="movie-description">Description</label>
-              <textarea
-                id="movie-description"
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                required
-                placeholder="Enter movie description"
-                rows="4"
-              />
-            </div>
+            <label htmlFor="movie-description">Description</label>
+            <textarea
+              id="movie-description"
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              required
+              placeholder="Enter movie description"
+              rows="4"
+            />
 
-            <div className="form-col">
-              <label htmlFor="movie-genres">Genres</label>
-              <input
-                id="movie-genres"
-                name="genres"
-                value={form.genres}
-                onChange={handleChange}
-                required
-                placeholder="Enter genres (comma-separated)"
-              />
-            </div>
+            <label htmlFor="movie-genres">Genres</label>
+            <input
+              id="movie-genres"
+              name="genres"
+              value={form.genres}
+              onChange={handleChange}
+              required
+              placeholder="Enter genres (comma-separated)"
+            />
 
             <div className="form-row">
               <div className="form-col">
@@ -334,44 +295,6 @@ const EditMoviesPage = () => {
             )}
           </section>
         </form>
-        <ul className="editmovies-list">
-          {movies.map((movie) => (
-            <li className="editmovies-list-item" key={movie.id}>
-              <section className="movie-info">
-                <img
-                  src={movie.poster}
-                  alt={movie.title}
-                  width={60}
-                  height={90}
-                  style={{
-                    marginRight: 16,
-                    borderRadius: 6,
-                    objectFit: "cover",
-                    background: "#444",
-                  }}
-                />
-                <strong>{movie.title}</strong>
-                <p>{movie.description}</p>
-              </section>
-              <section className="movie-actions">
-                <button
-                  className="edit"
-                  type="button"
-                  onClick={() => handleEdit(movie)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="delete"
-                  type="button"
-                  onClick={() => handleDelete(movie.id)}
-                >
-                  Delete
-                </button>
-              </section>
-            </li>
-          ))}
-        </ul>
       </main>
     </section>
   );

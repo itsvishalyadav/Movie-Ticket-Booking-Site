@@ -14,9 +14,9 @@ export default function About() {
     <div className={aboutStyles.aboutRoot}>
       <Header />
       <section className={aboutStyles.aboutHero}>
-        <h1 className={aboutStyles.aboutTitle}>About MovieBook</h1>
+        <h1 className={aboutStyles.aboutTitle}>About GetMySeat</h1>
         <p className={aboutStyles.aboutDesc}>
-          MovieBook is your one-stop platform for booking movie tickets,
+          GetMySeat is your one-stop platform for booking movie tickets,
           discovering the latest releases, and enjoying a seamless cinema
           experience. Our mission is to make movie-going easy, fun, and
           accessible for everyone.

@@ -8,16 +8,9 @@
   overflow: hidden;
 }
 
-@media (hover: hover) {
-  .row:hover .card {
-    opacity: 0.7;
-    transform: scale(0.98);
-  }
-
-  .row .card:hover {
-    transform: scale(1.05);
-    opacity: 1;
-  }
+.card:hover {
+  opacity: 0.7;
+  transform: scale(0.98);
 }
 
 .movieCard {

@@ -12,16 +12,61 @@
   background: #211f27;
   border-radius: 8px;
   margin: 16px 0px;
-
 }
 
 .sidebar {
   width: 270px;
-  background: #211F27;
+  background: #211f27;
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: 0 0 20px 0;
+}
+
+.sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(249, 171, 0, 0.2);
+}
+
+.flix-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f9ab00;
+  margin-bottom: 24px;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 8px;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 12px 24px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s;
+  border-radius: 8px;
+  margin: 0 12px;
+}
+
+.sidebar-nav li.active a,
+.sidebar-nav a:hover {
+  background: rgba(249, 171, 0, 0.1);
+  color: #f9ab00;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 24px;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
 }
 
 .admindashboard-main {
@@ -52,16 +97,32 @@
   box-shadow: 0 2px 16px 0 #00000030;
   min-width: 300px;
   margin-bottom: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid rgba(249, 171, 0, 0.1);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px 0 #00000040;
+  border-color: rgba(249, 171, 0, 0.3);
 }
 
 .dashboard-card h3 {
   color: #f9ab00;
   margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .dashboard-card p {
   color: #fff;
   margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.dashboard-card strong {
+  color: #f9ab00;
+  font-weight: 600;
 }
 
 .user-avatar {
@@ -72,6 +133,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
+  background: rgba(249, 171, 0, 0.1);
 }
 
 .user-info {
@@ -82,6 +144,19 @@
   border: 2px solid #f9ab00;
   border-radius: 12px;
   padding: 6px 14px;
+  background: rgba(249, 171, 0, 0.05);
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: #f9ab00;
+  font-weight: 600;
+}
+
+.user-name {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
@@ -90,5 +165,14 @@
   }
   .dashboard-card {
     padding: 16px;
+    min-width: 250px;
   }
-} 
+  .sidebar {
+    width: 200px;
+  }
+  .sidebar-nav a {
+    padding: 10px 16px;
+    margin: 0 8px;
+    font-size: 0.9rem;
+  }
+}

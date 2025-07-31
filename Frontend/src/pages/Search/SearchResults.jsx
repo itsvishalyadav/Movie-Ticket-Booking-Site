@@ -6,7 +6,7 @@ import styles from "./SearchResults.module.css";
 import Loader from "../../components/Loader/Loader";
 
 function SearchResults({ parameter, onClose }) {
-  const isOverlay = !useParams().parameter; // Check if we're in overlay mode
+  const isOverlay = !useParams().parameter; 
   const searchParam = parameter || useParams().parameter;
   const [demoMovies, setDemoMovies] = useState([]);
   const [movies, setMovies] = useState(demoMovies);
