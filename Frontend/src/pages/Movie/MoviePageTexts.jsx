@@ -8,7 +8,7 @@ import Rating from "../../components/MovieInfo/Rating";
 import TrailerBookBtn from "../../components/Buttons/Trailer+Book-BTN";
 import DetailedInfoReviews from "./DetailedInfo&Reviews";
 
-export default function MoviePageTexts({ info , reviews , setReviews}) {
+export default function MoviePageTexts({ info, reviews, setReviews }) {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,9 @@ export default function MoviePageTexts({ info , reviews , setReviews}) {
       document.body.style.overflow = "";
     };
   }, [showDetails]);
-
+  const today = new Date();
+  const day2 = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+  const twoDaysLater = day2.toISOString().split("T")[0];
   return (
     <div className={`MoviePage${showDetails ? " swipe-up" : ""}`}>
       <div id="MoviePageTexts">
@@ -39,11 +41,18 @@ export default function MoviePageTexts({ info , reviews , setReviews}) {
         />
         <Plot plot={info.plot} />
         <Rating ratings={info.ratings} />
-        <TrailerBookBtn trailer={info.trailer}
+        <TrailerBookBtn
+          trailer={info.trailer}
           onMoreInfo={() => setShowDetails(true)}
+          showBookButton={info.releaseDate <= twoDaysLater}
         />
       </div>
-      <DetailedInfoReviews info={info} reviews = {reviews} setReviews = {setReviews} onClose={() => setShowDetails(false)} />
+      <DetailedInfoReviews
+        info={info}
+        reviews={reviews}
+        setReviews={setReviews}
+        onClose={() => setShowDetails(false)}
+      />
     </div>
   );
 }

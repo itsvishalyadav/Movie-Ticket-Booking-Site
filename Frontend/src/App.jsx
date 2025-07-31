@@ -24,6 +24,7 @@ import ShowTimePage from "./pages/Booking/ShowTimePage.jsx";
 import { UserProvider, useUser } from "./contexts/userContext.jsx";
 import ShippingPolicy from "./pages/footer/ShippingPolicy";
 import RefundPolicy from "./pages/footer/RefundPolicy";
+import ErrorMessage from "./components/Error/ErrorMessage.jsx";
 
 function ProtectedRoute({ children }) {
   const location = useLocation();
@@ -81,6 +82,7 @@ function App() {
           <Route path="/terms" element={<Terms />}></Route>
           <Route path="/faq" element={<FAQ />}></Route>
           <Route path="/contact" element={<Contact />}></Route>
+          <Route path="*" element={<ErrorMessage message={"Not Found"} />} ></Route>
         </Routes>
       </CityProvider>
     </UserProvider>

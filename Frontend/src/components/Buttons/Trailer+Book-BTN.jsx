@@ -1,13 +1,18 @@
 import TrailerBtn from "./TrailerBtn";
 import BookTicketBtn from "./BookTicketBtn";
 import styles from "./Trailer+Book-BTN.module.css";
+import BigBTN from "./BigBTN";
 
-export default function TrailerBookBtn({ trailer, onMoreInfo }) {
+export default function TrailerBookBtn({
+  trailer,
+  onMoreInfo,
+  showBookButton,
+}) {
   return (
     <div className={styles.TrailerBookBtn}>
       <div className={styles["TrailerBookBtn__buttons"]}>
         <TrailerBtn trailer={trailer} />
-        <BookTicketBtn />
+        {showBookButton ? <BookTicketBtn />:<BigBTN TextForButton={"Coming Soon..."}/>}
       </div>
       <a
         href="#"

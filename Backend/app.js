@@ -122,7 +122,7 @@ let transporter = nodemailer.createTransport({
 
 const sendVerificationCode = async (email, verificationCode) => {
   const info = await transporter.sendMail({
-    from: "agrawalpiyush415@gmail.com",
+    from: "ticktbooking@gmail.com",
     to: email,
     subject: "Hello",
     text: `${verificationCode}`, // plain‑text body
@@ -345,6 +345,7 @@ io.on("connection", (socket) => {
         paymentId: paymentId
       });
       await newBooking.save();
+
       io.to(showId).emit("seatsBooked", seatNumbers);
       socket.emit("bookingConfirmed", {
         bookingId: newBooking._id,
@@ -557,11 +558,11 @@ app.get(
         $match: {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
-          "movieDetails.releaseDate": { $gte: startDate, $lte: today },
+          "movieDetails.releaseDate": {  $lte: today },
 
           $or: [
             { "movieDetails.ratings.imdbRating": { $gte: 7 } },
-            { "movieDetails.popularity": { $gte: 600 } },
+            { "movieDetails.popularity": { $gte: 300 } },
           ],
         },
       },

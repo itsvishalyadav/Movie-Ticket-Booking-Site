@@ -6,19 +6,17 @@ function SideBar({ username, name }) {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
   async function handleSignout() {
-    try{
-      const res = await fetch(
-        "http://localhost:8080/api/signout",
-        { credentials: "include" }
-      );
+    try {
+      const res = await fetch("http://localhost:8080/api/signout", {
+        credentials: "include",
+      });
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.message || "Failed to sign out");
       }
       setUser();
       navigate("/");
-    }
-    catch (error) {
+    } catch (error) {
       alert("Failed to sign out. Please try again.");
     }
   }
@@ -38,7 +36,9 @@ function SideBar({ username, name }) {
         {user.role === "user" ? (
           <>
             <p>👤 My Account</p>
-            <p>🎫 My Bookings</p>
+            <Link to="/bookings">
+              <p>🎫 My Bookings</p>
+            </Link>
           </>
         ) : (
           <p>
