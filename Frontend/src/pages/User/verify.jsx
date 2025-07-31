@@ -7,7 +7,7 @@ function Verify() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, setUser } = useUser();
-  const from = location.state?.from?.pathname || "/home";
+  const from = location.state?.from?.pathname || "/";
   let [formState, setFormState] = new useState({ verificationCode: "" });
   let [error, setError] = new useState("");
   let [isEmpty, setIsEmpty] = new useState({ verificationCode: false });
@@ -42,7 +42,7 @@ function Verify() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/");
+      navigate(from, { replace: true });
     }
   }
   return (

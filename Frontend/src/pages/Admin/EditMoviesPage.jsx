@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import "./EditMoviesPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import Loader from "../../components/Loader/Loader";
 
 const EditMoviesPage = () => {
-  const { user } = useUser();
+  const { user , loading} = useUser();
+  const [error, setError] = useState();
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({
     title: "",
@@ -78,6 +81,9 @@ const EditMoviesPage = () => {
   };
 
   return (
+    error ? (
+      <ErrorMessage message={error} />
+      ) : (
     <section className="editmovies-root">
       <aside className="sidebar">
         <div className="sidebar-header">
@@ -297,6 +303,7 @@ const EditMoviesPage = () => {
         </form>
       </main>
     </section>
+  )
   );
 };
 

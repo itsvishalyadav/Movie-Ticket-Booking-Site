@@ -5,6 +5,7 @@ import "./Bookings.css";
 import { socket } from "../../components/Booking/SeatMatrix";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import ErrorMessage from "../../components/Error/ErrorMessage";
 function formatShowDate(unix) {
   const d = new Date(unix * 1000);
   const day = d.toLocaleDateString("en-US", { weekday: "short" });
@@ -34,6 +35,7 @@ export default function Bookings() {
   const [cancelBooking, setCancelBooking] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [error, setError] = useState();
 
   useEffect(() => {
     socket.on("bookingSeatsCancelled", (newBookings) => {
@@ -42,21 +44,34 @@ export default function Bookings() {
       setSelectedSeats([]);
       setCancelBooking({});
     });
+    socket.on("error", (err) => {
+      setError(err.message);
+    });
     return () => {
-      socket.off("seatsCancelled");
+      socket.off("bookingSeatsCancelled");
+      socket.off("error");
     };
   }, []);
 
   useEffect(() => {
     if (loading) return;
     const func = async () => {
+      try{
       const data = await fetch(
         ` http://localhost:8080/api/bookings/${user._id}`
         , { credentials: "include" }
       );
       const bookingData = await data.json();
+      if (!data.ok) {
+        throw new Error(bookingData.message || "Failed to fetch bookings");
+      }
       setBookings(bookingData);
       setLoader(false);
+    }
+      catch(error) {
+        setError(error.message);
+        setLoader(false);
+      }
     };
     func();
   }, [user]);
@@ -65,6 +80,10 @@ export default function Bookings() {
     setCancel(!cancel);
     setCancelBooking(bookings[e.target.id]);
   };
+
+  if(error) {
+    return <ErrorMessage message={error} />;
+  }
 
   return (
     <>

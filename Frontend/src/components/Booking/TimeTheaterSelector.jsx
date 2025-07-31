@@ -40,7 +40,7 @@ function TimeTheaterSelector({ liveInfo , title }) {
             timings: filteredTimings,
           };
         })
-        .filter((t) => t !== null); // Remove theaters without valid timings
+        .filter((t) => t !== null); 
 
       setFilteredTheaters(filtered);
     }

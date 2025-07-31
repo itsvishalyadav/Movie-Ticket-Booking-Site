@@ -1,6 +1,7 @@
 import styles from "./Sidebar.module.css";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
+
 function SideBar({ username, name }) {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
@@ -10,8 +11,12 @@ function SideBar({ username, name }) {
         "http://localhost:8080/api/signout",
         { credentials: "include" }
       );
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to sign out");
+      }
       setUser();
-      navigate("/home");
+      navigate("/");
     }
     catch (error) {
       alert("Failed to sign out. Please try again.");

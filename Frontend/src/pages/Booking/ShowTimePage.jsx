@@ -7,6 +7,8 @@ import DateTimeTheater from "../../components/Booking/DateTimeTheater";
 import MovieInfo from "../../components/MovieInfo/MovieInfoBookingPage";
 import { useCity } from "../../contexts/CityContext";
 import Loader from "../../components/Loader/Loader";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+
 
 function formatCurrentDate() {
   const now = new Date();
@@ -34,6 +36,7 @@ function ShowTimePage() {
   const { city } = useCity();
   const [movieInfo, setMovieInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
   const [liveInfo, setLiveInfo] = useState({
     theatres: [],
     date: formatCurrentDate(),
@@ -45,10 +48,14 @@ function ShowTimePage() {
 
   useEffect(() => {
     const fetchShowData = async () => {
+      try{
       const theatreData = await fetch(
         `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
       );
       const theatres = await theatreData.json();
+      if(!theatreData.ok) {
+        throw new Error(theatres.message || "Failed to fetch show data");
+      }
 
       if (theatres.length > 0) {
         const langs = [];
@@ -88,7 +95,11 @@ function ShowTimePage() {
           date: formatCurrentDate(),
         }));
       }
-    };
+    }
+    catch (error) {
+      setError(error.message || "Failed to fetch show data");
+    }
+  } 
 
     fetchShowData();
   }, [title, city, liveInfo.date]);
@@ -101,10 +112,13 @@ function ShowTimePage() {
           ` http://localhost:8080/api/movies/${title}`
         );
         const detailedMovie = await movieData.json();
+        if (!movieData.ok) {
+          throw new Error(detailedMovie.message || "Failed to fetch movie data");
+        }
         setMovieInfo(detailedMovie[0]);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching movie:", error);
+        setError(error.message || "Failed to fetch movie data");
         setLoading(false);
       }
     };
@@ -115,9 +129,10 @@ function ShowTimePage() {
     return <Loader />;
   }
 
-  if (!movieInfo) {
-    return <p style={{ color: "#fff", padding: "1rem" }}>Movie not found</p>;
+  if (error) {
+    return <ErrorMessage message={error} />;
   }
+
 
   return (
     <div className={styles.container}>

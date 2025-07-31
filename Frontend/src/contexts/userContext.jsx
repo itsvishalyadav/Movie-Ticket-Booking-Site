@@ -6,20 +6,23 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState();
   useEffect(() => {
-    try{
+    
       const getUser = async () => {
-        const res = await fetch(
+        try{const res = await fetch(
           "http://localhost:8080/api/isLoggedIn",
           { credentials: "include" }
         );
+        if (!res.ok) {
+          throw new Error(res.statusText || "Failed to fetch user data");
+        }
         const data = await res.json();
         setUser(data.user);
         setLoading(false);
+      } catch (error) {
+        setLoading(false);
       };
-      getUser();
-    } catch (error) {
-      setLoading(false);
     }
+      getUser();
   }, []);
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>

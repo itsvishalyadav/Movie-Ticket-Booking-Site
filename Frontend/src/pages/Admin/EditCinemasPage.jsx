@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect} from "react";
+
 import "./EditCinemasPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 import CitySelector from "../../components/CitySelector";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import Loader from "../../components/Loader/Loader";
 
 export default function EditCinemasPage() {
-  const { user } = useUser();
+  const { user , loading} = useUser();
   const [editId, setEditId] = useState(null);
   const [showCitySelector, setShowCitySelector] = useState(false);
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    if (loading) return;
+      if(user && user.role !== "admin") {
+        setError("You do not have permission to access this page.");
+      }
+  } , [user]);
 
   const [form, setForm] = useState({
     name: "",
@@ -91,31 +102,39 @@ export default function EditCinemasPage() {
     console.log("Form submitted:", form);
     e.preventDefault();
 
-    try {
-      await fetch("http://localhost:8080/api/theatres", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      setForm({
-        name: "",
-        location: "",
-        city: "",
-        theaters: [
-          { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
-        ],
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    try{const res = await fetch("http://localhost:8080/api/theatres", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },  
+      body: JSON.stringify(form),
     }
-  };
+  )
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message || "Failed to save cinema details");
+    }
+  }
 
+  catch(error) {
+      setError(error.message || "Failed to save cinema details");
+      return;
+    }
+    setForm({
+      name: "",
+      location: "",
+      city: "",
+      theaters: [
+        { theaterNo: "", seatTypes: [{ name: "", price: "", number: "" }] },
+      ],
+    });
+    setEditId(null);
+  };
+  if (loading) return <Loader />;
   return (
-    <div className="editcinemas-root">
+    error ? (<ErrorMessage message={error} />) : (
+    <div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link to="/admin/dashboard">
@@ -304,5 +323,6 @@ export default function EditCinemasPage() {
         </form>
       </main>
     </div>
+    )
   );
 }
