@@ -18,6 +18,9 @@ const bookingSchema = new Schema({
     },
     price : {
         type : Number
+    },
+    paymentId : {
+        type : String,
     }
 })
 

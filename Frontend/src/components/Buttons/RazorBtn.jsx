@@ -1,5 +1,20 @@
 import React, { useEffect } from "react";
 
+const createOrder = async (amount) => {
+  const response = await fetch("http://localhost:8080/api/create-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // if needed
+    body: JSON.stringify({ amount }), // amount in rupees
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message);
+  return data.order;
+};
+
 const RazorpayButton = ({ amount, onSuccess, selectedSeats }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -11,22 +26,28 @@ const RazorpayButton = ({ amount, onSuccess, selectedSeats }) => {
     };
   }, []);
 
-  const handlePayment = () => {
-    if (!window.Razorpay) {
-      alert("Razorpay SDK is still loading. Please try again in a moment.");
-      return;
-    }
+  const handlePayment = async () => {
+  if (!window.Razorpay) {
+    alert("Razorpay SDK is still loading. Please try again.");
+    return;
+  }
+
+  try {
+    const order = await createOrder(amount); 
 
     const options = {
-      key: "rzp_test_mbgfqHptub6vIY",
-      amount: amount * 100, // Amount in paise
+      key: "rzp_test_eZTXX0YnP9TdKT", 
+      amount: order.amount, 
       currency: "INR",
       name: "GetMySeat",
       description: `Booking for ${selectedSeats.length} seats`,
+      order_id: order.id, 
       handler: function (response) {
-        // Handle successful payment
         if (onSuccess) {
-          onSuccess(response);
+          onSuccess({
+            ...response,
+            amount: order.amount,
+          });
         }
       },
       prefill: {
@@ -41,20 +62,16 @@ const RazorpayButton = ({ amount, onSuccess, selectedSeats }) => {
       },
     };
 
-    try {
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function (response) {
-        alert(
-          "Payment failed. Please try again. Error: " +
-            response.error.description
-        );
-      });
-      rzp.open();
-    } catch (error) {
-      console.error("Razorpay initialization error:", error);
-      alert("Could not initialize payment. Please try again.");
-    }
-  };
+    const rzp = new window.Razorpay(options);
+    rzp.on("payment.failed", function (response) {
+      alert("Payment failed: " + response.error.description);
+    });
+    rzp.open();
+  } catch (error) {
+    console.error("Payment init failed:", error);
+    alert("Could not initialize Razorpay checkout.");
+  }
+};
 
   return (
     <button

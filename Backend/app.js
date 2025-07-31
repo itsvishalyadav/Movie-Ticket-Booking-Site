@@ -18,6 +18,52 @@ const LocalStrategy = require("passport-local");
 const mongoUrl = process.env.MONGO_URL;
 const cors = require("cors");
 const http = require("http");
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
+async function verifyRazorpayPayment(
+  expectedAmount,
+  razorpay_order_id,
+  razorpay_payment_id,
+  razorpay_signature
+) {
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest("hex");
+
+  if (expectedSignature !== razorpay_signature) {
+    throw new Error("Invalid payment signature.");
+  }
+
+
+  const payment = await razorpay.payments.fetch(razorpay_payment_id);
+  if (!payment) {
+    throw new Error("Payment not found.");
+  }
+
+  if (payment.status !== "captured") {
+    throw new Error("Payment not captured.");
+  }
+
+  if (payment.amount !== expectedAmount) {
+    throw new Error("Payment amount mismatch.");
+  }
+
+
+  const alreadyUsed = await Booking.findOne({ paymentId: razorpay_payment_id });
+  if (alreadyUsed) {
+    throw new Error("Payment already used.");
+  }
+
+  return payment;
+}
+
 class expressError extends Error {
   constructor(status, message) {
     super();
@@ -38,7 +84,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173" ,"https://lumberjack.razorpay.com/v1/track?key_id=rzp_test_eZTXX0YnP9TdKT"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -89,8 +135,8 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true, // allow cookies to be sent
+    origin: ["http://localhost:5173", "https://lumberjack.razorpay.com/v1/track?key_id=rzp_test_eZTXX0YnP9TdKT"],
+    credentials: true,
   })
 );
 
@@ -264,7 +310,8 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("confirmSeats", async ({ showId, seatNumbers, userId,paymentId }) => {
+  socket.on("confirmSeats", async ({ showId, seatNumbers, userId , amount , paymentId , orderId , signature}) => {
+    console.log(amount);
     try {
       const locker = socket.id;
       const show = shows[showId];
@@ -272,6 +319,11 @@ io.on("connection", (socket) => {
       if (!seatNumbers.every((s) => heldSeats.includes(s))) {
         return socket.emit("confirmFailed", "seats are not locked by you");
       }
+
+      const payment = await verifyRazorpayPayment(amount , orderId, paymentId, signature);
+      if (!payment) {
+        return socket.emit("confirmFailed", "Payment verification failed");
+      }                                
 
       seatNumbers.forEach((seat) => {
         show.bookedSeats.push(seat);
@@ -290,6 +342,7 @@ io.on("connection", (socket) => {
         user: userId,
         seats: seatNumbers,
         time: Math.floor(Date.now() / 1000),
+        paymentId: paymentId
       });
       await newBooking.save();
       io.to(showId).emit("seatsBooked", seatNumbers);
@@ -343,6 +396,23 @@ io.on("connection", (socket) => {
     }
   });
 });
+
+app.post("/api/create-order", async (req, res) => {
+  const { amount } = req.body;
+  try {
+    const options = {
+      amount: amount * 100, // amount in paise
+      currency: "INR",
+      receipt: `receipt_order_${Date.now()}`,
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json({ order });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create order", error: err.message });
+  }
+});
+
 
 app.get(
   "/api/movies",

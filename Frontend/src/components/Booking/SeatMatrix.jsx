@@ -6,7 +6,7 @@ import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import RazorpayButton from "../Buttons/RazorBtn";
-import ErrorMessage from "../Error/ErrorMessage";
+
 
 export const socket = io("http://localhost:8080", {
   withCredentials: true,
@@ -79,7 +79,7 @@ export default function SeatMatrix({
     socket.emit("joinShow", showId);
 
     socket.on("error", (err) => {
-      setError(err);
+      setError(err.message || "An error occurred");
     });
 
     socket.on("seatData", ({ bookedSeats }) => setBookedSeats(bookedSeats));
@@ -94,9 +94,8 @@ export default function SeatMatrix({
     );
     socket.on("lockFailed", (msg) => alert(msg));
     socket.on("bookingConfirmed", ({ bookingId, showDetails, seat }) => {
-      const totalPrice = calculateTotalPrice();
+      const totalPrice = calculateTotalPrice(seat);
       setSelectedSeats([]);
-      console.log(totalPrice);
       navigate("/thank-you", {
         state: {
           movieName: showDetails.movie.title,
@@ -120,7 +119,13 @@ export default function SeatMatrix({
     };
   }, [showId, setSelectedSeats]);
 
-  const calculateTotalPrice = () => {
+  const calculateTotalPrice = (seat = []) => {
+  if (seat.length > 0) {
+    return seat.reduce((total, seatNumber) => {
+    const type = getSeatType(seatNumber);
+    return total + SEAT_PRICES[type];
+  }, 0);
+  }
   if (selectedSeats.length === 0) return 0;
   return selectedSeats.reduce((total, seatNumber) => {
     const type = getSeatType(seatNumber);
@@ -237,7 +242,10 @@ export default function SeatMatrix({
                   showId,
                   seatNumbers: selectedSeats,
                   userId: user._id,
+                  amount: response.amount,
                   paymentId: response.razorpay_payment_id,
+                  orderId: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
                 });
               }}
             />
