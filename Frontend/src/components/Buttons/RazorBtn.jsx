@@ -58,29 +58,28 @@ const RazorpayButton = ({ amount, onSuccess, selectedSeats }) => {
 
   return (
     <button
-  onClick={handlePayment}
-  style={{
-    backgroundColor: "#f9ab00",
-    color: "white",
-    padding: "10px 20px",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "bold",
-    width: "100%",
-    marginTop: "10px",
-    transition: "box-shadow 0.3s ease",
-  }}
-  onMouseEnter={(e) =>
-    (e.currentTarget.style.boxShadow = "0 4px 10px rgba(249, 171, 0, 0.6)")
-  }
-  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-  disabled={!selectedSeats || selectedSeats.length === 0}
->
-  Pay ₹{amount}
-</button>
-
+      onClick={handlePayment}
+      style={{
+        backgroundColor: "#f9ab00",
+        color: "white",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        fontSize: "16px",
+        fontWeight: "bold",
+        width: "100%",
+        marginTop: "10px",
+        transition: "box-shadow 0.3s ease",
+      }}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.boxShadow = "0 4px 10px rgba(249, 171, 0, 0.6)")
+      }
+      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+      disabled={!selectedSeats || selectedSeats.length === 0}
+    >
+      Pay ₹{amount}
+    </button>
   );
 };
 
