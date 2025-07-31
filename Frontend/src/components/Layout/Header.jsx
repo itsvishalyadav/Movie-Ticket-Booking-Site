@@ -3,7 +3,7 @@ import * as Select from "@radix-ui/react-select";
 import SideBar from "../User/SideBar";
 import { useCity } from "../../contexts/CityContext";
 import { useUser } from "../../contexts/userContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate , useLocation} from "react-router-dom";
 import SearchResults from "../../pages/Search/SearchResults";
 import {
   MapPin,
@@ -21,6 +21,7 @@ import CitySelector from "../CitySelector";
 // import SearchResults from "../../pages/Search/SearchResults";
 
 export default function Header({ nonSticky = false }) {
+  const location = useLocation();
   const { city, setCity } = useCity();
   const { user } = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -171,10 +172,10 @@ export default function Header({ nonSticky = false }) {
           </>
         ) : (
           <div className={styles.authButtons}>
-            <Link to="/login">
+            <Link to="/login"  state={{ from: location }}>
               <div className={styles.navLoginBtn}>Login</div>
             </Link>
-            <Link to="/signup">
+            <Link to="/signup"  state={{ from: location }}>
               <div className={styles.navSignupBtn}>Signup</div>
             </Link>
           </div>

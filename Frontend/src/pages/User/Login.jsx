@@ -5,7 +5,7 @@ import "./Signup.css";
 
 function Login() {
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/home";
+  const from = location.state?.from?.pathname || "/";
   const navigate = useNavigate();
   let { setUser } = useUser();
   let [formState, setFormState] = new useState({ email: "", password: "" });
@@ -46,7 +46,7 @@ function Login() {
       setError(data.message);
     } else {
       setUser(data.user);
-      navigate("/");
+      navigate(from, { replace: true });
     }
   }
   return (

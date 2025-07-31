@@ -623,6 +623,70 @@ app.get("/api/theatres/:city", wrapAsync(async (req, res) => {
   res.json(theatres);
 }));
 
+app.get("/api/show/:city" , wrapAsync(async (req, res) => {
+  const { city } = req.params;
+  const currentUnixTime = Math.floor(Date.now() / 1000);
+
+  // const shows = await Show.aggregate([
+    
+  //   {
+  //     $lookup: {
+  //       from: "theatres",
+  //       localField: "theatreId",
+  //       foreignField: "_id",
+  //       as: "theatre"
+  //     }
+  //   },
+  //   { $unwind: "$theatre" },
+
+    
+  //   {
+  //     $lookup: {
+  //       from: "screens",
+  //       localField: "screenId",
+  //       foreignField: "_id",
+  //       as: "screen"
+  //     }
+  //   },
+  //   { $unwind: "$screen" },
+
+  
+  //   {
+  //     $lookup: {
+  //       from: "movies",
+  //       localField: "movieId",
+  //       foreignField: "_id",
+  //       as: "movie"
+  //     }
+  //   },
+  //   { $unwind: "$movie" },
+
+   
+  //   {
+  //     $match: {
+  //       "theatre.city": city , 
+  //       startTime: { $gt: currentUnixTime }
+  //     }
+  //   },
+
+    
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       startTime: 1,
+  //       "theatre.name": 1,
+  //       "screen.audi": 1,
+  //       "movie.title": 1,
+  //     }
+  //   }
+  // ]);
+
+  let shows = await Show.find({startTime : {$gt : currentUnixTime}}).populate({path: "theatre", match: { city }}).populate("movie").populate("screen");
+  shows = shows.filter((show) => show.theatre);
+  res.json(shows);
+
+}))
+
 app.get("/api/shows/:city/:title/:date", wrapAsync(async (req, res) => {
   const { city, title, date } = req.params;
   const range = getISTDayRangeFromFormattedDate(date, 2025);
@@ -800,7 +864,7 @@ app.use((err , req , res , next) => {
     res.status(status).json({message});
 });
 
-app.use((req , res) => {
+app.use((req , res , next) => {
   next(new expressError(404 , "not found"));
 })
 

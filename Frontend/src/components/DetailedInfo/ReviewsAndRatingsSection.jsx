@@ -31,13 +31,17 @@ export default function ReviewsAndRatingsSection({ info , reviews , setReviews})
           },
           body: JSON.stringify(newEntry),
         });
+        if (!newReviewData.ok) {
+          const errorData = await newReviewData.json();
+          throw new Error(errorData.message || "Failed to submit review");
+        }
         const newReview = await newReviewData.json();
         setReviews((prevReviews) => [...prevReviews, newReview]);
         setNewComment("");
         setRating(0);
       }
       catch (error) {
-        alert("Failed to submit review. Please try again later.");
+        alert("Failed to submit review. Please try again.");
       }
     }
   };

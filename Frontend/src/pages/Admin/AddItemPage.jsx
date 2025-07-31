@@ -4,9 +4,43 @@ import { Link } from "react-router-dom";
 import SearchBar from "../../components/Layout/SearchBar";
 import { useUser } from "../../contexts/userContext";
 import CitySelector from "../../components/CitySelector";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import Loader from "../../components/Loader/Loader";
+
+const cityButtonStyle = {
+  minWidth: 120,
+  padding: "8px 16px",
+  borderRadius: 6,
+  border: "1px solid #ccc",
+  background: "#1E1E1E",
+  color: "#fff",
+  marginBottom: 8,
+  cursor: "pointer",
+  fontWeight: 600,
+};
+
+const suggestionBoxStyle = {
+  position: "absolute",
+  top: "100%",
+  left: 0,
+  right: 0,
+  backgroundColor: "#fff",
+  border: "1px solid #ccc",
+  zIndex: 10,
+  maxHeight: "150px",
+  overflowY: "auto",
+};
+
+const suggestionItemStyle = {
+  padding: "8px",
+  cursor: "pointer",
+  backgroundColor: "#fff",
+  color: "#000",
+};
+
 
 const AddItemPage = () => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const [city, setCity] = useState();
   const [showCitySelector, setShowCitySelector] = useState(false);
   const [theatres, setTheatres] = useState([]);
@@ -14,6 +48,7 @@ const AddItemPage = () => {
   const [showTheatreSuggestions, setShowTheatreSuggestions] = useState(false);
   const [movies, setMovies] = useState([]);
   const [showMovieSuggestions, setShowMovieSuggestions] = useState(false);
+  const [error, setError] = useState();
 
   const [form, setForm] = useState({
     title: "",
@@ -26,26 +61,27 @@ const AddItemPage = () => {
   });
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "file" ? files[0] : value,
-    }));
+  const { name, value, type, files } = e.target;
+  setForm((prev) => ({
+    ...prev,
+    [name]: type === "file" ? files[0] : value,
+  }));
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const payload = {
+    ...form,
+    city,
+    title: {
+      _id: form.title._id,
+      title: form.title.title,
+    },
+    screen: form.screenId,
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const payload = {
-      ...form,
-      city,
-      title: {
-        _id: form.title._id,
-        title: form.title.title,
-      },
-      screen: form.screenId,
-    };
-
-    await fetch("http://localhost:8080/api/shows", {
+  try {
+    const res = await fetch("http://localhost:8080/api/shows", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -53,6 +89,11 @@ const AddItemPage = () => {
       },
       body: JSON.stringify(payload),
     });
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to add show");
+    }
 
     setForm({
       title: "",
@@ -64,22 +105,46 @@ const AddItemPage = () => {
       format: "",
     });
     setSelectedTheatre(null);
-  };
+  } catch (error) {
+    setError(error.message || "Failed to add show");
+  }
+};
 
-  useEffect(() => {
+useEffect(() => {
     const getTheatres = async () => {
-      const res = await fetch(`http://localhost:8080/api/theatres/${city}`);
-      const data = await res.json();
-      setTheatres(data);
+      try {
+        const res = await fetch(`http://localhost:8080/api/theatres/${city}`, {
+          credentials: "include"
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to fetch theatres");
+        }
+        setTheatres(data);
+      } catch (error) {
+        setError(error.message || "Failed to fetch theatres");
+      }
     };
-    city && getTheatres();
+    
+    if (city) {
+      getTheatres();
+    }
   }, [city]);
 
   useEffect(() => {
     const getMovies = async () => {
-      const res = await fetch("http://localhost:8080/api/movies");
-      const data = await res.json();
-      setMovies(data);
+      try {
+        const res = await fetch("http://localhost:8080/api/movies", {
+          credentials: "include"
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to fetch movies");
+        }
+        setMovies(data);
+      } catch (error) {
+        setError(error.message || "Failed to fetch movies");
+      }
     };
     getMovies();
   }, []);
@@ -97,8 +162,17 @@ const AddItemPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (loading) return;
+    if(user && user.role !== "admin") {
+      setError("You do not have permission to access this page.");
+    }
+  } , [user]);
+
+  if (loading) return <Loader />;
   return (
-    <div className="admin-root">
+    error ? (<ErrorMessage message={error} />) :
+    (<div className="admin-root">
       <aside className="sidebar">
         <div className="sidebar-header">
           <Link to="/">
@@ -342,40 +416,10 @@ const AddItemPage = () => {
           </div>
         </form>
       </main>
-    </div>
+    </div>)
   );
 };
 
-// Styles used inline for clarity
-const cityButtonStyle = {
-  minWidth: 120,
-  padding: "8px 16px",
-  borderRadius: 6,
-  border: "1px solid #ccc",
-  background: "#1E1E1E",
-  color: "#fff",
-  marginBottom: 8,
-  cursor: "pointer",
-  fontWeight: 600,
-};
 
-const suggestionBoxStyle = {
-  position: "absolute",
-  top: "100%",
-  left: 0,
-  right: 0,
-  backgroundColor: "#fff",
-  border: "1px solid #ccc",
-  zIndex: 10,
-  maxHeight: "150px",
-  overflowY: "auto",
-};
-
-const suggestionItemStyle = {
-  padding: "8px",
-  cursor: "pointer",
-  backgroundColor: "#fff",
-  color: "#000",
-};
 
 export default AddItemPage;

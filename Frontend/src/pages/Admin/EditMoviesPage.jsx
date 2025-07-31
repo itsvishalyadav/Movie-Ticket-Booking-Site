@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import "./EditMoviesPage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import Loader from "../../components/Loader/Loader";
 
 const mockMovies = [
   {
@@ -19,8 +21,9 @@ const mockMovies = [
 ];
 
 const EditMoviesPage = () => {
-  const { user } = useUser();
+  const { user , loading} = useUser();
   const [movies, setMovies] = useState(mockMovies);
+  const [error, setError] = useState();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -110,7 +113,18 @@ const EditMoviesPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (loading) return;
+      if(user && user.role !== "admin") {
+        setError("You do not have permission to access this page.");
+      }
+
+    } , [user]);
+  if (loading) return <Loader />;
   return (
+    error ? (
+      <ErrorMessage message={error} />
+      ) : (
     <section className="editmovies-root">
       <aside className="sidebar">
         <div className="sidebar-header">
@@ -374,6 +388,7 @@ const EditMoviesPage = () => {
         </ul>
       </main>
     </section>
+  )
   );
 };
 

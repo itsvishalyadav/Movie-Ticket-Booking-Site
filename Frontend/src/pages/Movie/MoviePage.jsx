@@ -4,12 +4,14 @@ import Loader from "../../components/Loader/Loader";
 import BookingPage from "../Booking/BookingPage";
 import MoviePageTexts from "./MoviePageTexts";
 import { useParams } from "react-router-dom";
+import ErrorMessage from "../../components/Error/ErrorMessage";
 
 function MoviePage() {
   const { title } = useParams();
   let [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(true);
   let [reviews, setReviews] = useState([]);
+  const [error, setError] = useState();
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
@@ -18,16 +20,22 @@ function MoviePage() {
           { credentials: "include" }
         );
         const detailedMovies = await movieData.json();
+        if (!movieData.ok) {
+          throw new Error(detailedMovies.message || "Failed to fetch movie data");
+        }
         const reviewsData = await fetch(
           `http://localhost:8080/api/reviews/${detailedMovies[0]._id}`,
           { credentials: "include" })
         
         const detailedReviews = await reviewsData.json();
+        if (!reviewsData.ok) {
+          throw new Error(detailedReviews.message || "Failed to fetch reviews");
+        }
         setReviews(detailedReviews);
         setMovies(detailedMovies);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        setError(error.message || "Failed to fetch movies");
         setLoading(false);
       }
     };
@@ -57,6 +65,10 @@ function MoviePage() {
       position: "relative",
     };
   };
+
+  if(error) {
+    return <ErrorMessage message={error} />;
+  }
 
   return (
     <div

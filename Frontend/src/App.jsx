@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate  , useLocation} from "react-router-dom";
 import HomePage from "./pages/Home/HomePage.jsx";
 import Login from "./pages/User/Login";
 import MoviePage from "./pages/Movie/MoviePage";
@@ -26,6 +26,7 @@ import ShippingPolicy from "./pages/footer/ShippingPolicy";
 import RefundPolicy from "./pages/footer/RefundPolicy";
 
 function ProtectedRoute({ children }) {
+  const location = useLocation();
   const { user, loading } = useUser();
   if (loading) {
     return <p>loading...</p>;
@@ -57,10 +58,14 @@ function App() {
               </ProtectedRoute>
             }
           ></Route>
-          <Route path="/admin/add-item" element={<AddItemPage />}></Route>
-          <Route path="/search/:parameter" element={<SearchResults />}></Route>
-          <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
-          <Route path="/admin/edit-movies" element={<EditMoviesPage />}></Route>
+          <Route path="/admin/add-item" element={
+            <ProtectedRoute>
+              <AddItemPage />
+            </ProtectedRoute>
+            }></Route>
+          <Route path="/search/:parameter" element={<ProtectedRoute><SearchResults /></ProtectedRoute>}></Route>
+          <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}></Route>
+          <Route path="/admin/edit-movies" element={<ProtectedRoute><EditMoviesPage /></ProtectedRoute>}></Route>
           <Route
             path="/admin/edit-cinemas"
             element={<EditCinemasPage />}

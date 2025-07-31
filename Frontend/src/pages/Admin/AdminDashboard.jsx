@@ -1,29 +1,50 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import "./AdminDashboard.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
 import CitySelector from "../../components/CitySelector";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import Loader from "../../components/Loader/Loader";
 
-const mockShows = [
-  {
-    id: 1,
-    movie: "Inception",
-    cinema: "PVR Cinemas",
-    showtime: "2024-06-10 19:00",
-  },
-  {
-    id: 2,
-    movie: "Interstellar",
-    cinema: "INOX",
-    showtime: "2024-06-10 21:30",
-  },
-];
 
 const AdminDashboard = () => {
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState();
   const [showCitySelector, setShowCitySelector] = useState(false);
-  const { user } = useUser();
+  const [error, setError] = useState();
+  const [mockShows, setMockShows] = useState([]);
+  const { user , loading} = useUser();
+
+  useEffect(() => {
+    if (loading) return;
+      if(user && user.role !== "admin") {
+        setError("You do not have permission to access this page.");
+      }
+    } , [user]);
+
+    useEffect(() => {
+      if (!city) return;
+        
+      const fetchShows = async () => {
+        try {
+          const response = await fetch(`http://localhost:8080/api/show/${city}`, {
+            credentials: "include",
+          });
+          if (!response.ok) {
+            throw new Error("Failed to fetch shows");
+          }
+          const data = await response.json();
+          setMockShows(data);
+        } catch (err) {
+          setError(err.message);
+        }
+      }
+      fetchShows();
+    } , [city]);
+
+  if (loading) return <Loader />;
   return (
+    error ? (
+      <ErrorMessage message={error} />) : (
     <>
       <section className="admindashboard-root">
         <aside className="sidebar">
@@ -98,12 +119,12 @@ const AdminDashboard = () => {
           <ul className="dashboard-cards">
             {mockShows.map((show) => (
               <li className="dashboard-card" key={show.id}>
-                <h3>{show.movie}</h3>
+                <h3>{show.movie.title}</h3>
                 <p>
-                  <strong>Cinema:</strong> {show.cinema}
+                  <strong>Cinema:</strong> {show.theatre.name}
                 </p>
                 <p>
-                  <strong>Showtime:</strong> {show.showtime}
+                  <strong>Showtime:</strong> {show.startTime}
                 </p>
               </li>
             ))}
@@ -111,6 +132,7 @@ const AdminDashboard = () => {
         </main>
       </section>
     </>
+      )
   );
 };
 

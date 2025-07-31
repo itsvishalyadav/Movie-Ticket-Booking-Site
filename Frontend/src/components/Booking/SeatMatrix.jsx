@@ -6,13 +6,20 @@ import seatPricingStyles from "./SeatPricingInfo.module.css";
 import { useUser } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import RazorpayButton from "../Buttons/RazorBtn";
+import ErrorMessage from "../Error/ErrorMessage";
 
 export const socket = io("http://localhost:8080" , {
   withCredentials: true,
 });
 
+let errorCallback = null;
+
+export const setSocketErrorHandler = (cb) => {
+  errorCallback = cb;
+};
+
 socket.on("connect_error", (err) => {
-  alert("Failed to connect to server. Please check your network or login again.");
+  if (errorCallback) errorCallback(err);
 });
 function formatTime(unix) {
   const date = new Date(unix * 1000);
@@ -28,6 +35,8 @@ function formatTime(unix) {
 
 
 export default function SeatMatrix({
+  error,
+  setError,
   showId,
   selectedSeats,
   setSelectedSeats,
@@ -38,6 +47,11 @@ export default function SeatMatrix({
   const [bookedSeats, setBookedSeats] = useState([]);
   const [showDetails, setShowDetails] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSocketErrorHandler(setError);
+  }, []);
+
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
@@ -45,10 +59,14 @@ export default function SeatMatrix({
           `http://localhost:8080/api/shows/${showId}`
           , { credentials: "include" }
         );
+        if(!response.ok){
+          const data = await response.json();
+          throw new Error(data.message || "Failed to fetch show details");
+        }
         const data = await response.json();
         setShowDetails(data);
       } catch (error) {
-        console.error("Error fetching show details:", error);
+        setError(error.message || "Failed to fetch show details");
       }
     };
 
@@ -60,7 +78,7 @@ export default function SeatMatrix({
     socket.emit("joinShow", showId);
 
     socket.on("error", (err) => {
-      alert("Error: " + err.message);
+      setError(err);
     });
 
     socket.on("seatData", ({ bookedSeats }) => setBookedSeats(bookedSeats));
@@ -88,6 +106,7 @@ export default function SeatMatrix({
   }, [showId]);
 
   return (
+    !error && (
     <div className={styles["outer-div"]}>
       <div className={styles.wholeDiv}>
         <hr />
@@ -196,6 +215,6 @@ export default function SeatMatrix({
           />
         </div>
       </div>
-    </div>
-  );
+    </div>)
+  )
 }

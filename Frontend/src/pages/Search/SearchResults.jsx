@@ -4,6 +4,7 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import Header from "../../components/Layout/Header";
 import styles from "./SearchResults.module.css";
 import Loader from "../../components/Loader/Loader";
+import ErrorMessage from "../../components/Error/ErrorMessage";
 
 function SearchResults({ parameter, onClose }) {
   const isOverlay = !useParams().parameter; // Check if we're in overlay mode
@@ -11,6 +12,7 @@ function SearchResults({ parameter, onClose }) {
   const [demoMovies, setDemoMovies] = useState([]);
   const [movies, setMovies] = useState(demoMovies);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
   const [filters, setFilters] = useState({
     genres: [],
     minYear: "",
@@ -22,9 +24,18 @@ function SearchResults({ parameter, onClose }) {
   });
   useEffect(() => {
     const dataSet = async () => {
+      try{
       const moviesData = await fetch(" http://localhost:8080/api/movies");
+      if (!moviesData.ok) {
+        throw new Error("Failed to fetch movies");
+      }
       setDemoMovies(await moviesData.json());
       setLoading(false);
+      }
+      catch(error){
+        setError(error.message);
+        setLoading(false);
+      }
     };
 
     dataSet();
@@ -98,6 +109,11 @@ function SearchResults({ parameter, onClose }) {
     setMovies(filteredMovies);
     console.log(filteredMovies);
   }, [parameter, filters, demoMovies]);
+
+  if(error) {
+    return <ErrorMessage message={error} />;
+
+  }
 
   return (
     <div className={`${styles.container} ${isOverlay ? styles.overlay : ""}`}>
