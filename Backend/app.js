@@ -530,6 +530,7 @@ app.get(
           genres: "$movieDetails.genres",
           ratings: "$movieDetails.ratings",
           length: "$movieDetails.length",
+          trailer: "$movieDetails.trailer",
         },
       },
     ]);

@@ -1,7 +1,7 @@
 .slider {
   position: relative;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1350px;
   margin: 1.5rem auto;
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -23,7 +23,6 @@
   opacity: 1;
 }
 
-/* Overlay that darkens the image */
 .overlay {
   position: absolute;
   inset: 0;
@@ -35,7 +34,6 @@
   z-index: 1;
 }
 
-/* Text block animation */
 .info {
   max-width: 600px;
   opacity: 0;
@@ -44,7 +42,6 @@
   animation-delay: 0.2s;
 }
 
-/* Animate info slide up */
 @keyframes fadeUp {
   to {
     opacity: 1;
@@ -67,24 +64,43 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
-/* Book Now Button */
 .bookNow {
   background: #f9ab00;
   color: #000;
   padding: 0.6rem 1.2rem;
   font-weight: 600;
+  cursor: pointer;
   font-size: 1rem;
   border-radius: 6px;
-  transition: transform 0.2s ease, background 0.3s ease;
+  border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
+.bookNow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.4s ease;
+}
+
+.bookNow:hover::after {
+  left: 100%;
+}
+
 .bookNow:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
   background: #f9ab00;
+  box-shadow: 0 0 15px #f9ab00;
 }
 
 .controlLeft,
 .controlRight {
-  position: absolute; /* centering magic */
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 1rem;
@@ -93,7 +109,7 @@
   border-radius: 50%;
   z-index: 2;
 
-  display: grid; /* use grid … */
+  display: grid;
   place-items: center;
 
   background: rgba(0, 0, 0, 0.4);
@@ -114,7 +130,6 @@
 .controlRight:hover {
   background: rgba(0, 0, 0, 0.6);
 }
-/* pagination dots  ---------------------------------------------*/
 .dots {
   position: absolute;
   bottom: 1rem;
@@ -122,7 +137,7 @@
   transform: translateX(-50%);
   display: flex;
   gap: 0.55rem;
-  z-index: 3; /* sit above overlay gradient */
+  z-index: 3;
 }
 
 .dot {
@@ -131,18 +146,17 @@
   border: 1px solid #fff;
   border-radius: 50%;
   background: transparent;
-  cursor: pointer; /* <— NEW */
+  cursor: pointer;
   transition: background 0.3s, transform 0.3s;
 }
 
 .dot:hover,
 .dot:focus-visible {
-  background: rgba(255, 255, 255, 0.6); /* subtle hover */
+  background: rgba(255, 255, 255, 0.6);
   outline: none;
 }
 
-/* active (current slide) */
 .dotActive {
-  background: #f9ab00; /* Theme color */
-  transform: scale(1.2); /* gentle pop */
+  background: #f9ab00;
+  transform: scale(1.2);
 }

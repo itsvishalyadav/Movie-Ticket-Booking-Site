@@ -22,8 +22,6 @@ import FAQ from "./pages/footer/FAQ";
 import Contact from "./pages/footer/Contact";
 import ShowTimePage from "./pages/Booking/ShowTimePage.jsx";
 import { UserProvider, useUser } from "./contexts/userContext.jsx";
-import ShippingPolicy from "./pages/footer/ShippingPolicy";
-import RefundPolicy from "./pages/footer/RefundPolicy";
 import ErrorMessage from "./components/Error/ErrorMessage.jsx";
 
 function ProtectedRoute({ children }) {
@@ -44,8 +42,6 @@ function App() {
       <CityProvider>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
-          <Route path="/shipping-policy" element={<ShippingPolicy />} />
-          <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/verify" element={<Verify />}></Route>

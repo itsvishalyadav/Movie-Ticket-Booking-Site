@@ -16,8 +16,6 @@ function Footer() {
             <li><Link to="/services">Our Services</Link></li>
             <li><Link to="/privacy">Privacy Policy</Link></li>
             <li><Link to="/terms">Terms Of Service</Link></li>
-            <li><Link to="/shipping-policy">Shipping Policy</Link></li>
-            <li><Link to="/refund-policy">Refund Policy</Link></li>
           </ul>
         </div>
         <div className={styles.footerCol}>

@@ -1,8 +1,8 @@
-// src/pages/Home.jsx
-import React from "react";
 import Slider from "../../components/Slider/Slider";
 import Rails from "../../components/Rails/Rails";
 import styles from "./Home.module.css";
+import TrailerBtn from "../../components/Buttons/TrailerBtn";
+
 
 const getSections = (
   nowPlayingMovies,
@@ -33,6 +33,7 @@ export default function Home({
       {sections.map(({ key, title, movies }) => (
         <Rails key={key} title={title} movies={movies} />
       ))}
+      {/* <TrailerBtn trailer={nowPlayingMovies[0].trailer}/> */}
     </div>
   );
 }

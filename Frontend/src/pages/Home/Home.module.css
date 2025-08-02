@@ -1,16 +1,11 @@
 /* ========= Home Page Layout ========= */
-
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
 .page {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1500px;
+  max-width: 1450px;
   margin-inline: auto;
   padding-inline: clamp(0.5rem, 4vw, 2rem);
   min-height: 100vh;
+  
 }

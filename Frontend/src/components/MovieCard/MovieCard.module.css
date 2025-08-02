@@ -11,7 +11,7 @@
 .card:hover {
   opacity: 1;
   transform: scale(1.1);
-}
+ }
 
 .movieCard {
   width: clamp(120px, calc(12vw + 40px), 160px);

@@ -24,7 +24,9 @@ function HomePage() {
         );
         const detailedPopularMovies = await popularMoviesData.json();
         if (!popularMoviesData.ok) {
-          throw new Error(detailedPopularMovies.message || "Failed to fetch popular movies");
+          throw new Error(
+            detailedPopularMovies.message || "Failed to fetch popular movies"
+          );
         }
         setPopularMovies(detailedPopularMovies);
 
@@ -34,8 +36,9 @@ function HomePage() {
         );
         const detailedTopRated = await topRatedData.json();
         if (!topRatedData.ok) {
-          throw new Error(detailedTopRated.message || "Failed to fetch top-rated movies");
-
+          throw new Error(
+            detailedTopRated.message || "Failed to fetch top-rated movies"
+          );
         }
         setTopRatedMovies(detailedTopRated);
 
@@ -45,7 +48,9 @@ function HomePage() {
         );
         const detailedNowPlaying = await nowPlayingData.json();
         if (!nowPlayingData.ok) {
-          throw new Error(detailedNowPlaying.message || "Failed to fetch now playing movies");
+          throw new Error(
+            detailedNowPlaying.message || "Failed to fetch now playing movies"
+          );
         }
         setNowPlayingMovies(detailedNowPlaying);
 
@@ -55,7 +60,9 @@ function HomePage() {
         );
         const detailedUpcoming = await upcomingData.json();
         if (!upcomingData.ok) {
-          throw new Error(detailedUpcoming.message || "Failed to fetch upcoming movies");
+          throw new Error(
+            detailedUpcoming.message || "Failed to fetch upcoming movies"
+          );
         }
         setUpcomingMovies(detailedUpcoming);
 
@@ -69,7 +76,7 @@ function HomePage() {
     fetchAllMovies();
   }, [city]);
 
-  if(error) {
+  if (error) {
     return <ErrorMessage message={error} />;
   }
 

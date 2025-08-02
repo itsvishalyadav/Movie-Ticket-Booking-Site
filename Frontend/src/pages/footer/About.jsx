@@ -4,9 +4,27 @@ import Footer from "../../components/Layout/Footer";
 import aboutStyles from "./About.module.css";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 const team = [
-  { name: "Piyush Agrawal", role: "Full stack Developer", img: "" },
-  { name: "Vishal Yadav", role: "Full stack Developer", img: "" },
-  { name: "Aman Maurya", role: "Full stack Developer", img: "" },
+  {
+    name: "Piyush Agrawal",
+    role: "Full stack Developer",
+    img: "",
+    github: "https://github.com/piyxsh31",
+    linkedIn: "https://www.linkedin.com/in/piyush-agrawal-352b57253",
+  },
+  {
+    name: "Vishal Yadav",
+    role: "Full stack Developer",
+    img: "",
+    github: "https://github.com/itsvishalyadav",
+    linkedIn: "https://www.linkedin.com/in/vishal-yadav-iiitm",
+  },
+  {
+    name: "Aman Maurya",
+    role: "Full stack Developer",
+    img: "",
+    github: "https://github.com/amanthatdoescares",
+    linkedIn: "https://www.linkedin.com/in/aman-maurya-895963324",
+  },
 ];
 
 export default function About() {
@@ -42,10 +60,10 @@ export default function About() {
               <h3 className={aboutStyles.teamName}>{member.name}</h3>
               <p className={aboutStyles.teamRole}>{member.role}</p>
               <div className={aboutStyles.socialLinks}>
-                <a href="#">
+                <a href={member.github}>
                   <FaGithub size={24} />
                 </a>
-                <a href="#">
+                <a href={member.linkedIn}>
                   <FaLinkedin size={24} />
                 </a>
               </div>
