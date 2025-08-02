@@ -41,7 +41,6 @@ async function verifyRazorpayPayment(
     throw new Error("Invalid payment signature.");
   }
 
-
   const payment = await razorpay.payments.fetch(razorpay_payment_id);
   if (!payment) {
     throw new Error("Payment not found.");
@@ -54,7 +53,6 @@ async function verifyRazorpayPayment(
   if (payment.amount !== expectedAmount) {
     throw new Error("Payment amount mismatch.");
   }
-
 
   const alreadyUsed = await Booking.findOne({ paymentId: razorpay_payment_id });
   if (alreadyUsed) {
@@ -84,7 +82,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173" ,"https://lumberjack.razorpay.com/v1/track?key_id=rzp_test_eZTXX0YnP9TdKT"],
+    origin: true,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -135,7 +133,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://lumberjack.razorpay.com/v1/track?key_id=rzp_test_eZTXX0YnP9TdKT"],
+    origin: true,
     credentials: true,
   })
 );
@@ -310,53 +308,69 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("confirmSeats", async ({ showId, seatNumbers, userId , amount , paymentId , orderId , signature}) => {
-    console.log(amount);
-    try {
-      const locker = socket.id;
-      const show = shows[showId];
-      const heldSeats = show.userLocks[locker] || [];
-      if (!seatNumbers.every((s) => heldSeats.includes(s))) {
-        return socket.emit("confirmFailed", "seats are not locked by you");
+  socket.on(
+    "confirmSeats",
+    async ({
+      showId,
+      seatNumbers,
+      userId,
+      amount,
+      paymentId,
+      orderId,
+      signature,
+    }) => {
+      console.log(amount);
+      try {
+        const locker = socket.id;
+        const show = shows[showId];
+        const heldSeats = show.userLocks[locker] || [];
+        if (!seatNumbers.every((s) => heldSeats.includes(s))) {
+          return socket.emit("confirmFailed", "seats are not locked by you");
+        }
+
+        const payment = await verifyRazorpayPayment(
+          amount,
+          orderId,
+          paymentId,
+          signature
+        );
+        if (!payment) {
+          return socket.emit("confirmFailed", "Payment verification failed");
+        }
+
+        seatNumbers.forEach((seat) => {
+          show.bookedSeats.push(seat);
+          delete show.locks[seat];
+        });
+        show.userLocks[locker] = [];
+
+        let currShow = await Show.findById(showId)
+          .populate("screen")
+          .populate("movie")
+          .populate("theatre");
+        currShow.bookedSeats = [...currShow.bookedSeats, ...seatNumbers];
+        await currShow.save();
+        let newBooking = new Booking({
+          show: showId,
+          user: userId,
+          seats: seatNumbers,
+          time: Math.floor(Date.now() / 1000),
+          paymentId: paymentId,
+        });
+        await newBooking.save();
+
+        io.to(showId).emit("seatsBooked", seatNumbers);
+        socket.emit("bookingConfirmed", {
+          bookingId: newBooking._id,
+          showDetails: currShow,
+          seat: seatNumbers,
+        });
+      } catch (err) {
+        console.log(err);
+        socket.emit("error", { message: err.message });
       }
-
-      const payment = await verifyRazorpayPayment(amount , orderId, paymentId, signature);
-      if (!payment) {
-        return socket.emit("confirmFailed", "Payment verification failed");
-      }                                
-
-      seatNumbers.forEach((seat) => {
-        show.bookedSeats.push(seat);
-        delete show.locks[seat];
-      });
-      show.userLocks[locker] = [];
-
-      let currShow = await Show.findById(showId)
-        .populate("screen")
-        .populate("movie")
-        .populate("theatre");
-      currShow.bookedSeats = [...currShow.bookedSeats, ...seatNumbers];
-      await currShow.save();
-      let newBooking = new Booking({
-        show: showId,
-        user: userId,
-        seats: seatNumbers,
-        time: Math.floor(Date.now() / 1000),
-        paymentId: paymentId
-      });
-      await newBooking.save();
-
-      io.to(showId).emit("seatsBooked", seatNumbers);
-      socket.emit("bookingConfirmed", {
-        bookingId: newBooking._id,
-        showDetails: currShow,
-        seat:seatNumbers,
-      });
-    } catch (err) {
-      console.log(err);
-      socket.emit("error", { message: err.message });
     }
-  });
+  );
 
   socket.on("cancelSeats", async ({ seats, booking }) => {
     try {
@@ -410,10 +424,11 @@ app.post("/api/create-order", async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.json({ order });
   } catch (err) {
-    res.status(500).json({ message: "Failed to create order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to create order", error: err.message });
   }
 });
-
 
 app.get(
   "/api/movies",
@@ -558,7 +573,7 @@ app.get(
         $match: {
           "theatreDetails.city": city,
           startTime: { $gte: currentUnix },
-          "movieDetails.releaseDate": {  $lte: today },
+          "movieDetails.releaseDate": { $lte: today },
 
           $or: [
             { "movieDetails.ratings.imdbRating": { $gte: 7 } },

@@ -25,7 +25,6 @@ export default function Home({
     nowPlayingMovies,
     upcomingMovies,
     topRatedMovies,
-    
   );
 
   return (

@@ -3,10 +3,32 @@
   margin-block: 1.2rem;
 }
 .sectionTitle {
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
-  font-weight: 600;
-  margin-bottom: 0.9rem;
-  color: #fff;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: transparent;
+  background: linear-gradient(90deg, #f9ab00 40%, #ffde7d 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+.sectionTitle::after {
+  content: "";
+  display: block;
+  margin: 0.3em auto 0;
+  width: 80%;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #f9ab00 40%, #ffde7d 100%);
+  opacity: 0.7;
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(.4,2,.6,1);
+}
+
+.sectionTitle:hover::after {
+  transform: scaleX(1);
 }
 
 /* ------------ Slider wrapper ------------ */
@@ -16,12 +38,12 @@
 
 /* ------------ Scroll row ------------ */
 .row {
+  padding: 1rem 0rem;
   display: flex;
   gap: clamp(0.5rem, 2vw, 1rem);
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding-bottom: 0.5rem; /* breathing space under cards */
   align-items: stretch; /* ensures all cards have same height */
   transition: all 0.3s ease;
 }
