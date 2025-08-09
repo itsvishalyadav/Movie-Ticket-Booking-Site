@@ -49,7 +49,7 @@ function ShowTimePage() {
     const fetchShowData = async () => {
       try {
         const theatreData = await fetch(
-          `http://localhost:8080/api/shows/${city}/${title}/${liveInfo.date}`
+          `https://getmyseatbackend.onrender.com/api/shows/${city}/${title}/${liveInfo.date}`
         );
         const theatres = await theatreData.json();
         if (!theatreData.ok) {
@@ -112,7 +112,7 @@ function ShowTimePage() {
     const fetchMovieData = async () => {
       try {
         const movieData = await fetch(
-          ` http://localhost:8080/api/movies/${title}`
+          ` https://getmyseatbackend.onrender.com/api/movies/${title}`
         );
         const detailedMovie = await movieData.json();
         if (!movieData.ok) {

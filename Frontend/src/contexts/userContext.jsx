@@ -9,7 +9,7 @@ export function UserProvider({ children }) {
     
       const getUser = async () => {
         try{const res = await fetch(
-          "http://localhost:8080/api/isLoggedIn",
+          "https://getmyseatbackend.onrender.com/api/isLoggedIn",
           { credentials: "include" }
         );
         if (!res.ok) {
