@@ -101,6 +101,7 @@ main()
 
 const sessionOptions = {
   secret: "mysecretkey",
+  store: MongoStore.create({ mongoUrl }),
   resave: false,
   saveUninitialized: true,
   cookie: {
