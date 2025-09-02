@@ -102,7 +102,7 @@ export default function EditCinemasPage() {
     console.log("Form submitted:", form);
     e.preventDefault();
 
-    try{const res = await fetch("http://localhost:8080/api/theatres", {
+    try{const res = await fetch("https://getmyseatbackend.onrender.com/api/theatres", {
       method: "POST",
       credentials: "include",
       headers: {

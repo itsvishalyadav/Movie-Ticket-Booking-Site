@@ -43,7 +43,7 @@ function Signup() {
         password: formState.password === "",
       });
     }
-    const res = await fetch(" http://localhost:8080/api/signup", {
+    const res = await fetch(" https://getmyseatbackend.onrender.com/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
