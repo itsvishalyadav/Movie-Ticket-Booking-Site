@@ -82,7 +82,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://getmyseat.onrender.com',
+    origin: "https://getmyseat.onrender.com",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -110,6 +110,8 @@ const sessionOptions = {
   },
 };
 
+
+
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -129,16 +131,15 @@ const sendVerificationCode = async (email, verificationCode) => {
   console.log("Message sent:", info.messageId);
 };
 
+app.use(session(sessionOptions));
 app.use(express.json());
-
 app.use(
   cors({
-    origin: 'https://getmyseat.onrender.com',
+    origin: "https://getmyseat.onrender.com",
     credentials: true,
   })
 );
 
-app.use(session(sessionOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -230,7 +231,6 @@ const isAdmin = (req, res, next) => {
   }
   throw new expressError(403, "You must be an admin to do that");
 };
-
 const verificationSchema = joi.object({
   verificationCode: joi.number().required(),
   email: joi.string().required(),
