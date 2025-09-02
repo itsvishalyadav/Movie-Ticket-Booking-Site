@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import RazorpayButton from "../Buttons/RazorBtn";
 
 
-export const socket = io("https://getmyseatbackend.onrender.com", {
+export const socket = io("http://localhost:8080", {
   withCredentials: true,
 });
 
@@ -57,7 +57,7 @@ export default function SeatMatrix({
     const fetchShowDetails = async () => {
       try {
         const response = await fetch(
-          `https://getmyseatbackend.onrender.com/api/shows/${showId}`,
+          `http://localhost:8080/api/shows/${showId}`,
           { credentials: "include" }
         );
         if (!response.ok) {

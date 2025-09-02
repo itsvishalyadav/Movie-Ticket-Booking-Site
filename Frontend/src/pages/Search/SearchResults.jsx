@@ -25,7 +25,7 @@ function SearchResults({ parameter, onClose }) {
   useEffect(() => {
     const dataSet = async () => {
       try{
-      const moviesData = await fetch(" https://getmyseatbackend.onrender.com/api/movies");
+      const moviesData = await fetch(" http://localhost:8080/api/movies");
       if (!moviesData.ok) {
         throw new Error("Failed to fetch movies");
       }

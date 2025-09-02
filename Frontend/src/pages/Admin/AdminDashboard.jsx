@@ -26,7 +26,7 @@ const AdminDashboard = () => {
         
       const fetchShows = async () => {
         try {
-          const response = await fetch(`https://getmyseatbackend.onrender.com/api/show/${city}`, {
+          const response = await fetch(`http://localhost:8080/api/show/${city}`, {
             credentials: "include",
           });
           if (!response.ok) {

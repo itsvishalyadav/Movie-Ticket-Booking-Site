@@ -26,7 +26,7 @@ function Verify() {
     if (formState.verificationCode === "") {
       return setIsEmpty({ verificationCode: true });
     }
-    const res = await fetch(" https://getmyseatbackend.onrender.com/api/verify", {
+    const res = await fetch(" http://localhost:8080/api/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
